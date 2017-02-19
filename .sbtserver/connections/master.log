@@ -1,0 +1,7 @@
+New log file opened at Sun Feb 12 17:07:51 CET 2017 by 19643@werner-desktop
+Taking next connection to: 32947
+New client attempting to connect on port: 36188-32947
+  Address = /127.0.1.1:32947
+This client on port 36188 has uuid 6639918f-1d6b-4b2b-b711-d1060b43f558 configName play-fork-run humanReadableName Play Fork Run protocolVersion 1 featureTags Vector()
+Connected Clients: play-fork-run-6639918f-1d6b-4b2b-b711-d1060b43f558
+Taking next connection to: 32947

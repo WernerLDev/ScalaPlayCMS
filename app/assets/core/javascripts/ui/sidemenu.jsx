@@ -1,0 +1,38 @@
+import React from 'react';
+
+export default class SideMenu extends React.Component {
+
+    constructor(props, context) {
+        super(props, context);
+    }
+
+    render() {
+        return(
+            <div className="menuleft">
+                <ul>
+                    <li>
+                        <i className="fa fa-home" aria-hidden="true"></i>
+                        <p>Dashboard</p>
+                    </li>
+                    <li>
+                        <i className="fa fa-file" aria-hidden="true"></i>
+                        <p>Documents</p>
+                    </li>
+                    <li>
+                        <i className="fa fa-picture-o" aria-hidden="true"></i>
+                        <p>Assets</p>
+                    </li>
+                    <li>
+                        <i className="fa fa-gear" aria-hidden="true"></i>
+                        <p>Settings</p>
+                    </li>
+                    <li className="signoutbtn">
+                        <i className="fa fa-sign-out" aria-hidden="true"></i>
+                        <p>Logout</p>
+                    </li>
+                </ul>
+            </div>
+        )
+    }
+
+}

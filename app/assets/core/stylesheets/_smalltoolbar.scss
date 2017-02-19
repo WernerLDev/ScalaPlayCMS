@@ -1,0 +1,20 @@
+
+.small-toolbar {
+    list-style-type: none;
+    display: block;
+    margin: 0; padding: 0;
+    li {
+        display: inline-block;
+        width: 40px; height: 40px;
+        text-align: center; line-height: 40px;
+        font-size: 16px; color: #FFF;
+    }
+    li:hover {
+        background: $color3;
+        color: $menuback;
+        cursor: pointer;
+    }
+    li.tool-right {
+        float: right;
+    }
+}

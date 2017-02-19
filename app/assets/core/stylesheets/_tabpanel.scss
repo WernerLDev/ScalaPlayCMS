@@ -1,0 +1,39 @@
+
+.tabsContainer {
+    background: $color4;
+    height: 40px;
+    ul.tabs {
+        display: block;
+        list-style-type: none;
+        margin: 0; padding: 0;
+        height: 40px;
+        li {
+            position: relative;
+            display: block;
+            float: left;
+            font-size: 13px;
+            line-height: 40px;
+            padding: 0 5px;
+            height: 40px; margin-right: 2px;
+            background: $color2;
+            text-align: center;
+            cursor: pointer;
+            .clickarea {
+                position: absolute;
+                top: 0; left: 0; bottom: 0; right: 20px;
+            }
+            .fa { opacity: 0.4; }
+        }
+        li:hover .fa { opacity: 1 }
+        li.active {
+            background: $menuback;
+            color: #FFF;
+        }
+    }
+    ul.tabs:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+

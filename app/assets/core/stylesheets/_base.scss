@@ -1,0 +1,24 @@
+$menuback: #4E5166;
+
+$color1: #7C90A0;
+$color2: #B5AA9D;
+$color3: #B9B7A7;
+$color4: #747274;
+$bgcolor: #EEEFF1;
+
+body {
+    background: $bgcolor;
+    color: #003300;
+    font-family: 'Varela Round', sans-serif;
+}
+
+.panel-treeview {
+    width: 400px; 
+    position: absolute; top: 0; left: 80px; bottom: 0;
+    border-right: 1px solid $color2;
+}
+
+
+.area-right {
+    position: absolute; top: 0; left: 480px; right: 0; bottom: 0;
+}

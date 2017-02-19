@@ -1,0 +1,74 @@
+
+.toolbar {
+    height: 40px;
+    background: $color4;
+}
+
+
+input.treeviewinput {
+    display: block;
+    border: 0;
+    border-bottom: 1px solid $menuback;
+    border-left: 1px solid $menuback;
+    padding-left: 5px;
+    height: 15px;
+    font-size: 14px;
+    margin-left: 0px;
+    flex: 1;
+}
+
+.tree {
+    padding: 15px;
+    ul {
+        list-style-type: none;
+        display: block;
+        padding: 0 0 0 0px; margin: 0 0 0 30px;
+        border-left: 1px dotted #d2d2d2;
+
+        li {
+            margin-left: -10px;
+            display: block; min-height: 25px; 
+            div.treeitem {
+                display: flex;
+                -moz-user-select: none;
+                user-select: none;
+                height: 15px;
+                padding: 5px;
+                font-size: 14px;
+                .fa {
+                    width: 10px;
+                    margin-right: 5px;
+                }
+                .arrow:hover {
+                    cursor: pointer;
+                }
+                .fileicon { margin-right: 5px; }
+                .emptyicon {
+                }
+            }
+            div.treeitem:hover {
+                background-color: #e3e3e3;
+                cursor: default;
+                border-radius: 6px;
+            }
+            div.selected {
+                background: #0275d8;
+                /*background: #d3d3d3;*/
+                color: #FFF;
+                border-radius: 6px;
+            }
+            div.selected:hover {
+                background: #0275d8;
+                /*background: #d3d3d3;*/
+                color: #FFF;
+            }
+            div.adding input { color: $color4; text-decoration: italic; } 
+        }
+        li.deleted div.treeitem{ color: red }
+    }
+}
+
+.tree > ul {
+    margin: 0; padding: 0; border: 0;  
+}
+.tree > ul > li { margin: 0 }
