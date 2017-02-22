@@ -10,7 +10,7 @@ GET     /count                      controllers.CountController.count
 GET     /message                    controllers.AsyncController.message
 
 GET     /admin                      core.controllers.MainController.index
-GET     /documents                  core.controllers.MainController.documents
+GET     /documents                  core.controllers.MainController.listDocuments
 DELETE  /documents/:id              core.controllers.MainController.deleteDocument(id:Long)
 POST    /documents                  core.controllers.MainController.addDocument
 PUT     /documents/:id/collapse     core.controllers.MainController.collapseDocument(id:Long)

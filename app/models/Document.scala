@@ -1,16 +1,17 @@
 package models
 
 import play.api.Play
-import play.api.db.slick.DatabaseConfigProvider
+import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import scala.concurrent.Future
 import slick.driver.JdbcProfile
 import slick.driver.MySQLDriver.api._
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.{Try,Success,Failure}
+import javax.inject.Singleton
+import javax.inject._
+import play.api.Play.current
 
 case class Document(id : Long , parent_id : Long, name : String, doctype : String, collapsed : Boolean )
 case class DocumentJson(id : Long, key: String, label : String, doctype : String, collapsed : Boolean, selected: Boolean, children: List[DocumentJson])
-case class DocumentResult(success:Boolean, affectedRowCount:Int)
 
 class DocumentTableDef(tag: Tag) extends Table[Document](tag, "document") {
 
@@ -24,9 +25,8 @@ class DocumentTableDef(tag: Tag) extends Table[Document](tag, "document") {
     (id, parent_id, name, doctype, collapsed) <>(Document.tupled, Document.unapply)
 }
 
-
-object Documents {
-    val dbConfig = DatabaseConfigProvider.get[JdbcProfile](Play.current)
+@Singleton
+class Documents @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends HasDatabaseConfigProvider[JdbcProfile] {
 
     val documents = TableQuery[DocumentTableDef]
     val insertQuery = documents returning documents.map(_.id) into ((doc, id) => doc.copy(id = id))
@@ -46,33 +46,20 @@ object Documents {
         dbConfig.db.run( insertQuery += doc )
     }
 
-    def delete(id:Long):Future[DocumentResult] = {
+    def delete(id:Long):Future[Int] = {
+        val subitems:Future[Seq[Document]] = dbConfig.db.run(documents.filter(_.parent_id === id).result)
+        subitems.map(items => {
+            items.map(x => delete(x.id))
+        })
         val action = documents.filter(_.id === id).delete
-        val result = dbConfig.db.run(action)
-        result map (res => DocumentResult(true, res))
+        dbConfig.db.run(action)
     }
 
-    def collapse(id:Long, state:Boolean):Future[Boolean] = {
-        Try(
-            documents.filter(x => x.id === id).map{ document => document.collapsed}.update(state)
-        ) match {
-            case Success(x) => {
-                dbConfig.db.run(x)
-                Future(true)
-            }
-            case Failure(_) => Future(false)
-        }
+    def setCollapsed(id:Long, state:Boolean):Future[Int] = dbConfig.db.run {
+        documents.filter(_.id === id).map(_.collapsed).update(state)
     }
 
-    def rename(id:Long, name:String):Future[Boolean] = {
-        Try(
-            documents.filter(x => x.id === id).map{ document => document.name}.update(name)
-        ) match {
-            case Success(x) => {
-                dbConfig.db.run(x)
-                Future(true)
-            }
-            case Failure(_) => Future(false)
-        }
+    def setName(id:Long, name:String):Future[Int] = dbConfig.db.run {
+        documents.filter(_.id === id).map(_.name).update(name)
     }
 }
