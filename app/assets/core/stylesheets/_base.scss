@@ -12,13 +12,18 @@ body {
     font-family: 'Varela Round', sans-serif;
 }
 
+.splitpane-container {
+    position: absolute; top: 0; left: 80px; bottom: 0; right: 0;
+}
+
 .panel-treeview {
-    width: 400px; 
-    position: absolute; top: 0; left: 80px; bottom: 0;
-    border-right: 1px solid $color2;
+    width: 100%; 
+    height: 100%;
+    overflow: auto;
+    //border-right: 1px solid $color2;
 }
 
 
 .area-right {
-    position: absolute; top: 0; left: 480px; right: 0; bottom: 0;
+    //position: absolute; top: 0; left: 480px; right: 0; bottom: 0;
 }

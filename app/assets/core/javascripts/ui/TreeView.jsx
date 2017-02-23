@@ -122,7 +122,7 @@ export default class TreeView extends React.Component {
                         <div className={this.props.selected ? "selected treeitem" : "treeitem"} onContextMenu={this.itemClicked.bind(this)} onClick={this.itemClicked.bind(this)}><Icon click={this.collapseHandler.bind(this)} type={this.props.collapsed ? "arrow-down" : "arrow-right"} /> <Icon type={this.props.type} /> {label}</div>
                         </ContextMenuTrigger>
                         {newitemform}
-                        {this.props.collapsed ? this.props.children.map((x) => <TreeView id={x.id} selected={x.selected} type={x.doctype} collapsed={x.collapsed} key={x.label} label={x.label} callback={this.props.callback} children={x.children} />) : ""}
+                        {this.props.collapsed ? this.props.children.map((x) => <TreeView id={x.id} selected={x.selected} type={x.doctype} collapsed={x.collapsed} key={x.id} label={x.label} callback={this.props.callback} children={x.children} />) : ""}
                     </li>
                     {this.contextMenu()}
                 </ul>    

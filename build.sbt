@@ -16,11 +16,6 @@ libraryDependencies ++= Seq(
   "mysql" % "mysql-connector-java" % "5.1.34"
 )
 
-includeFilter in webpack := "*.js"
-includeFilter in webpackDev := "*.js" // for development mode
-includeFilter in webpackProd := "*.js" // for production mode
-includeFilter in webpackTest := "*.js" // for testing mode
-
-WebKeys.pipeline := WebKeys.pipeline.dependsOn(webpack).value
+PlayKeys.playRunHooks += Webpack(baseDirectory.value)
 
 fork in run := false

@@ -3,6 +3,7 @@ import SideMenu from './ui/sidemenu.jsx';
 import PanelTreeView from './ui/PanelTreeView.jsx';
 import TabPanel from './ui/TabPanel.jsx';
 import * as TabActions from './actions/TabViewActions.js';
+import SplitPane from 'react-split-pane';
 
 export default class Main extends React.Component {
 
@@ -46,9 +47,13 @@ export default class Main extends React.Component {
         return(
             <div>
                 <SideMenu />
-                <PanelTreeView renameItem={this.itemRenamed.bind(this)} deleteItem={(id) => this.deleteItem(id)} dblclick={this.onTreeDblClick.bind(this)} />
-                <div className="area-right">
-                    <TabPanel clickTab={this.clickTab.bind(this)} closeTab={this.closeTab.bind(this)} tabs={this.state.tabs} />
+                <div className="splitpane-container"> 
+                    <SplitPane split="vertical" minSize={200} defaultSize={400}>
+                        <PanelTreeView renameItem={this.itemRenamed.bind(this)} deleteItem={(id) => this.deleteItem(id)} dblclick={this.onTreeDblClick.bind(this)} />
+                        <div className="area-rightsdf">
+                            <TabPanel clickTab={this.clickTab.bind(this)} closeTab={this.closeTab.bind(this)} tabs={this.state.tabs} />
+                        </div>
+                    </SplitPane>
                 </div>
             </div>
         )

@@ -51,7 +51,7 @@ export default class PanelTreeView extends React.Component {
         if(this.state.items.length <= 0) {
             return(
                 <div className="panel-treeview">
-                    Loading...
+                    Loading documents...
                 </div>
             )
         }
@@ -61,7 +61,7 @@ export default class PanelTreeView extends React.Component {
                     <SmallToolBar />
                 </div>
                <div className="tree">
-                    {this.state.items.map(x => <TreeView id={x.id} selected={x.selected} type={x.doctype} label={x.label} key={x.label} callback={this.clickHandler.bind(this)} collapsed={x.collapsed} children={x.children} />  )}
+                    {this.state.items.map(x => <TreeView id={x.id} selected={x.selected} type={x.doctype} label={x.label} key={x.id} callback={this.clickHandler.bind(this)} collapsed={x.collapsed} children={x.children} />  )}
                 </div>
             </div>
         )
