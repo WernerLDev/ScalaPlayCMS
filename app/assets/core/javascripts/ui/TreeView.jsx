@@ -134,6 +134,7 @@ export default class TreeView extends React.Component {
                             collapsed={this.props.collapsed}
                             collapseHandler={this.collapseHandler.bind(this)}
                             onParentChange={this.updateParent.bind(this)}
+                            childNodes={this.props.children}
                         />
                         </ContextMenuTrigger>
                         {newitemform}
@@ -154,6 +155,7 @@ export default class TreeView extends React.Component {
                         label={label}
                         collapsable={false}
                         onParentChange={this.updateParent.bind(this)}
+                        childNodes={[]}
                     />
                     </ContextMenuTrigger>
                     {newitemform}

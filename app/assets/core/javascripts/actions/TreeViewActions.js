@@ -32,3 +32,12 @@ export function selectItem(prop, items) {
     }
     return updateTree(prop.id, items, select, deselect);
 }
+
+export function isItemChild(id, children) {
+    var subset = children.filter(x => x.id == id);
+    if(subset.length > 0) {
+        return true;
+    } else {
+        return children.map(x => isItemChild(id, x.children)).filter(x => x == true).length > 0;
+    }
+}

@@ -3,9 +3,6 @@ import TreeView from './TreeView.jsx';
 import * as Api from '../api/api.js';
 import * as TreeActions from '../actions/TreeViewActions.js';
 import SmallToolBar from './SmallToolBar.jsx';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
-import { DragDropContextProvider } from 'react-dnd';
 
 export default class PanelTreeView extends React.Component {
 

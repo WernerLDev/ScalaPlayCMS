@@ -36,8 +36,10 @@
 .react-contextmenu-item.react-contextmenu-item--active,
 .react-contextmenu-item:hover {
     color: #fff;
-    background-color: #0275d8!important;
-    border-color: #0275d8!important;
+    /*background-color: #0275d8!important;
+    border-color: #0275d8!important;*/
+    background-color: $menuback!important;
+    border-color: $menuback!important;
     text-decoration: none;
 }
 

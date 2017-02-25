@@ -28,6 +28,9 @@
         li.active {
             background: $menuback;
             color: #FFF;
+            -webkit-box-shadow: inset -1px 47px 31px -38px rgba(0,0,0,0.44);
+-moz-box-shadow: inset -1px 47px 31px -38px rgba(0,0,0,0.44);
+box-shadow: inset -1px 47px 31px -38px rgba(0,0,0,0.44);
         }
     }
     ul.tabs:after {
