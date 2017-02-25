@@ -47,3 +47,15 @@ export function renameDocument(id, name) {
         })
     }).then(r => r.json())
 }
+
+export function updateParentDocument(id, parent_id) {
+    return fetch("/documents/" + id + "/updateparent", {
+        method: "PUT",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "parent_id": parent_id
+        })
+    }).then(r => r.json());
+}

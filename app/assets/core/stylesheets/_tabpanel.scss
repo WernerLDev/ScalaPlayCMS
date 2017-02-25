@@ -1,12 +1,12 @@
 
 .tabsContainer {
-    background: $color4;
-    height: 40px;
+    background: $color1;
+    min-height: 40px;
     ul.tabs {
         display: block;
         list-style-type: none;
         margin: 0; padding: 0;
-        height: 40px;
+        min-height: 40px;
         li {
             position: relative;
             display: block;

@@ -1,11 +1,14 @@
 
 .toolbar {
     height: 40px;
-    background: $color4;
+    background: $color1;
 }
 
+.betweenDropTarget {
+    height: 2px; background: #00ff00;
+}
 
-input.treeviewinput {
+input.treeviewinput, input.treeviewinputEdit {
     display: block;
     border: 0;
     border-bottom: 1px solid $menuback;
@@ -15,6 +18,20 @@ input.treeviewinput {
     font-size: 14px;
     margin-left: 0px;
     flex: 1;
+    font-family: 'Varela Round', sans-serif;
+    font-size: 14px;
+}
+
+input.treeviewinputEdit {
+    background: #3796E7;
+    border-radius: 4px;
+    border: 0;
+    width: auto;
+    margin-top: -2px;
+    padding-left: 0;
+    padding-top: 3px;
+    height: 15px;
+    color: #FFF;
 }
 
 .tree {
@@ -43,8 +60,6 @@ input.treeviewinput {
                     cursor: pointer;
                 }
                 .fileicon { margin-right: 5px; }
-                .emptyicon {
-                }
             }
             div.treeitem:hover {
                 background-color: #e3e3e3;
@@ -52,17 +67,23 @@ input.treeviewinput {
                 border-radius: 6px;
             }
             div.selected {
-                background: #0275d8;
+                /*background: #0275d8;*/
+                background: $menuback;
                 /*background: #d3d3d3;*/
                 color: #FFF;
                 border-radius: 6px;
             }
             div.selected:hover {
-                background: #0275d8;
+                background: $menuback;
                 /*background: #d3d3d3;*/
                 color: #FFF;
             }
             div.adding input { color: $color4; text-decoration: italic; } 
+            div.draghover { 
+                border: 1px dotted $color1;
+                border-radius: 4px;
+                /*background: #00ff00;*/
+            }
         }
         li.deleted div.treeitem{ color: red }
     }

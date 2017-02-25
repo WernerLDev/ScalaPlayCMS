@@ -1,0 +1,16 @@
+$menuback: #0e1110;
+
+$color1: #638279;
+$color2: #24312e;
+$color3: #8c9b97;
+$color4: #396156;
+
+$bgcolor: #EEEFF1;
+
+.tabsContainer ul.tabs li {
+    color: $bgcolor;
+}
+
+.small-toolbar li:hover {
+    color: $bgcolor;
+}

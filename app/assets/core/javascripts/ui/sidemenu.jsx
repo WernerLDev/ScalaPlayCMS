@@ -14,7 +14,7 @@ export default class SideMenu extends React.Component {
                         <i className="fa fa-home" aria-hidden="true"></i>
                         <p>Dashboard</p>
                     </li>
-                    <li>
+                    <li className="active">
                         <i className="fa fa-files-o" aria-hidden="true"></i>
                         <p>Pages</p>
                     </li>

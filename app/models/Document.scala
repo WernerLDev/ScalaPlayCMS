@@ -62,4 +62,8 @@ class Documents @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     def setName(id:Long, name:String):Future[Int] = dbConfig.db.run {
         documents.filter(_.id === id).map(_.name).update(name)
     }
+
+    def updateParent(id:Long, parent_id:Long):Future[Int] = dbConfig.db.run {
+        documents.filter(_.id === id).map(_.parent_id).update(parent_id)
+    }
 }

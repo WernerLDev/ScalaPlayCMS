@@ -5,6 +5,7 @@ import * as TreeActions from '../actions/TreeViewActions.js';
 import SmallToolBar from './SmallToolBar.jsx';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import { DragDropContextProvider } from 'react-dnd';
 
 export default class PanelTreeView extends React.Component {
 
@@ -44,6 +45,10 @@ export default class PanelTreeView extends React.Component {
         } else if(action == "refresh") {
             this.getData();
             this.props.renameItem(prop.id, prop.name)
+        } else if(action == "updateparent") {
+            Api.updateParentDocument(prop.id, prop.parent_id).then(r => {
+                this.getData();
+            });
         }
     }
 
@@ -60,9 +65,9 @@ export default class PanelTreeView extends React.Component {
                 <div className="toolbar">
                     <SmallToolBar />
                 </div>
-               <div className="tree">
-                    {this.state.items.map(x => <TreeView id={x.id} selected={x.selected} type={x.doctype} label={x.label} key={x.id} callback={this.clickHandler.bind(this)} collapsed={x.collapsed} children={x.children} />  )}
-                </div>
+                    <div className="tree">
+                         {this.state.items.map(x => <TreeView id={x.id} selected={x.selected} type={x.doctype} label={x.label} key={x.id} callback={this.clickHandler.bind(this)} collapsed={x.collapsed} children={x.children} />  )}
+                    </div>
             </div>
         )
     }

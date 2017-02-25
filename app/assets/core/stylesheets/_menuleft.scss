@@ -1,5 +1,8 @@
 .menuleft {
     background: $menuback;
+    -webkit-box-shadow: inset -12px 0px 21px -6px rgba(0,0,0,0.18);
+-moz-box-shadow: inset -12px 0px 21px -6px rgba(0,0,0,0.18);
+box-shadow: inset -12px 0px 21px -6px rgba(0,0,0,0.18);
     width: 80px;
     position: fixed; top: 0; left: 0; bottom: 0;
     ul {
@@ -18,14 +21,22 @@
                 font-size: 25px;
             }
         }
-        :hover {
-          background: $color1;
+        li:hover {
+-webkit-box-shadow: inset 10px 10px 21px 1px rgba(0,0,0,0.18);
+-moz-box-shadow: inset 10px 10px 21px 1px rgba(0,0,0,0.18);
+box-shadow: inset 10px 10px 21px 1px rgba(0,0,0,0.18);
           cursor: pointer;
         }
 
         .signoutbtn {
             position: absolute; left: 0; right: 0; bottom: 0;
 
+        }
+
+        li.active {
+            -webkit-box-shadow: inset 10px 10px 60px 1px rgba(0,0,0,0.44);
+-moz-box-shadow: inset 10px 10px 60px 1px rgba(0,0,0,0.44);
+box-shadow: inset 10px 10px 60px 1px rgba(0,0,0,0.44);
         }
     }
 }

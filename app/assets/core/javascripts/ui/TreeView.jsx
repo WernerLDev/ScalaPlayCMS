@@ -2,6 +2,7 @@ import React from 'react';
 import Icon from './Icon.jsx';
 import { ContextMenu, MenuItem, SubMenu, ContextMenuTrigger } from "react-contextmenu";
 import * as Api from '../api/api.js';
+import DraggableTreeViewItem from './DraggableTreeViewItem.jsx';
 
 export default class TreeView extends React.Component {
 
@@ -72,6 +73,10 @@ export default class TreeView extends React.Component {
         }
     }
 
+    updateParent(id, parent_id) {
+        this.props.callback({id: id, parent_id: parent_id}, "updateparent");
+    }
+
     contextMenu() {
         return (
             <ContextMenu id={String(this.props.id)}>
@@ -110,7 +115,7 @@ export default class TreeView extends React.Component {
         var label = this.props.label;
         if(this.state.renaming) {
             label = (
-                <input autoFocus disabled={this.state.updating} onBlur={() =>this.setState({renaming: false})} onKeyUp={this.editKeyPress.bind(this)} className="treeviewinput" type="text" defaultValue={this.props.label} />
+                <input autoFocus disabled={this.state.updating} onBlur={() =>this.setState({renaming: false})} onKeyUp={this.editKeyPress.bind(this)} className="treeviewinputEdit" type="text" defaultValue={this.props.label} />
             )
         }
 
@@ -118,8 +123,18 @@ export default class TreeView extends React.Component {
             return(
                 <ul>
                     <li className={this.state.deleted ? "deleted" : ""}>
-                        <ContextMenuTrigger id={String(this.props.id)}>
-                        <div className={this.props.selected ? "selected treeitem" : "treeitem"} onContextMenu={this.itemClicked.bind(this)} onClick={this.itemClicked.bind(this)}><Icon click={this.collapseHandler.bind(this)} type={this.props.collapsed ? "arrow-down" : "arrow-right"} /> <Icon type={this.props.type} /> {label}</div>
+                        <ContextMenuTrigger holdToDisplay={-1} id={String(this.props.id)}>
+                        <DraggableTreeViewItem
+                            id={this.props.id}
+                            selected={this.props.selected}
+                            type={this.props.type}
+                            itemClicked={this.itemClicked.bind(this)}
+                            label={label}
+                            collapsable={true}
+                            collapsed={this.props.collapsed}
+                            collapseHandler={this.collapseHandler.bind(this)}
+                            onParentChange={this.updateParent.bind(this)}
+                        />
                         </ContextMenuTrigger>
                         {newitemform}
                         {this.props.collapsed ? this.props.children.map((x) => <TreeView id={x.id} selected={x.selected} type={x.doctype} collapsed={x.collapsed} key={x.id} label={x.label} callback={this.props.callback} children={x.children} />) : ""}
@@ -130,10 +145,16 @@ export default class TreeView extends React.Component {
         } else {
             return (<ul>
                 <li className={this.state.deleted ? "deleted" : ""}> 
-                    <ContextMenuTrigger id={String(this.props.id)}>
-                    <div className={this.props.selected ? "selected treeitem" : "treeitem"} onContextMenu={this.itemClicked.bind(this)} onClick={this.itemClicked.bind(this)}>
-                        <Icon type="empty" /> <Icon type={this.props.type} /> {label}
-                    </div>
+                    <ContextMenuTrigger holdToDisplay={-1} id={String(this.props.id)}>
+                    <DraggableTreeViewItem
+                        id={this.props.id}
+                        selected={this.props.selected}
+                        type={this.props.type}
+                        itemClicked={this.itemClicked.bind(this)}
+                        label={label}
+                        collapsable={false}
+                        onParentChange={this.updateParent.bind(this)}
+                    />
                     </ContextMenuTrigger>
                     {newitemform}
                 </li>
