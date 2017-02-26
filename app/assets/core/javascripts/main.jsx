@@ -50,7 +50,7 @@ export default class Main extends React.Component {
                 <div className="splitpane-container"> 
                     <SplitPane split="vertical" minSize={200} defaultSize={400}>
                         <PanelTreeView renameItem={this.itemRenamed.bind(this)} deleteItem={(id) => this.deleteItem(id)} dblclick={this.onTreeDblClick.bind(this)} />
-                        <div className="area-rightsdf">
+                        <div>
                             <TabPanel clickTab={this.clickTab.bind(this)} closeTab={this.closeTab.bind(this)} tabs={this.state.tabs} />
                         </div>
                     </SplitPane>

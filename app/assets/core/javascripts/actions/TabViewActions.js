@@ -59,6 +59,7 @@ export function addTab(obj, alltabs) {
         id: obj.id,
         active: true,
         name: obj.label,
+        type: obj.type,
         content: () => (<TestEditor name={obj.label}><h1>blaat {obj.id}</h1></TestEditor> )
     }
     alltabs.push(newtab);

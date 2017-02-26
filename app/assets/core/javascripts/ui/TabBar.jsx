@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Icon from './Icon.jsx';
 
 export default class TabBar extends React.Component {
 
@@ -8,6 +8,7 @@ export default class TabBar extends React.Component {
     }
 
     render() {
+        console.log(this.props.type);
         return(
             <div className="tabsContainer">
 
@@ -15,7 +16,7 @@ export default class TabBar extends React.Component {
                     {this.props.tabs.map(tab => (
                         <li key={tab.id} className={tab.active ? "active" : ""}>
                             <div onClick={() => this.props.onTabClick(tab)} className="clickarea"></div>
-                            {tab.name} <i onClick={() => this.props.onTabClose(tab)} className="fa fa-window-close" aria-hidden="true"></i>
+                            <Icon type={tab.type} /> {tab.name} <i onClick={() => this.props.onTabClose(tab)} className="fa fa-window-close" aria-hidden="true"></i>
                         </li>
                     ) )}
                 </ul>

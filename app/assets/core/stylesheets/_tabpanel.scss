@@ -22,9 +22,9 @@
                 position: absolute;
                 top: 0; left: 0; bottom: 0; right: 20px;
             }
-            .fa { opacity: 0.4; }
+            .fa-window-close { opacity: 0.4; }
         }
-        li:hover .fa { opacity: 1 }
+        li:hover .fa-window-close { opacity: 1 }
         li.active {
             background: $menuback;
             color: #FFF;
