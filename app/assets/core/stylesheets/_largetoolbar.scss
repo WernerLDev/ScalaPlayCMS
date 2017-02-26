@@ -9,18 +9,26 @@
 ul.large-toolbar {
     display: block;
     padding: 0; margin: 20px;
-	border: 1px solid $color1; 
-	border-radius: 4px;
+	border: 1px solid $menuback;
+	border-radius: 6px;
 	-webkit-box-shadow: inset 10px 10px 60px 1px rgba(0,0,0,0.44);
 	-moz-box-shadow: inset 10px 10px 60px 1px rgba(0,0,0,0.44);
 	box-shadow: inset 10px 10px 60px 1px rgba(0,0,0,0.44);
 	height: 46px;
     list-style-type: none;
+	li:first-child a{
+		border-top-left-radius: 6px;
+		border-bottom-left-radius: 6px;
+	}
+	li:last-child a {
+		border-top-right-radius: 6px;
+		border-bottom-right-radius: 6px;
+	}
     li {
         display: inline-block;
         width: auto; height: 46px;
         margin-right: 0px;
-        border-right: 1px solid #5E6073;
+        border-right: 1px solid $menuback;
 		a {
 			display: block;
 			outline: 0;
@@ -42,7 +50,7 @@ box-shadow: inset 1px -12px 45px -23px rgba(0,0,0,1);
     li.button-right {
         float: right; margin: 0;
 		border-right: 0;
-		border-left: 1px solid #5E6073;
+		border-left: 1px solid $menuback;
     }
     li:hover {
         cursor: pointer;
