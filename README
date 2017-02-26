@@ -1,3 +1,12 @@
+Scala Play Platform
+===================
+This is an application I recently started working on. It is an application that can be used for content management, data management and asset management.
+Platform will be build on top of Scala Play and the front-end using react.js.
+
+Here's a screenshot of app so far.
+![UI of current version](http://werlang.nl/rand/playplatform.png)
+
+
 This is your new Play application
 =================================
 
