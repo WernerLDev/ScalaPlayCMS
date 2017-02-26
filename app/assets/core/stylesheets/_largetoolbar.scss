@@ -55,4 +55,9 @@ box-shadow: inset 1px -12px 45px -23px rgba(0,0,0,1);
     li:hover {
         cursor: pointer;
     }
+	li.redbtn {
+		a:hover {
+			background: red;
+		}
+	}
 }

@@ -5,7 +5,7 @@ Platform will be build on top of Scala Play and the front-end using react.js.
 
 Here's a screenshot of app so far.
 
-![Alt text](http://werlang.nl/rand/playplatform.png "Screenshot")
+![Alt text](http://werlang.nl/rand/playplatformv2.png "Screenshot")
 
 This is your new Play application
 =================================
