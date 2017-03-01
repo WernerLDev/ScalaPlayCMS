@@ -23,18 +23,18 @@ export default class DraggableTreeViewItem extends React.Component {
     }
 
     onDragOver(e) {
-        if(this.preventDropInOwnChild(e)) {
+        /*if(this.preventDropInOwnChild(e)) {
             return;
-        }
+        }*/
         e.preventDefault();
         e.target.classList.add("draghover");
         return false;
     }
 
     onDragLeave(e) {
-        if(this.preventDropInOwnChild(e)) {
+        /*if(this.preventDropInOwnChild(e)) {
             return;
-        }
+        }*/
         e.preventDefault();
         e.target.classList.remove("draghover");
         return false;

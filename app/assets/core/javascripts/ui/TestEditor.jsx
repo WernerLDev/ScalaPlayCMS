@@ -11,17 +11,11 @@ export default class TestEditor extends React.Component {
 
     render() {
         return(
-            <div>
+            <div id="wrapper">
                 <LargeToolBar />
-                 <SplitPane split="vertical" minSize={50} defaultSize={100}>
-                    <div>
-
-                    </div>
-                    <div>
-                        {this.props.name}
-                        {this.props.children}
-                    </div>
-                </SplitPane>
+                <div className="iframe-wrapper">
+                    <iframe src="/" />
+                </div>
             </div>
         )
     }

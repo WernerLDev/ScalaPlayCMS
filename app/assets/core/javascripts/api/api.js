@@ -1,5 +1,9 @@
 
 
+export function getPageTypes() {
+    return fetch("/api/v1/pagetypes").then(r => r.json())
+}
+
 export function getDocuments() {
     return fetch("/documents").then(r => r.json())
 }
@@ -10,10 +14,11 @@ export function deleteDocument(id) {
     }).then(r => r.json())
 }
 
-export function addDocument(parent_id, name) {
+export function addDocument(parent_id, name, pagetype) {
     var body = JSON.stringify({
         "parent_id" : parent_id,
-        "name" : name
+        "name" : name,
+        "pagetype": pagetype
     })
     return fetch("/documents", {
         method: "POST",

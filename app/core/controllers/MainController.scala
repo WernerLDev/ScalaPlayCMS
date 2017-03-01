@@ -8,9 +8,15 @@ import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
+import java.sql.Timestamp
+import java.util.Date
+import utils.PageTemplates
+import scala.util.{Success, Failure}
+import scala.concurrent._
+import scala.concurrent.duration._
 
 @Singleton
-class MainController @Inject()(documents:Documents) extends Controller {
+class MainController @Inject()(documents:Documents, templates:PageTemplates) extends Controller {
 
   /**
    * Create an Action to render an HTML page with a welcome message.
@@ -20,6 +26,19 @@ class MainController @Inject()(documents:Documents) extends Controller {
    */
   def index = Action {
     Ok(core.views.html.index("Your new application is ready."))
+  }
+
+  def getPageTypes = Action {
+    val pagetypes = templates.templates.map { case (k,v) => {
+      Json.toJson(Map( "typekey" -> JsString(k), "typename" -> JsString(v.name)))
+     }}.toSeq
+    Ok(
+      Json.toJson(
+        Map(
+          "pagetypes" -> JsArray(pagetypes)
+        )
+      )
+    )
   }
 
   implicit val DocWrites = Json.writes[DocumentJson]
@@ -38,7 +57,9 @@ class MainController @Inject()(documents:Documents) extends Controller {
   def addDocument() = Action.async(parse.json) { request =>
       val parent_id = (request.body \ "parent_id").asOpt[Int].getOrElse(0)
       val name = (request.body \ "name").asOpt[String].getOrElse("")
-      documents.create( Document(0, parent_id, name, "file", true) ) map { x =>
+      val pagetype = (request.body \ "pagetype").asOpt[String].getOrElse("default")
+      var currentTime:Timestamp = new Timestamp((new Date).getTime());
+      documents.create( Document(0, parent_id, name, "file", true, Some(pagetype), currentTime, currentTime, currentTime) ) map { x =>
         Ok(Json.toJson( Map("id" -> JsNumber(x.id),  "parent_id" -> JsNumber(parent_id), "name" -> JsString(name)) ))
       }
   }
@@ -66,5 +87,22 @@ class MainController @Inject()(documents:Documents) extends Controller {
         Ok(Json.toJson(Map("success" -> JsNumber(x))))
       }
     }).getOrElse( Future(BadRequest("Error: missing parameter [parent_id]")) )
+  }
+
+  def page(path:String):Action[AnyContent] = {
+    val result = Await.ready(documents.getByPath(path), Duration.Inf).value.get
+    result match {
+      case Success(page) => {
+        page match {
+          case Some(p) => templates.getAction(p)
+          case None => Action {
+            NotFound(views.html.notfound())
+          }
+        }
+      }
+      case Failure(x) => Action{
+        BadRequest("Something went wrong")
+      }
+    }
   }
 }

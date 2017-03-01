@@ -8,7 +8,6 @@ export default class TabBar extends React.Component {
     }
 
     render() {
-        console.log(this.props.type);
         return(
             <div className="tabsContainer">
 

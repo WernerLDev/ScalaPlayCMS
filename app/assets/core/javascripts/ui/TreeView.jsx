@@ -14,7 +14,8 @@ export default class TreeView extends React.Component {
             newitem: false,
             newitemname: "",
             updating: false,
-            renaming: false
+            renaming: false,
+            pagetype: ""
         }
     }
 
@@ -41,8 +42,8 @@ export default class TreeView extends React.Component {
         this.props.callback(this.props, "delete");
     }
 
-    newItem() {
-        this.setState({ lastclick: this.state.lastclick, deleted: this.state.deleted, newitem: true })
+    newItem(pagetype) {
+        this.setState({ lastclick: this.state.lastclick, deleted: this.state.deleted, newitem: true, pagetype: pagetype })
     }
 
     hideNewItem() {
@@ -52,8 +53,8 @@ export default class TreeView extends React.Component {
     keypress(e) {
         if(e.keyCode == 13) {
             this.setState({updating: true })
-            Api.addDocument(this.props.id, this.state.newitemname).then(r => {
-                this.props.callback({id: r.id, label: this.state.newitemname}, "newitemadded");
+            Api.addDocument(this.props.id, this.state.newitemname, this.state.pagetype).then(r => {
+                this.props.callback({id: r.id, type: "file", label: this.state.newitemname}, "newitemadded");
                 this.setState({ newitemname: "", newitem: false, updating: false })
             })
         } else {
@@ -80,14 +81,8 @@ export default class TreeView extends React.Component {
     contextMenu() {
         return (
             <ContextMenu id={String(this.props.id)}>
-                <SubMenu hoverDelay={0} title="Add">
-                <SubMenu hoverDelay={0} title="Page">
-                    <MenuItem onClick={this.newItem.bind(this)} data={{item: 'newdefaultpage'}}>Default page</MenuItem>
-                    <MenuItem onClick={this.handleClick.bind(this)} data={{item: 'newfolder'}}>Photo gallery</MenuItem>
-                    <MenuItem onClick={this.handleClick.bind(this)} data={{item: 'newfolder'}}>Product page</MenuItem>
-                </SubMenu>
-                <MenuItem onClick={this.handleClick.bind(this)} data={{item: 'newfolder'}}>Link</MenuItem>
-                <MenuItem onClick={this.handleClick.bind(this)} data={{item: 'newfolder'}}>Snippet</MenuItem>
+                <SubMenu hoverDelay={0} title="Add Page">
+                    {this.props.pagetypes.map(x => <MenuItem onClick={() => this.newItem(x.typekey)} data={{item: 'newdefaultpage'}}>{x.typename}</MenuItem> )}
                 </SubMenu>
                 <MenuItem onClick={() => this.props.callback(this.props, "dblclick")} data={{item: 'open'}}>Open</MenuItem>
                 <MenuItem onClick={() => this.props.callback(this.props, "dblclick")} data={{item: 'open'}}>Unpublish</MenuItem>
@@ -119,33 +114,9 @@ export default class TreeView extends React.Component {
             )
         }
 
-        if(this.props.children.length > 0) {
-            return(
-                <ul>
-                    <li className={this.state.deleted ? "deleted" : ""}>
-                        <ContextMenuTrigger holdToDisplay={-1} id={String(this.props.id)}>
-                        <DraggableTreeViewItem
-                            id={this.props.id}
-                            selected={this.props.selected}
-                            type={this.props.type}
-                            itemClicked={this.itemClicked.bind(this)}
-                            label={label}
-                            collapsable={true}
-                            collapsed={this.props.collapsed}
-                            collapseHandler={this.collapseHandler.bind(this)}
-                            onParentChange={this.updateParent.bind(this)}
-                            childNodes={this.props.children}
-                        />
-                        </ContextMenuTrigger>
-                        {newitemform}
-                        {this.props.collapsed ? this.props.children.map((x) => <TreeView id={x.id} selected={x.selected} type={x.doctype} collapsed={x.collapsed} key={x.id} label={x.label} callback={this.props.callback} children={x.children} />) : ""}
-                    </li>
-                    {this.contextMenu()}
-                </ul>    
-            )
-        } else {
-            return (<ul>
-                <li className={this.state.deleted ? "deleted" : ""}> 
+        return (
+            <ul>
+                <li className={this.state.deleted ? "deleted" : ""}>
                     <ContextMenuTrigger holdToDisplay={-1} id={String(this.props.id)}>
                     <DraggableTreeViewItem
                         id={this.props.id}
@@ -153,16 +124,19 @@ export default class TreeView extends React.Component {
                         type={this.props.type}
                         itemClicked={this.itemClicked.bind(this)}
                         label={label}
-                        collapsable={false}
+                        collapsable={this.props.children.length > 0}
+                        collapsed={this.props.collapsed}
+                        collapseHandler={this.collapseHandler.bind(this)}
                         onParentChange={this.updateParent.bind(this)}
-                        childNodes={[]}
+                        childNodes={this.props.children}
                     />
                     </ContextMenuTrigger>
                     {newitemform}
+                    
+                    {this.props.collapsed && this.props.children.length > 0 ? this.props.children.map((x) => <TreeView pagetypes={this.props.pagetypes} id={x.id} selected={x.selected} type={x.doctype} collapsed={x.collapsed} key={x.id} label={x.label} callback={this.props.callback} children={x.children} />) : ""}
                 </li>
-               
                 {this.contextMenu()}
-            </ul>)
-        }
+            </ul>
+        )
     }
 }

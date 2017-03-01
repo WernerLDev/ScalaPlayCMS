@@ -9,8 +9,12 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import javax.inject.Singleton
 import javax.inject._
 import play.api.Play.current
+import java.sql.Timestamp
+import slick.profile.SqlProfile.ColumnOption.SqlType
+import scala.concurrent._
+import scala.concurrent.duration._
 
-case class Document(id : Long , parent_id : Long, name : String, doctype : String, collapsed : Boolean )
+case class Document(id : Long , parent_id : Long, name : String, doctype : String, collapsed : Boolean, view:Option[String], created_at:Timestamp, updated_at:Timestamp, published_at:Timestamp )
 case class DocumentJson(id : Long, key: String, label : String, doctype : String, collapsed : Boolean, selected: Boolean, children: List[DocumentJson])
 
 class DocumentTableDef(tag: Tag) extends Table[Document](tag, "document") {
@@ -20,9 +24,12 @@ class DocumentTableDef(tag: Tag) extends Table[Document](tag, "document") {
   def name = column[String]("name")
   def doctype = column[String]("type")
   def collapsed = column[Boolean]("collapsed")
-
+  def view = column[Option[String]]("view")
+  def created_at = column[Timestamp]("created_at", SqlType("timestamp not null default CURRENT_TIMESTAMP"))
+  def updated_at = column[Timestamp]("updated_at", SqlType("timestamp not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP"))
+  def published_at = column[Timestamp]("published_at", SqlType("timestamp not null default CURRENT_TIMESTAMP"))
   override def * =
-    (id, parent_id, name, doctype, collapsed) <>(Document.tupled, Document.unapply)
+    (id, parent_id, name, doctype, collapsed, view, created_at, updated_at, published_at) <>(Document.tupled, Document.unapply)
 }
 
 @Singleton
@@ -65,5 +72,25 @@ class Documents @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
 
     def updateParent(id:Long, parent_id:Long):Future[Int] = dbConfig.db.run {
         documents.filter(_.id === id).map(_.parent_id).update(parent_id)
+    }
+
+    def getByName(name:String):Future[Option[Document]] = dbConfig.db.run {
+        documents.filter(_.name === name).result.headOption
+    }
+
+    def getByPath(path:String) = {
+        val parts = path.split("/").toList
+        val docs = Await.result(Future.sequence(parts map (x => getByName(x))), Duration.Inf)
+        
+        val res = docs.reduce((a,b) => (a,b) match {
+            case (Some(x), Some(y)) => {
+                if(y.parent_id == x.id) Some(y)
+                else None
+            } 
+            case (None, None) => None
+            case (Some(x), None) => None
+            case (None, Some(x)) => None
+        })
+        Future(res)
     }
 }

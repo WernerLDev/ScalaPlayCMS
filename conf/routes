@@ -10,6 +10,8 @@ GET     /count                      controllers.CountController.count
 GET     /message                    controllers.AsyncController.message
 
 GET     /admin                      core.controllers.MainController.index
+GET     /admin/login                core.controllers.AdminController.login
+GET     /api/v1/pagetypes           core.controllers.MainController.getPageTypes
 GET     /documents                  core.controllers.MainController.listDocuments
 DELETE  /documents/:id              core.controllers.MainController.deleteDocument(id:Long)
 POST    /documents                  core.controllers.MainController.addDocument
@@ -17,5 +19,8 @@ PUT     /documents/:id/collapse     core.controllers.MainController.collapseDocu
 PUT     /documents/:id/rename       core.controllers.MainController.renameDocument(id:Long)
 PUT     /documents/:id/updateparent core.controllers.MainController.updateParentDocument(id:Long)
 
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+
+GET     /*path                 core.controllers.MainController.page(path:String)

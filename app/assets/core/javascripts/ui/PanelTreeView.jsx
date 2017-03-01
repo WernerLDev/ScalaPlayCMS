@@ -8,17 +8,20 @@ export default class PanelTreeView extends React.Component {
 
     constructor(props, context) {
         super(props, context);
-        this.state = { items: []}
+        this.state = { items: [], pagetypes: []}
     } 
 
     getData() {
         return Api.getDocuments().then(data => {
-            this.setState({items: data});
+            this.setState({items: data, pagetypes: this.state.pagetypes});
         });
     }
 
     componentDidMount() {
-        this.getData();
+        Api.getPageTypes().then(types => {
+            this.setState({items: [], pagetypes: types.pagetypes})
+            this.getData();
+        })
     }
 
     clickHandler(prop, action) {
@@ -63,7 +66,7 @@ export default class PanelTreeView extends React.Component {
                     <SmallToolBar />
                 </div>
                     <div className="tree">
-                         {this.state.items.map(x => <TreeView id={x.id} selected={x.selected} type={x.doctype} label={x.label} key={x.id} callback={this.clickHandler.bind(this)} collapsed={x.collapsed} children={x.children} />  )}
+                         {this.state.items.map(x => <TreeView pagetypes={this.state.pagetypes} id={x.id} selected={x.selected} type={x.doctype} label={x.label} key={x.id} callback={this.clickHandler.bind(this)} collapsed={x.collapsed} children={x.children} />  )}
                     </div>
             </div>
         )
