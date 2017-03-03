@@ -1,7 +1,7 @@
 
 @core.views.html.main("Login"){
 
-<div class="login-wrapper">
+<div class="login-wrapper" style="opacity: 0;">
 
     <div class="login-page">
     <div class="form">
@@ -21,8 +21,17 @@
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script>
-$('.message a').click(function(){
-   $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+
+$(document).ready(function(){
+    $(".login-wrapper").animate({opacity: 1}, "slow");
+    addAnimation();
 });
+
+function addAnimation() {
+    $('.message a').click(function(){
+       $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+    });
+}
+
 </script>
 }

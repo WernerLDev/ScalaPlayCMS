@@ -58,10 +58,17 @@ class MainController @Inject()(documents:Documents, templates:PageTemplates) ext
       val parent_id = (request.body \ "parent_id").asOpt[Int].getOrElse(0)
       val name = (request.body \ "name").asOpt[String].getOrElse("")
       val pagetype = (request.body \ "pagetype").asOpt[String].getOrElse("default")
-      var currentTime:Timestamp = new Timestamp((new Date).getTime());
-      documents.create( Document(0, parent_id, name, "file", true, Some(pagetype), currentTime, currentTime, currentTime) ) map { x =>
-        Ok(Json.toJson( Map("id" -> JsNumber(x.id),  "parent_id" -> JsNumber(parent_id), "name" -> JsString(name)) ))
-      }
+      val currentTime:Timestamp = new Timestamp((new Date).getTime());
+      val parent = documents.getById(parent_id)
+      parent flatMap (docOp => docOp match {
+        case Some(doc) => {
+          val newpath = if(doc.parent_id > 0) doc.path + "/" + name else name
+          documents.create( Document(0, parent_id, name, "file", true, Some(pagetype), newpath, currentTime, currentTime, currentTime) ) map { x =>
+            Ok(Json.toJson( Map("id" -> JsNumber(x.id),  "parent_id" -> JsNumber(parent_id), "name" -> JsString(name)) ))
+          }
+        }
+        case None => Future(BadRequest("Invalid parent_id"))
+      })
   }
 
   def collapseDocument(id:Long) = Action.async(parse.json) { request =>
@@ -90,18 +97,12 @@ class MainController @Inject()(documents:Documents, templates:PageTemplates) ext
   }
 
   def page(path:String):Action[AnyContent] = {
-    val result = Await.ready(documents.getByPath(path), Duration.Inf).value.get
+    println(path)
+    val result = Await.result(documents.getByPath("/" + path), Duration.Inf)
     result match {
-      case Success(page) => {
-        page match {
-          case Some(p) => templates.getAction(p)
-          case None => Action {
-            NotFound(views.html.notfound())
-          }
-        }
-      }
-      case Failure(x) => Action{
-        BadRequest("Something went wrong")
+      case Some(p) => templates.getAction(p)
+      case None => Action {
+        NotFound(views.html.notfound("Page not found"))
       }
     }
   }

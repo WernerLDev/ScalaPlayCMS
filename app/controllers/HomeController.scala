@@ -27,4 +27,8 @@ class HomeController @Inject() extends Controller {
     Ok(views.html.test(p))
   }
 
+  def default(p:Document) = Action { request =>
+    Ok(views.html.default(p))
+  }
+
 }

@@ -14,7 +14,7 @@ import slick.profile.SqlProfile.ColumnOption.SqlType
 import scala.concurrent._
 import scala.concurrent.duration._
 
-case class Document(id : Long , parent_id : Long, name : String, doctype : String, collapsed : Boolean, view:Option[String], created_at:Timestamp, updated_at:Timestamp, published_at:Timestamp )
+case class Document(id : Long , parent_id : Long, name : String, doctype : String, collapsed : Boolean, view:Option[String], path:String, created_at:Timestamp, updated_at:Timestamp, published_at:Timestamp )
 case class DocumentJson(id : Long, key: String, label : String, doctype : String, collapsed : Boolean, selected: Boolean, children: List[DocumentJson])
 
 class DocumentTableDef(tag: Tag) extends Table[Document](tag, "document") {
@@ -23,13 +23,15 @@ class DocumentTableDef(tag: Tag) extends Table[Document](tag, "document") {
   def parent_id = column[Long]("parent_id")
   def name = column[String]("name")
   def doctype = column[String]("type")
+  def path = column[String]("path")
   def collapsed = column[Boolean]("collapsed")
   def view = column[Option[String]]("view")
+  
   def created_at = column[Timestamp]("created_at", SqlType("timestamp not null default CURRENT_TIMESTAMP"))
   def updated_at = column[Timestamp]("updated_at", SqlType("timestamp not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP"))
   def published_at = column[Timestamp]("published_at", SqlType("timestamp not null default CURRENT_TIMESTAMP"))
   override def * =
-    (id, parent_id, name, doctype, collapsed, view, created_at, updated_at, published_at) <>(Document.tupled, Document.unapply)
+    (id, parent_id, name, doctype, collapsed, view, path, created_at, updated_at, published_at) <>(Document.tupled, Document.unapply)
 }
 
 @Singleton
@@ -62,12 +64,28 @@ class Documents @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
         dbConfig.db.run(action)
     }
 
+    def update(doc:Document):Future[Document] = dbConfig.db.run {
+        documents.filter(_.id === doc.id).update(doc).map (x => doc)
+    }
+
     def setCollapsed(id:Long, state:Boolean):Future[Int] = dbConfig.db.run {
         documents.filter(_.id === id).map(_.collapsed).update(state)
     }
 
-    def setName(id:Long, name:String):Future[Int] = dbConfig.db.run {
-        documents.filter(_.id === id).map(_.name).update(name)
+    def setName(id:Long, name:String):Future[Int] = {
+        (dbConfig.db.run {
+            documents.filter(_.id === id).map(_.name).update(name)
+        }) flatMap (x => {
+            getById(id) flatMap (docOpt => docOpt match {
+                case Some(doc) => {
+                    getById(doc.parent_id) flatMap ( pDocOpt => pDocOpt match {
+                        case Some(parentdoc) => updatePath(parentdoc)
+                        case None => Future(0)
+                    })
+                }
+                case None => Future(x)
+            })
+        })
     }
 
     def updateParent(id:Long, parent_id:Long):Future[Int] = dbConfig.db.run {
@@ -78,19 +96,25 @@ class Documents @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
         documents.filter(_.name === name).result.headOption
     }
 
-    def getByPath(path:String) = {
-        val parts = path.split("/").toList
-        val docs = Await.result(Future.sequence(parts map (x => getByName(x))), Duration.Inf)
+    def getById(id:Long):Future[Option[Document]] = dbConfig.db.run {
+        documents.filter(_.id === id).result.headOption
+    }
+
+    def getByParentId(id:Long) = dbConfig.db.run {
+        documents.filter(_.parent_id === id).result
+    }
+
+    def getByPath(path:String) = dbConfig.db.run {
+        documents.filter(_.path === path).result.headOption
+    }
+
+    def updatePath(parentdoc:Document):Future[Int] = {
+        val childs = Await.result(getByParentId(parentdoc.id), Duration.Inf)
+        val updatedChilds = childs map (x => update(x.copy(path = parentdoc.path + "/" + x.name)))
         
-        val res = docs.reduce((a,b) => (a,b) match {
-            case (Some(x), Some(y)) => {
-                if(y.parent_id == x.id) Some(y)
-                else None
-            } 
-            case (None, None) => None
-            case (Some(x), None) => None
-            case (None, Some(x)) => None
-        })
-        Future(res)
+        updatedChilds foreach (x => x map (doc => {
+            updatePath(doc)
+        }))
+        Future(updatedChilds.length)
     }
 }
