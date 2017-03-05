@@ -14,9 +14,10 @@ import utils.PageTemplates
 import scala.util.{Success, Failure}
 import scala.concurrent._
 import scala.concurrent.duration._
+import core.utils._
 
 @Singleton
-class MainController @Inject()(documents:Documents, templates:PageTemplates) extends Controller {
+class MainController @Inject()(documents:Documents, templates:PageTemplates, WithAuthAction:AuthAction) extends Controller {
 
   /**
    * Create an Action to render an HTML page with a welcome message.
@@ -24,11 +25,11 @@ class MainController @Inject()(documents:Documents, templates:PageTemplates) ext
    * will be called when the application receives a `GET` request with
    * a path of `/`.
    */
-  def index = Action {
-    Ok(core.views.html.index("Your new application is ready."))
+  def index = WithAuthAction { implicit request =>
+    Ok(core.views.html.index("Logged in as " + request.user.username))
   }
 
-  def getPageTypes = Action {
+  def getPageTypes = WithAuthAction {
     val pagetypes = templates.templates.map { case (k,v) => {
       Json.toJson(Map( "typekey" -> JsString(k), "typename" -> JsString(v.name)))
      }}.toSeq
@@ -48,13 +49,13 @@ class MainController @Inject()(documents:Documents, templates:PageTemplates) ext
     })
   }
 
-  def deleteDocument(docid:Long) = Action.async {
+  def deleteDocument(docid:Long) = WithAuthAction.async {
     documents.delete(docid) map ((affectedRows:Int) => {
       Ok(Json.toJson( Map("success" -> JsBoolean(true), "affectedRows" -> JsNumber(affectedRows)) ))
     })
   }
 
-  def addDocument() = Action.async(parse.json) { request =>
+  def addDocument() = WithAuthAction.async(parse.json) { request =>
       val parent_id = (request.body \ "parent_id").asOpt[Int].getOrElse(0)
       val name = (request.body \ "name").asOpt[String].getOrElse("")
       val pagetype = (request.body \ "pagetype").asOpt[String].getOrElse("default")
@@ -71,7 +72,7 @@ class MainController @Inject()(documents:Documents, templates:PageTemplates) ext
       })
   }
 
-  def collapseDocument(id:Long) = Action.async(parse.json) { request =>
+  def collapseDocument(id:Long) = WithAuthAction.async(parse.json) { request =>
     val collapseState = (request.body \ "collapsed").asOpt[Boolean]
     (collapseState map { collapse:Boolean =>
       documents.setCollapsed(id, collapse) map { x =>
@@ -80,7 +81,7 @@ class MainController @Inject()(documents:Documents, templates:PageTemplates) ext
     }).getOrElse( Future(BadRequest("Error: Missing parameter [collapsed]")) )
   }
 
-  def renameDocument(id:Long) = Action.async(parse.json) { request =>
+  def renameDocument(id:Long) = WithAuthAction.async(parse.json) { request =>
     ((request.body \ "name").asOpt[String].map{ name =>
       documents.setName(id, name) map { x =>
         Ok(Json.toJson(Map("success" -> JsNumber(x))))
@@ -88,7 +89,7 @@ class MainController @Inject()(documents:Documents, templates:PageTemplates) ext
     }).getOrElse( Future(BadRequest("Error: missing parameter [name]")) )
   }
 
-  def updateParentDocument(id:Long) = Action.async(parse.json) { request =>
+  def updateParentDocument(id:Long) = WithAuthAction.async(parse.json) { request =>
     ((request.body \ "parent_id").asOpt[Long].map{ parent_id =>
       documents.updateParent(id, parent_id) map { x =>
         Ok(Json.toJson(Map("success" -> JsNumber(x))))

@@ -31,8 +31,10 @@ export default class SideMenu extends React.Component {
                         <p>Settings</p>
                     </li>
                     <li className="signoutbtn">
+                        <a href="/admin/logout">
                         <i className="fa fa-sign-out" aria-hidden="true"></i>
                         <p>Logout</p>
+                        </a>
                     </li>
                 </ul>
             </div>

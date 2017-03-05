@@ -1,21 +1,29 @@
+@import core.controllers.UserData
+@import helper._
+@(loginForm: Form[UserData])(implicit messages: Messages)
 
 @core.views.html.main("Login"){
 
-<div class="login-wrapper" style="opacity: 0;">
+<div class="login-wrapper">
 
-    <div class="login-page">
+    <div class="login-page" style="opacity: 0;">
     <div class="form">
-        <form class="register-form">
+        <form method="POST" action="" class="register-form">
             <input type="text" placeholder="email address"/>
             <button>Retrieve password</button>
             <p class="message"><a href="#">Sign In</a></p>
         </form>
-        <form class="login-form">
-        <input type="text" placeholder="username"/>
-        <input type="password" placeholder="password"/>
-        <button>login</button>
-        <p class="message">Forgot password? <a href="#">Retrieve password</a></p>
-        </form>
+        @helper.form(action = core.controllers.routes.AdminController.doLogin()) {
+            @if(loginForm.hasErrors) {
+                <div class="errors">
+                    <span class="errormsg">Incorrect username or password</span>
+                </div>
+            }
+            <input type="text" name="username" placeholder="username"/>
+            <input type="password" name="password" placeholder="password"/>
+            <button>login</button>
+            <p class="message">Forgot password? <a href="#">Retrieve password</a></p>
+        }
     </div>
     </div>
 </div>
@@ -23,7 +31,7 @@
 <script>
 
 $(document).ready(function(){
-    $(".login-wrapper").animate({opacity: 1}, "slow");
+    $(".login-page").animate({opacity: 1}, "slow");
     addAnimation();
 });
 

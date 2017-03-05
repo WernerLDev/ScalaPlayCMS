@@ -1,16 +1,17 @@
 
 
 export function getPageTypes() {
-    return fetch("/api/v1/pagetypes").then(r => r.json())
+    return fetch("/api/v1/pagetypes", { credentials: 'include' }).then(r => r.json())
 }
 
 export function getDocuments() {
-    return fetch("/documents").then(r => r.json())
+    return fetch("/documents", {credentials: 'include' }).then(r => r.json())
 }
 
 export function deleteDocument(id) {
     return fetch("/documents/" + id, {
-        method: "delete"
+        method: "delete",
+        credentials: 'include' 
     }).then(r => r.json())
 }
 
@@ -22,6 +23,7 @@ export function addDocument(parent_id, name, pagetype) {
     })
     return fetch("/documents", {
         method: "POST",
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -32,6 +34,7 @@ export function addDocument(parent_id, name, pagetype) {
 export function collapseDocument(id, collapsed) {
     return fetch("/documents/" + id + "/collapse", {
         method: "PUT",
+        credentials: 'include' ,
         headers: {
             'Content-Type': 'application/json'
         },
@@ -44,6 +47,7 @@ export function collapseDocument(id, collapsed) {
 export function renameDocument(id, name) {
     return fetch("/documents/" + id + "/rename", {
         method: "PUT",
+        credentials: 'include' ,
         headers: {
             'Content-Type': 'application/json'
         },
@@ -56,6 +60,7 @@ export function renameDocument(id, name) {
 export function updateParentDocument(id, parent_id) {
     return fetch("/documents/" + id + "/updateparent", {
         method: "PUT",
+        credentials: 'include' ,
         headers: {
             'Content-Type': 'application/json'
         },

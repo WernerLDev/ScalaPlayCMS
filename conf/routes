@@ -11,6 +11,8 @@ GET     /message                    controllers.AsyncController.message
 
 GET     /admin                      core.controllers.MainController.index
 GET     /admin/login                core.controllers.AdminController.login
+POST    /admin/login                core.controllers.AdminController.doLogin
+GET     /admin/logout               core.controllers.AdminController.logout
 GET     /api/v1/pagetypes           core.controllers.MainController.getPageTypes
 GET     /documents                  core.controllers.MainController.listDocuments
 DELETE  /documents/:id              core.controllers.MainController.deleteDocument(id:Long)
