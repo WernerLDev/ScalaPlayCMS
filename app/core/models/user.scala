@@ -14,6 +14,7 @@ import slick.profile.SqlProfile.ColumnOption.SqlType
 import scala.concurrent._
 import scala.concurrent.duration._
 import core.utils.PasswordHasher
+import core.models._
 
 case class User(id: Long, username:String, passwordhash:String, email:String)
 
@@ -34,7 +35,7 @@ class Users @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) ex
     val users = TableQuery[UserTableDef]
     val insertQuery = users returning users.map(_.id) into ((user, id) => user.copy(id = id))
 
-    def check(username:String, password:String) = {
+    def check(username:String, password:String):Option[User] = {
         val userOpt = Await.result(findByUsername(username), Duration.Inf)
         userOpt.flatMap (user => {
             if(PasswordHasher.checkPassword(password, user.passwordhash)) {
