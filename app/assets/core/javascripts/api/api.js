@@ -8,6 +8,10 @@ export function getDocuments() {
     return fetch("/documents", {credentials: 'include' }).then(r => r.json())
 }
 
+export function getDocument(id) {
+    return fetch("/documents/" + id, {credentials: 'include' }).then(r => r.json())
+}
+
 export function deleteDocument(id) {
     return fetch("/documents/" + id, {
         method: "delete",

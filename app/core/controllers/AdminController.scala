@@ -40,7 +40,7 @@ class AdminController @Inject()(users:Users, sessions:UserSessions) extends Cont
         loginForm.bindFromRequest.fold(
             formWithErrors => BadRequest(core.views.html.login(formWithErrors)),
             userData => {
-                val currDate:Date = new Date();
+                val currDate:Date = new Date()
                 var expirationdate:Date = new Date(currDate.getTime() + 1 * 24 * 3600 * 1000)
                 val sessionkey = PasswordHasher.md5Hash(currDate.toString)
                 
@@ -51,6 +51,7 @@ class AdminController @Inject()(users:Users, sessions:UserSessions) extends Cont
                             id = 0,
                             session_key = sessionkey,
                             user_id = user.id,
+                            passwordhash = user.passwordhash,
                             ipaddress = request.remoteAddress,
                             useragent = request.headers.get("User-Agent").getOrElse("Unknown"),
                             expiration_date = new Timestamp(expirationdate.getTime())

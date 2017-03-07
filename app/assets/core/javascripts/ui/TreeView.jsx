@@ -82,7 +82,7 @@ export default class TreeView extends React.Component {
         return (
             <ContextMenu id={String(this.props.id)}>
                 <SubMenu hoverDelay={0} title="Add Page">
-                    {this.props.pagetypes.map(x => <MenuItem onClick={() => this.newItem(x.typekey)} data={{item: 'newdefaultpage'}}>{x.typename}</MenuItem> )}
+                    {this.props.pagetypes.map(x => <MenuItem key={x.typekey} onClick={() => this.newItem(x.typekey)} data={{item: 'newdefaultpage'}}>{x.typename}</MenuItem> )}
                 </SubMenu>
                 <MenuItem onClick={() => this.props.callback(this.props, "dblclick")} data={{item: 'open'}}>Open</MenuItem>
                 <MenuItem onClick={() => this.props.callback(this.props, "dblclick")} data={{item: 'open'}}>Unpublish</MenuItem>

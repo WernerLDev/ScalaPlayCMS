@@ -4,7 +4,8 @@ module.exports = {
     entry: ['./app/assets/core/javascripts/app.js'],
     output: {
       path: './public/javascripts/',
-      filename: 'bundle.js'
+      filename: 'bundle.js',
+      sourceMapFilename: 'bundle.js.map'
     },
     devtool: 'eval-source-map',
     module: {

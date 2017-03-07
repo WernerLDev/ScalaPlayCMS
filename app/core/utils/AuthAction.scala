@@ -23,7 +23,7 @@ class AuthAction @Inject()(users:Users, sessions:UserSessions) extends ActionBui
           session.flatMap(s => {
             val useragent = request.headers.get("User-Agent").getOrElse("Unknown")
             val currDate = new Timestamp((new Date).getTime())
-            if(s.useragent == useragent && s.ipaddress == request.remoteAddress && s.expiration_date.getTime() > currDate.getTime()) {
+            if(s.useragent == useragent && user.passwordhash == s.passwordhash && s.ipaddress == request.remoteAddress && s.expiration_date.getTime() > currDate.getTime()) {
               Some(block(new AuthRequest(user, request)))
             } else None
           })

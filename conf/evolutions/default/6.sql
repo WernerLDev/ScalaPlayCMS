@@ -8,6 +8,7 @@ CREATE TABLE `session` (
   `user_id` INT NULL,
   `ipaddress` VARCHAR(45) NULL,
   `useragent` VARCHAR(255) NULL,
+  `passwordhash` VARCHAR(255) NULL,
   `expiration_date` DATETIME NULL,
   UNIQUE INDEX `session_key_UNIQUE` (`session_key` ASC),
   PRIMARY KEY (`id`));

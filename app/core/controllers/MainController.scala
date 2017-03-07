@@ -43,9 +43,17 @@ class MainController @Inject()(documents:Documents, templates:PageTemplates, Wit
   }
 
   implicit val DocWrites = Json.writes[DocumentJson]
-  def listDocuments = Action.async {
+  def listDocuments = WithAuthAction.async {
     documents.listJson map (x => {
       Ok(Json.toJson(x))
+    })
+  }
+
+  implicit val DocumentWrites = Json.writes[Document]
+  def getDocument(id:Long) = WithAuthAction.async {
+    documents.getById(id).map(docOpt => {
+      docOpt.map(doc => Ok(Json.toJson(doc)))
+      .getOrElse(BadRequest("Document not found"))
     })
   }
 
