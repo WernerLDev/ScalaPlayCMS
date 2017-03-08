@@ -56,7 +56,9 @@ export default class PanelTreeView extends React.Component {
         if(this.state.items.length <= 0) {
             return(
                 <div className="panel-treeview">
-                    Loading documents...
+                    <div className="loading">
+                        <img src="/assets/images/ring.svg" />
+                    </div>
                 </div>
             )
         }

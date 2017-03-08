@@ -13,7 +13,7 @@ export default class TabPanel extends React.Component {
         return(
             <div>
                 <TabBar onTabClick={this.props.clickTab} onTabClose={this.props.closeTab} tabs={this.props.tabs} />
-                {active ? active.content() : ""}
+                {active ? active.content : ""}
             </div>
         )
     }

@@ -4481,7 +4481,11 @@
 	                return _react2.default.createElement(
 	                    'div',
 	                    { className: 'panel-treeview' },
-	                    'Loading documents...'
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'loading' },
+	                        _react2.default.createElement('img', { src: '/assets/images/ring.svg' })
+	                    )
 	                );
 	            }
 	            return _react2.default.createElement(
@@ -6201,7 +6205,7 @@
 	                'div',
 	                null,
 	                _react2.default.createElement(_TabBar2.default, { onTabClick: this.props.clickTab, onTabClose: this.props.closeTab, tabs: this.props.tabs }),
-	                active ? active.content() : ""
+	                active ? active.content : ""
 	            );
 	        }
 	    }]);
@@ -6380,18 +6384,16 @@
 	        active: true,
 	        name: obj.label,
 	        type: obj.type,
-	        content: function content() {
-	            return _react2.default.createElement(
-	                _TestEditor2.default,
-	                { key: obj.id, docid: obj.id, name: obj.label },
-	                _react2.default.createElement(
-	                    'h1',
-	                    null,
-	                    'blaat ',
-	                    obj.id
-	                )
-	            );
-	        }
+	        content: _react2.default.createElement(
+	            _TestEditor2.default,
+	            { key: obj.id, docid: obj.id, name: obj.label },
+	            _react2.default.createElement(
+	                'h1',
+	                null,
+	                'blaat ',
+	                obj.id
+	            )
+	        )
 	    };
 	    alltabs.push(newtab);
 	    return alltabs;
@@ -6464,7 +6466,11 @@
 	                    'div',
 	                    { id: 'wrapper' },
 	                    _react2.default.createElement(_LargeToolBar2.default, null),
-	                    'Loading document...'
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'loading' },
+	                        _react2.default.createElement('img', { src: '/assets/images/ring.svg' })
+	                    )
 	                );
 	            }
 	            return _react2.default.createElement(

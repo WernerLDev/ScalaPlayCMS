@@ -21,9 +21,9 @@ export default class TestEditor extends React.Component {
         if(this.state.document == null) {
             return(<div id="wrapper">
                 <LargeToolBar />
-                Loading document...
+                <div className="loading"><img src="/assets/images/ring.svg" /></div>
                 </div>)
-        }
+        } 
         return(
             <div id="wrapper">
                 <LargeToolBar />

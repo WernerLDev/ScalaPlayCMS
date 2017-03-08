@@ -33,12 +33,14 @@ class AdminController @Inject()(users:Users, sessions:UserSessions) extends Cont
     def login = Action {
         //users.insert( User(0, "werner", "test123", "blaat@bla.nl") )
         //users.insert( User(0, "nogiemand", "test123", "nogiemand@bla.nl") )
+        val test = PasswordHasher.hashPassword("testing123")
+        println(test)
         Ok(core.views.html.login(loginForm))
     }
 
-    def doLogin = Action { implicit request =>
+    def doLogin = Action.async { implicit request =>
         loginForm.bindFromRequest.fold(
-            formWithErrors => BadRequest(core.views.html.login(formWithErrors)),
+            formWithErrors => Future(BadRequest(core.views.html.login(formWithErrors))),
             userData => {
                 val currDate:Date = new Date()
                 var expirationdate:Date = new Date(currDate.getTime() + 1 * 24 * 3600 * 1000)
@@ -59,10 +61,12 @@ class AdminController @Inject()(users:Users, sessions:UserSessions) extends Cont
                         sessions.create( newSession )
                     })
                 })
-                Redirect(core.controllers.routes.MainController.index)
-                .withSession( 
-                    request.session + ("username" -> userData.username) + ("skey" -> sessionkey)
-                 )
+                futureUser.map(x => {
+                    Redirect(core.controllers.routes.MainController.index)
+                    .withSession( 
+                        request.session + ("username" -> userData.username) + ("skey" -> sessionkey)
+                    )
+                })
             }
         )
     }

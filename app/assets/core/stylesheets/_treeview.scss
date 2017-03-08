@@ -49,6 +49,7 @@ input.treeviewinputEdit {
             display: block; min-height: 25px; 
             div.treeitem {
                 display: flex;
+                
                 -moz-user-select: none;
                 user-select: none;
                 height: 15px;
@@ -82,7 +83,7 @@ input.treeviewinputEdit {
             }
             div.adding input { color: $color4; text-decoration: italic; } 
             div.draghover { 
-                border: 1px dotted $color1;
+                border: 2px dotted $color1;
                 border-radius: 4px;
                 /*background: #00ff00;*/
             }

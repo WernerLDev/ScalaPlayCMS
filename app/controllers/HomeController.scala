@@ -28,7 +28,7 @@ object UserAction extends ActionBuilder[UserRequest] with ActionTransformer[Requ
  * application's home page.
  */
 @Singleton
-class HomeController @Inject()(WithAuthAction:AuthAction) extends Controller {
+class HomeController @Inject()(PageAction:PageAction) extends Controller {
 
   /**
    * Create an Action to render an HTML page with a welcome message.
@@ -40,12 +40,14 @@ class HomeController @Inject()(WithAuthAction:AuthAction) extends Controller {
     Ok(views.html.index("Your new application is ready."))
   }
 
-  def test(p:Document) = WithAuthAction { request =>
-    println(request.user.username)
+  def test(p:Document) = PageAction { request =>
+    println(request.editmode)
+    println(request.user)
     Ok(views.html.test(p))
   }
 
-  def default(p:Document) = WithAuthAction { request =>
+  def default(p:Document) = PageAction { request =>
+    println(request.user)
     Ok(views.html.default(p))
   }
 

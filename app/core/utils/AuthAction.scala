@@ -28,6 +28,30 @@ class AuthAction @Inject()(users:Users, sessions:UserSessions) extends ActionBui
             } else None
           })
         })
-    })).getOrElse(Future(Results.Redirect(core.controllers.routes.AdminController.login)))
+    })).getOrElse(Future(Results.Redirect(core.controllers.routes.AdminController.login).withSession(request.session - "username" - "skey") ))
+  }
+}
+
+//class UserRequest[A](val username: Option[String], request: Request[A]) extends WrappedRequest[A](request)
+
+//object UserAction extends
+//    ActionBuilder[UserRequest] with ActionTransformer[Request, UserRequest] {
+//  def transform[A](request: Request[A]) = Future.successful {
+//    new UserRequest(request.session.get("username"), request)
+//  }
+//}
+
+class PageRequest[A](val user:Option[User], val editmode:Boolean, request:Request[A]) extends WrappedRequest[A](request)
+
+
+class PageAction @Inject()(users:Users) extends ActionBuilder[PageRequest] with ActionTransformer[Request, PageRequest] {
+
+  def transform[A](request:Request[A]) = Future.successful {
+    val usernameOpt = request.session.get("username")
+    val userOpt = usernameOpt.flatMap(username =>  Await.result(users.findByUsername(username), Duration.Inf))
+    request.getQueryString("editmode") match {
+      case Some(x) => new PageRequest(userOpt, x == "editing", request)
+      case None => new PageRequest(userOpt, false, request)
+    }
   }
 }
