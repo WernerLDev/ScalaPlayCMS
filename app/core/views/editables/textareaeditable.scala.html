@@ -1,0 +1,14 @@
+@import core.utils._
+@(name:String)(implicit request:PageRequest[AnyContent])
+
+@editable = @{
+    val es = request.editables.filter(_.name == name)
+    if(es.length > 0) es.head.value
+    else ""
+}
+
+@if(request.editmode) {
+    <textarea class="editable" name="@name">@editable</textarea>
+} else {
+    @Html(editable.replace("\n", "<br />\n"))
+}

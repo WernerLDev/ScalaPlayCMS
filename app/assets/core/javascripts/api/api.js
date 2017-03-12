@@ -73,3 +73,17 @@ export function updateParentDocument(id, parent_id) {
         })
     }).then(r => r.json());
 }
+
+
+export function SaveEditables(id, editables) {
+    return fetch("/documents/" + id + "/editables", {
+        method: "PUT",
+        credentials: 'include' ,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "editables": editables
+        }) 
+    }).then(r => r.json());
+}

@@ -1,10 +1,15 @@
-@(document:Document)
+@import core.utils._
+@import core.views.html.editables._
+@(document:Document)(implicit request:PageRequest[AnyContent])
 
 @main("een test") {
     <h1>@document.name</h1>
+    @texteditable("test")
     <p>Een test</p>
     <p>Een test</p>
+    @texteditable("blaat")
     <p>Een test</p>
+    @textareaeditable("nogeentest")
     <p>Een test</p>
     <p>Een test</p>
     <p>Een test</p>

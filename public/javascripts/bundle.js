@@ -5805,6 +5805,7 @@
 	exports.collapseDocument = collapseDocument;
 	exports.renameDocument = renameDocument;
 	exports.updateParentDocument = updateParentDocument;
+	exports.SaveEditables = SaveEditables;
 	function getPageTypes() {
 	    return fetch("/api/v1/pagetypes", { credentials: 'include' }).then(function (r) {
 	        return r.json();
@@ -5889,6 +5890,21 @@
 	        },
 	        body: JSON.stringify({
 	            "parent_id": parent_id
+	        })
+	    }).then(function (r) {
+	        return r.json();
+	    });
+	}
+	
+	function SaveEditables(id, editables) {
+	    return fetch("/documents/" + id + "/editables", {
+	        method: "PUT",
+	        credentials: 'include',
+	        headers: {
+	            'Content-Type': 'application/json'
+	        },
+	        body: JSON.stringify({
+	            "editables": editables
 	        })
 	    }).then(function (r) {
 	        return r.json();
@@ -6417,8 +6433,6 @@
 	
 	var _LargeToolBar = __webpack_require__(55);
 	
-	var _LargeToolBar2 = _interopRequireDefault(_LargeToolBar);
-	
 	var _reactSplitPane = __webpack_require__(56);
 	
 	var _reactSplitPane2 = _interopRequireDefault(_reactSplitPane);
@@ -6454,9 +6468,57 @@
 	        value: function componentDidMount() {
 	            var _this2 = this;
 	
-	            Api.getDocument(this.props.docid).then(function (document) {
-	                _this2.setState({ document: document });
+	            Api.getDocument(this.props.docid).then(function (doc) {
+	                _this2.setState({ document: doc });
 	            });
+	        }
+	    }, {
+	        key: 'publish',
+	        value: function publish() {
+	            console.log("publishing");
+	        }
+	    }, {
+	        key: 'saveItem',
+	        value: function saveItem() {
+	            console.log("CLicked save");
+	            var test = this.refs.docpage.contentDocument.getElementsByClassName("editable");
+	            var editables = [];
+	            [].forEach.call(test, function (elem) {
+	                editables.push({ id: 0, document_id: this.props.docid, name: elem.name, value: elem.value });
+	            }.bind(this));
+	            Api.SaveEditables(this.props.docid, editables).then(function (r) {
+	                console.log("saved !");
+	            });
+	            console.log(editables);
+	            console.log(test);
+	        }
+	    }, {
+	        key: 'settings',
+	        value: function settings() {
+	            console.log("Open settings");
+	        }
+	    }, {
+	        key: 'preview',
+	        value: function preview() {
+	            console.log("Previewing");
+	        }
+	    }, {
+	        key: 'delete',
+	        value: function _delete() {
+	            console.log("Deleting");
+	        }
+	    }, {
+	        key: 'renderToolbar',
+	        value: function renderToolbar() {
+	            return _react2.default.createElement(
+	                _LargeToolBar.LargeToolBar,
+	                null,
+	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.publish.bind(this), icon: 'life-ring', label: 'Publish' }),
+	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.saveItem.bind(this), icon: 'floppy-o', label: 'Save' }),
+	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.settings.bind(this), icon: 'gears', label: 'Settings' }),
+	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.preview.bind(this), icon: 'eye', label: 'Preview' }),
+	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.delete.bind(this), icon: 'trash', label: '', classes: 'button-right redbtn' })
+	            );
 	        }
 	    }, {
 	        key: 'render',
@@ -6465,7 +6527,7 @@
 	                return _react2.default.createElement(
 	                    'div',
 	                    { id: 'wrapper' },
-	                    _react2.default.createElement(_LargeToolBar2.default, null),
+	                    this.renderToolbar(),
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'loading' },
@@ -6476,11 +6538,11 @@
 	            return _react2.default.createElement(
 	                'div',
 	                { id: 'wrapper' },
-	                _react2.default.createElement(_LargeToolBar2.default, null),
+	                this.renderToolbar(),
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'iframe-wrapper' },
-	                    _react2.default.createElement('iframe', { src: this.state.document.path })
+	                    _react2.default.createElement('iframe', { ref: 'docpage', src: this.state.document.path + "?editmode=editing" })
 	                )
 	            );
 	        }
@@ -6500,8 +6562,11 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.LargeToolBar = undefined;
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	exports.ToolbarItemLarge = ToolbarItemLarge;
 	
 	var _react = __webpack_require__(2);
 	
@@ -6515,7 +6580,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var LargeToolBar = function (_React$Component) {
+	var LargeToolBar = exports.LargeToolBar = function (_React$Component) {
 	    _inherits(LargeToolBar, _React$Component);
 	
 	    function LargeToolBar(props) {
@@ -6533,56 +6598,7 @@
 	                _react2.default.createElement(
 	                    "ul",
 	                    { className: "large-toolbar" },
-	                    _react2.default.createElement(
-	                        "li",
-	                        null,
-	                        _react2.default.createElement(
-	                            "a",
-	                            { href: "#" },
-	                            _react2.default.createElement("i", { className: "fa fa-life-ring", "aria-hidden": "true" }),
-	                            " Publish"
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        "li",
-	                        null,
-	                        _react2.default.createElement(
-	                            "a",
-	                            { href: "#" },
-	                            _react2.default.createElement("i", { className: "fa fa-floppy-o", "aria-hidden": "true" }),
-	                            " Save"
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        "li",
-	                        null,
-	                        _react2.default.createElement(
-	                            "a",
-	                            { href: "#" },
-	                            _react2.default.createElement("i", { className: "fa fa-gears", "aria-hidden": "true" }),
-	                            " Settings"
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        "li",
-	                        null,
-	                        _react2.default.createElement(
-	                            "a",
-	                            { href: "#" },
-	                            _react2.default.createElement("i", { className: "fa fa-eye", "aria-hidden": "true" }),
-	                            " Preview"
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        "li",
-	                        { className: "button-right redbtn" },
-	                        _react2.default.createElement(
-	                            "a",
-	                            { href: "#" },
-	                            _react2.default.createElement("i", { className: "fa fa-trash", "aria-hidden": "true" }),
-	                            " "
-	                        )
-	                    )
+	                    this.props.children
 	                )
 	            );
 	        }
@@ -6591,7 +6607,19 @@
 	    return LargeToolBar;
 	}(_react2.default.Component);
 	
-	exports.default = LargeToolBar;
+	function ToolbarItemLarge(props) {
+	    return _react2.default.createElement(
+	        "li",
+	        { className: props.classes ? props.classes : "" },
+	        _react2.default.createElement(
+	            "a",
+	            { onClick: props.clicked, href: "#" },
+	            _react2.default.createElement("i", { className: "fa fa-" + props.icon, "aria-hidden": "true" }),
+	            " ",
+	            props.label
+	        )
+	    );
+	}
 
 /***/ },
 /* 56 */

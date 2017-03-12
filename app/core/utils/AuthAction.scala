@@ -9,6 +9,7 @@ import scala.concurrent._
 import scala.concurrent.duration._
 import java.sql.Timestamp
 import java.util.Date;
+import core.models._
 
 class AuthRequest[A](val user: User, val request: Request[A])
   extends WrappedRequest[A](request)
@@ -32,26 +33,19 @@ class AuthAction @Inject()(users:Users, sessions:UserSessions) extends ActionBui
   }
 }
 
-//class UserRequest[A](val username: Option[String], request: Request[A]) extends WrappedRequest[A](request)
+class PageRequest[A](val user:Option[User], val editmode:Boolean, val editables:List[Editable], request:Request[A]) extends WrappedRequest[A](request)
 
-//object UserAction extends
-//    ActionBuilder[UserRequest] with ActionTransformer[Request, UserRequest] {
-//  def transform[A](request: Request[A]) = Future.successful {
-//    new UserRequest(request.session.get("username"), request)
-//  }
-//}
-
-class PageRequest[A](val user:Option[User], val editmode:Boolean, request:Request[A]) extends WrappedRequest[A](request)
-
-
-class PageAction @Inject()(users:Users) extends ActionBuilder[PageRequest] with ActionTransformer[Request, PageRequest] {
+class PageAction @Inject()(users:Users, editables:Editables) extends ActionBuilder[PageRequest] with ActionTransformer[Request, PageRequest] {
 
   def transform[A](request:Request[A]) = Future.successful {
     val usernameOpt = request.session.get("username")
     val userOpt = usernameOpt.flatMap(username =>  Await.result(users.findByUsername(username), Duration.Inf))
-    request.getQueryString("editmode") match {
-      case Some(x) => new PageRequest(userOpt, x == "editing", request)
-      case None => new PageRequest(userOpt, false, request)
+    val editmode = userOpt.flatMap(user => request.getQueryString("editmode"))
+    val docEditables = Await.result(editables.getByPath(request.path), Duration.Inf).map(_._1).toList
+    
+    editmode match {
+      case Some(x) => new PageRequest(userOpt, x == "editing", docEditables, request)
+      case None => new PageRequest(userOpt, false, docEditables, request)
     }
   }
 }
