@@ -19,7 +19,7 @@ import scala.concurrent.duration._
 import core.utils._
 
 @Singleton
-class MainController @Inject()(documents:Documents, editables:Editables, templates:PageTemplates, WithAuthAction:AuthAction) extends Controller {
+class MainController @Inject()(documents:Documents, editables:Editables, templates:PageTemplates, WithAuthAction:AuthAction, PageAction:PageAction) extends Controller {
 
   /**
    * Create an Action to render an HTML page with a welcome message.
@@ -120,7 +120,7 @@ class MainController @Inject()(documents:Documents, editables:Editables, templat
     val result = Await.result(documents.getByPath("/" + path), Duration.Inf)
     result match {
       case Some(p) => templates.getAction(p)
-      case None => Action {
+      case None => PageAction { implicit request =>
         NotFound(views.html.notfound("Page not found"))
       }
     }

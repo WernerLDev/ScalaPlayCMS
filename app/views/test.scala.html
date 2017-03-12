@@ -2,7 +2,8 @@
 @import core.views.html.editables._
 @(document:Document)(implicit request:PageRequest[AnyContent])
 
-@main("een test") {
+@main("Test pagina - " + document.name) {
+<div class="row section-row">
     <h1>@document.name</h1>
     @texteditable("test")
     <p>Een test</p>
@@ -17,22 +18,5 @@
     <p>Een test</p>
     <p>Een test</p>
     <p>Een test</p>
-    <p>Een test</p>
-    <p>Een test</p>
-    <p>Een test</p>
-    <p>Een test</p>
-    <p>Een test</p>
-    <p>Een test</p>
-    <p>Een test</p>
-    <p>Een test</p>
-    <p>Een test</p>
-    <p>Een test</p>
-    <p>Een test</p>
-    <p>Een test</p>
-    <p>Een test</p>
-    <p>Een test</p>
-    <p>Een test</p>
-    <p>Een test</p>
-    <p>Een test</p>
-    <p>Een test</p>
+   </div>
 }

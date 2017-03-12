@@ -1,23 +1,104 @@
-@*
- * This template is called from the `index` template. This template
- * handles the rendering of the page header and body tags. It takes
- * two arguments, a `String` for the title of the page and an `Html`
- * object to insert into the body of the page.
- *@
-@(title: String)(content: Html)
+@import core.utils._
+@(title: String)(content: Html)(implicit request:PageRequest[AnyContent])
 
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        @* Here's where we render the page title `String`. *@
-        <title>@title</title>
-        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
-        <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
-        <script src="@routes.Assets.versioned("javascripts/hello.js")" type="text/javascript"></script>
-    </head>
-    <body>
-        @* And here's where we render the `Html` object containing
-         * the page content. *@
-        @content
-    </body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+	<title>@title - Werlang.nl</title>
+	<link href="http://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet"> 
+
+
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	
+    <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/structure.css")">
+    <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
+
+</head>
+
+<body>
+	<div class="jumbotron">
+	
+	 <nav class="navbar navbar-default navbar-top">
+	  <div class="container-fluid navbar-container">
+		<div class="navbar-header">
+		  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		  </button>
+		  <a class="navbar-brand" href="#"><h1><span>Wer</span>ner <span>Lang</span>enhuisen</h1></a>
+		</div>
+		<div class="collapse navbar-collapse" id="myNavbar">
+		  <ul class="nav navbar-nav navbar-right">
+            @for(doc <- request.documents.head.children) {
+                @if(doc.path == request.path) {
+			        <li class="active"><a href="@doc.path">@doc.label</a></li>
+                } else {
+			        <li><a href="@doc.path">@doc.label</a></li>
+                }
+            }
+		  </ul>
+		</div>
+	  </div>
+	</nav> 
+	
+	
+		<!--<div class="jtoverlay"></div>-->
+		<h2>Full stack developer</h2>
+		<hr />
+		<p>Specialized in building responsive websites and rich interactive web applications</p>
+	</div>
+	
+	
+	<div class="container-fluid website-section" id="skillswaypoint">
+	
+    
+            @content
+<!--
+	    <div class="row section-row">
+	        <div class="col-sm-2">
+	            
+	            <h2> About me</h2>
+	            <hr />
+	            
+	        </div>
+	        <div class="col-sm-10">
+	            <p>Hi, my name is Werner and I am a software developer with 2 years of professional experience. I love writing code. Most of my time I have been working with HTML/CSS, JS and PHP, but I have also worked with C#, AS3 and Python in the past.</p>
+	             <p>A few years ago I discovered Scala and really started to like this language. I have been trying to learn more ever since. I played a bit around with the Play framework and have used Spark to process large data-sets during my Master's program. Right now I am looking for a job where I can increase my Scala skills and build awesome stuff. When I'm not coding you can find  me behind a drum-kit or playing video games.
+</p>
+            
+
+	        </div>
+	        
+	    </div>
+	-->
+	</div>
+	
+	
+	
+	
+
+
+
+	
+	
+
+	
+
+
+
+
+</body>
+
 </html>

@@ -2,6 +2,7 @@ package core.utils
 
 import scala.concurrent.Future
 import play.api.mvc._
+import models._
 import core.models._
 import javax.inject._
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -33,19 +34,20 @@ class AuthAction @Inject()(users:Users, sessions:UserSessions) extends ActionBui
   }
 }
 
-class PageRequest[A](val user:Option[User], val editmode:Boolean, val editables:List[Editable], request:Request[A]) extends WrappedRequest[A](request)
+class PageRequest[A](val user:Option[User], val editmode:Boolean, val editables:List[Editable], val documents:List[DocumentJson], request:Request[A]) extends WrappedRequest[A](request)
 
-class PageAction @Inject()(users:Users, editables:Editables) extends ActionBuilder[PageRequest] with ActionTransformer[Request, PageRequest] {
+class PageAction @Inject()(users:Users, editables:Editables, documents:Documents) extends ActionBuilder[PageRequest] with ActionTransformer[Request, PageRequest] {
 
   def transform[A](request:Request[A]) = Future.successful {
     val usernameOpt = request.session.get("username")
     val userOpt = usernameOpt.flatMap(username =>  Await.result(users.findByUsername(username), Duration.Inf))
     val editmode = userOpt.flatMap(user => request.getQueryString("editmode"))
     val docEditables = Await.result(editables.getByPath(request.path), Duration.Inf).map(_._1).toList
-    
+    val menuitems = Await.result(documents.listJson, Duration.Inf)
+
     editmode match {
-      case Some(x) => new PageRequest(userOpt, x == "editing", docEditables, request)
-      case None => new PageRequest(userOpt, false, docEditables, request)
+      case Some(x) => new PageRequest(userOpt, x == "editing", docEditables, menuitems, request)
+      case None => new PageRequest(userOpt, false, docEditables, menuitems, request)
     }
   }
 }

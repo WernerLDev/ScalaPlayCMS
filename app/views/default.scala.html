@@ -1,4 +1,5 @@
-@(document:Document)
+@import core.utils._
+@(document:Document)(implicit request:PageRequest[AnyContent])
 
 @main("Nog een test") {
     <h1>@document.name</h1>

@@ -1,0 +1,198 @@
+body {
+    font-family: Lato, sans-serif;
+	line-height: 1.8;
+}
+
+.bg-grey {
+    background-color: #f6f6f6;
+}
+
+h1 {
+	font-family: Lato, sans-serif;
+	font-weight: 300;
+}
+
+h1 > span {
+    font-weight: 400;
+    font-size: 24px;
+}
+
+h2, h3 {
+    display: inline-block;
+    text-transform: uppercase;
+    font-family: "Lato", sans-serif;
+    font-size: 26px;
+}
+
+h2 {
+    color: #ED6A5A;
+}
+
+h3 { font-size: 26px; margin-top: 5px; text-transform: initial; font-weight: 300; color: #000; }
+
+p, span {
+    font-size: 18px;
+    font-weight: 300;
+}
+
+.jumbotron {
+    background-color: #f4511e; /* Orange */
+    background: url('../images/headerpattern.png');
+    background-attachment: fixed;
+    /*background: url('images/headers/bloghead6.png');*/
+    color: #ffffff;
+    height: 600px;
+    padding: 0 80px;
+    font-family: 'Lato', sans-serif;
+	font-weight: 300;
+	margin-bottom: 0;
+}
+
+.jumbotron > p { font-weight: 300; font-size: 19px; }
+
+.jumbotron > hr {
+    width: 100px;
+    color: #FFF;
+    background-color: #FFF;
+    height: 3px;
+    margin-left: 0; margin-bottom: 7px;
+}
+
+.jumbotron > h1, .navbar-brand  h1 {
+    margin-top: 0;
+    padding-top: 50px;
+    font-size: 24px;
+    font-weight: 300;
+    text-transform: uppercase;
+}
+
+.navbar-brand h1 {
+    padding-top: 0;
+}
+
+.jumbotron > h2 {
+    font-size: 60px;
+    border: 0; color: #FFF;
+    font-weight: 900;
+    margin-top: 180px;
+    text-transform: uppercase;
+}
+
+
+
+.section-row {
+    margin-left: 65px; margin-right: 65px;
+}
+
+
+
+.thumbnail { min-height: 455px; }
+
+.innerrow { margin: 0; }
+
+.jtoverlay {
+	position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+	background-color: #000; opacity: 0.5;
+}
+
+.website-section h2, .website-section h3 {
+    margin-top: 0;
+    
+}
+
+.website-section hr {
+    width: 50px; height: 4px;
+    background: #ED6A5A; margin-left: 0; margin-top: 0;
+}
+
+body > .container {
+    padding: 60px 50px;
+}
+
+body > .container-fluid {
+    padding: 120px 0;
+}
+
+@media (max-width: 768px) {
+    .jumbotron { height: 400px; padding: 0 30px; }
+    .jumbotron h2 { font-size: 30px; margin-top: 50px; }
+    .section-row { margin-left: 15px; margin-right: 15px; }
+    body > .container-fluid {
+        padding: 50px 0;
+    }
+}
+
+.skill {
+    display: block;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.skill span { text-align: center; }
+
+.skill .bar {
+    height: 20px; width: 100%;
+    padding: 0; margin: 0;
+    background: #d3d7cf;
+    border-radius: 10px;
+}
+
+.skill .bar .progress {
+    height: 20px;
+    padding: 0; margin: 0;
+    background: #f57900;
+    border-radius: 10px;
+
+}
+
+.progresscircle{
+    width: 200px; height: 100px; margin: 20px auto;
+    border-bottom: 1px solid #d3d7cf;
+}
+
+
+.projectitem {
+    background: #d3d7cf;
+    padding: 15px;
+
+}
+
+
+.bgtest {
+    background: url('images/test2.jpg');
+    background-attachment: fixed;
+    background-size: cover;
+    height: 300px;
+}
+
+.navbar {
+    margin-bottom: 0;
+    /*background-color: #f4511e;
+    background: #f4511e;*/
+    background: none;
+    z-index: 9999;
+    border: 0;
+    font-size: 12px !important;
+    line-height: 1.42857143 !important;
+    border-radius: 0;
+}
+
+.navbar-container {
+    padding: 0; margin-top: 25px;
+}
+
+.navbar li a, .navbar .navbar-brand {
+    color: #fff !important;
+    text-transform: uppercase;
+}
+
+.navbar-nav li a:hover, .navbar-nav li.active a {
+    color: #000 !important;
+    background-color: #fff !important;
+    text-transform: uppercase;
+}
+
+.navbar-default .navbar-toggle {
+    border-color: transparent;
+    color: #fff !important;
+}

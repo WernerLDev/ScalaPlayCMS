@@ -7,11 +7,12 @@ import play.api._
 import play.api.mvc._
 import play.api.mvc.Results._
 import models.Document
+import core.utils._
 
 case class PageType(name:String, action:(Document => Action[AnyContent]))
 
 @Singleton
-class PageTemplates @Inject()(controller:HomeController) {
+class PageTemplates @Inject()(controller:HomeController, PageAction:PageAction) {
 
     val templates = Map(
         "default" -> PageType("Default page", controller.default ),
@@ -22,7 +23,7 @@ class PageTemplates @Inject()(controller:HomeController) {
         templates.get(page.view.getOrElse("")) match {
             case Some(pagetype) => pagetype.action(page)
             case None => {
-                Action {
+                PageAction { implicit request =>
                     NotFound(views.html.notfound("Didn't find the page type'"))
                 }
             }

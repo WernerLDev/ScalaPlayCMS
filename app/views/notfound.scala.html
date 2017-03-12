@@ -1,4 +1,5 @@
-@(msg:String)
+@import core.utils._
+@(msg:String)(implicit request:PageRequest[AnyContent])
 
 @main("Page not found") {
     <h1>Error 404</h1>

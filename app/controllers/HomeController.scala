@@ -23,7 +23,7 @@ class HomeController @Inject()(PageAction:PageAction, editables:Editables) exten
    * will be called when the application receives a `GET` request with
    * a path of `/`.
    */
-  def index = Action {
+  def index = PageAction { implicit request =>
     Ok(views.html.index("Your new application is ready."))
   }
 
@@ -33,7 +33,7 @@ class HomeController @Inject()(PageAction:PageAction, editables:Editables) exten
     Ok(views.html.test(p))
   }
 
-  def default(p:Document) = PageAction { request =>
+  def default(p:Document) = PageAction { implicit request =>
     println(request.user)
     Ok(views.html.default(p))
   }
