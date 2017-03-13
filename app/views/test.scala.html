@@ -4,19 +4,18 @@
 
 @main("Test pagina - " + document.name) {
 <div class="row section-row">
-    <h1>@document.name</h1>
-    @texteditable("test")
-    <p>Een test</p>
-    <p>Een test</p>
-    @texteditable("blaat")
-    <p>Een test</p>
-    @textareaeditable("nogeentest")
-    <p>Een test</p>
-    <p>Een test</p>
-    <p>Een test</p>
-    <p>Een test</p>
-    <p>Een test</p>
-    <p>Een test</p>
-    <p>Een test</p>
+    <div class="col-md-6">
+        <h1>@document.name</h1>
+        @inlineeditable("test", "h2")
+        @inlineeditable("blaat", "div")
+    </div>
+    <div class="col-md-6">
+        @inlineeditable("nogeentest", "div")
+    </div>
    </div>
+<div class="row section-row">
+    <div class="col-md-6">@inlineeditable("leftcol", "div")</div>
+    <div class="col-md-6">@inlineeditable("rightcol", "div")</div>
+</div>
+
 }

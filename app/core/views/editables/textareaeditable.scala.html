@@ -8,7 +8,8 @@
 }
 
 @if(request.editmode) {
-    <textarea class="editable" name="@name">@editable</textarea>
+    <div id="@name" class="editable editabletextarea">
+    @Html(editable)</div>
 } else {
-    @Html(editable.replace("\n", "<br />\n"))
+    @Html(editable)
 }

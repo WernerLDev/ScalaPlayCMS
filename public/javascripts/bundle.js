@@ -6484,7 +6484,11 @@
 	            var test = this.refs.docpage.contentDocument.getElementsByClassName("editable");
 	            var editables = [];
 	            [].forEach.call(test, function (elem) {
-	                editables.push({ id: 0, document_id: this.props.docid, name: elem.name, value: elem.value });
+	                if (elem.nodeName != "INPUT") {
+	                    editables.push({ id: 0, document_id: this.props.docid, name: elem.id, value: elem.innerHTML });
+	                } else {
+	                    editables.push({ id: 0, document_id: this.props.docid, name: elem.name, value: elem.value });
+	                }
 	            }.bind(this));
 	            Api.SaveEditables(this.props.docid, editables).then(function (r) {
 	                console.log("saved !");
