@@ -2,7 +2,7 @@
 @import core.views.html.editables._
 @(document:Document)(implicit request:PageRequest[AnyContent])
 
-@main("Test pagina - " + document.name) {
+@main(document.name) {
 <div class="row section-row">
     <div class="col-md-6">
         <h1>@document.name</h1>
@@ -12,8 +12,6 @@
     <div class="col-md-6">
         @inlineeditable("nogeentest", "div")
     </div>
-   </div>
-<div class="row section-row">
     <div class="col-md-6">@inlineeditable("leftcol", "div")</div>
     <div class="col-md-6">@inlineeditable("rightcol", "div")</div>
 </div>
