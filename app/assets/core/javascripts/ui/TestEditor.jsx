@@ -13,7 +13,7 @@ export default class TestEditor extends React.Component {
 
     componentDidMount() {
         Api.getDocument(this.props.docid).then(doc => {
-            this.setState({ document: doc });
+            this.setState({ document: doc, iframeloaded: false });
         })
     }
 
@@ -74,8 +74,9 @@ export default class TestEditor extends React.Component {
             <div id="wrapper">
                 {this.renderToolbar()}
                 <div className="iframe-wrapper">
-                    <iframe ref="docpage" src={this.state.document.path + "?editmode=editing"} />
+                    <iframe onLoad={() => this.setState({document: this.state.document, iframeloaded: true})} ref="docpage" src={this.state.document.path + "?editmode=editing"} />
                 </div>
+                 {this.state.iframeloaded ? null : <div className="loadingiframe"> <img src="/assets/images/ring.svg" /> </div>}
             </div>
         )
     }

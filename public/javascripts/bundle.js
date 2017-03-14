@@ -4218,6 +4218,27 @@
 	            });
 	        }
 	    }, {
+	        key: 'resizingPanel',
+	        value: function resizingPanel() {
+	            [].forEach.call(document.getElementsByClassName("iframe-wrapper"), function (iframe) {
+	                var div = document.createElement("div");
+	                div.id = "iframeblocker";
+	                div.className = "blockiframe";
+	                iframe.appendChild(div);
+	            });
+	        }
+	    }, {
+	        key: 'resizingPanelFinished',
+	        value: function resizingPanelFinished() {
+	            [].forEach.call(document.getElementsByClassName("iframe-wrapper"), function (iframe) {
+	                [].forEach.call(iframe.childNodes, function (node) {
+	                    if (node.id == "iframeblocker") {
+	                        iframe.removeChild(node);
+	                    }
+	                });
+	            });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var _this2 = this;
@@ -4231,7 +4252,11 @@
 	                    { className: 'splitpane-container' },
 	                    _react2.default.createElement(
 	                        _reactSplitPane2.default,
-	                        { split: 'vertical', minSize: 200, defaultSize: 400 },
+	                        {
+	                            split: 'vertical',
+	                            onDragStarted: this.resizingPanel.bind(this),
+	                            onDragFinished: this.resizingPanelFinished.bind(this),
+	                            minSize: 200, defaultSize: 400 },
 	                        _react2.default.createElement(_PanelTreeView2.default, { renameItem: this.itemRenamed.bind(this), deleteItem: function deleteItem(id) {
 	                                return _this2.deleteItem(id);
 	                            }, dblclick: this.onTreeDblClick.bind(this) }),
@@ -6469,7 +6494,7 @@
 	            var _this2 = this;
 	
 	            Api.getDocument(this.props.docid).then(function (doc) {
-	                _this2.setState({ document: doc });
+	                _this2.setState({ document: doc, iframeloaded: false });
 	            });
 	        }
 	    }, {
@@ -6527,6 +6552,8 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var _this3 = this;
+	
 	            if (this.state.document == null) {
 	                return _react2.default.createElement(
 	                    'div',
@@ -6546,7 +6573,16 @@
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'iframe-wrapper' },
-	                    _react2.default.createElement('iframe', { ref: 'docpage', src: this.state.document.path + "?editmode=editing" })
+	                    _react2.default.createElement('iframe', { onLoad: function onLoad() {
+	                            return _this3.setState({ document: _this3.state.document, iframeloaded: true });
+	                        }, ref: 'docpage', src: this.state.document.path + "?editmode=editing" })
+	                ),
+	                this.state.iframeloaded ? null : _react2.default.createElement(
+	                    'div',
+	                    { className: 'loadingiframe' },
+	                    ' ',
+	                    _react2.default.createElement('img', { src: '/assets/images/ring.svg' }),
+	                    ' '
 	                )
 	            );
 	        }

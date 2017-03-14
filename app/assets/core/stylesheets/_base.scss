@@ -20,7 +20,7 @@ body {
 }
 
 .iframe-wrapper {
-    position: absolute; top: 126px; left: 0; right: 0; bottom: 0;
+    position: absolute; top: 126px; left: 0px; right: 0; bottom: 0;
 }
 iframe {
     position: absolute;
@@ -31,6 +31,18 @@ iframe {
     height: 100%;
 }
 
+.loadingiframe {
+    position: absolute; top: 126px; left: 0px; right: 0; bottom: 0;
+    background: #b3c430;
+    opacity: 0.4;
+    img {
+        display: block; margin: 100px auto 0 auto;
+    }
+}
+
+.blockiframe {
+    position: absolute; top: 0; right: 0; left: 0; bottom: 0; background: #000; opacity: 0.2;
+}
 
 .errors {
     margin-bottom: 10px;
@@ -41,7 +53,7 @@ iframe {
 
 .loading {
     img {
-        display: block; width: 90px;
+        display: block; 
         margin: 10px auto;
     }
 }
