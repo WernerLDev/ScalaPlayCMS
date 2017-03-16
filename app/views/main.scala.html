@@ -17,7 +17,11 @@
 
 	<!-- Optional theme -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
+<script
+			  src="https://code.jquery.com/jquery-3.1.1.min.js"
+			  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+			  crossorigin="anonymous"></script>
+		
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	
@@ -28,9 +32,19 @@
 		<script src="@routes.Assets.versioned("vendor/tinymce/tinymce.min.js")"></script>
 		<script>
 		tinymce.init({
-			selector: '.editabletextarea',
-			inline: true
+			selector: '.multiline',
+			inline: true,
+			plugins: "link image media table",
+			toolbar1: 'undo redo | styleselect fontsizeselect | bold italic underline',
+			toolbar2: "link unlink | image media table | bullist numlist"
 		});
+
+		tinymce.init({
+			selector: '.singleline',
+			inline: true,
+			plugins: "link",
+			toolbar: "bold italic underline strikethrough link unlink"
+		})
 		</script>
 	}
 
@@ -71,7 +85,7 @@
 	</div>
 	
 	
-	<div class="container-fluid website-section" id="skillswaypoint">
+	<div class="container website-section" id="skillswaypoint">
 	
     
             @content
@@ -94,6 +108,13 @@
 	    </div>
 	-->
 	</div>
+
+	<div class="container-fluid website-section bg-grey">
+		<div class="container">
+			Copyright and stuff<br />
+			Don't contact me
+		</div>
+</div>
 	
 	
 	

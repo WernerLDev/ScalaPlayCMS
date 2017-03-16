@@ -33,15 +33,15 @@ iframe {
 
 .loadingiframe {
     position: absolute; top: 126px; left: 0px; right: 0; bottom: 0;
-    background: #b3c430;
-    opacity: 0.4;
+    background: #000;
+    opacity: 0.8;
     img {
         display: block; margin: 100px auto 0 auto;
     }
 }
 
 .blockiframe {
-    position: absolute; top: 0; right: 0; left: 0; bottom: 0; background: #000; opacity: 0.2;
+    position: absolute; top: 0; right: 0; left: 0; bottom: 0; background: #000; opacity: 0.1;
 }
 
 .errors {

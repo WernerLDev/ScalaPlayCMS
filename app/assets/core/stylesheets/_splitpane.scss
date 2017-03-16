@@ -134,3 +134,7 @@
         -ms-flex: 1;
             flex: 1;
 }
+
+
+.leftpane > div.visible { display: block }
+.leftpane > div.hidden { display: none; }

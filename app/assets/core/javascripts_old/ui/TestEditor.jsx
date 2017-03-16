@@ -55,6 +55,7 @@ export default class TestEditor extends React.Component {
         return (
             <LargeToolBar>
                 <ToolbarItemLarge clicked={this.publish.bind(this)} icon="life-ring" label="Publish" />
+                <ToolbarItemLarge clicked={this.publish.bind(this)} icon="chevron-down" label="" />
                 <ToolbarItemLarge clicked={this.saveItem.bind(this)} icon="floppy-o" label="Save" />
                 <ToolbarItemLarge clicked={this.settings.bind(this)} icon="gears" label="Settings" />
                 <ToolbarItemLarge clicked={this.preview.bind(this)} icon="eye" label="Preview" />

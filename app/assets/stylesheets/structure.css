@@ -24,6 +24,8 @@ h2, h3 {
     font-size: 26px;
 }
 
+h2 span, h3 span { font-size: 26px; }
+
 h2 {
     color: #ED6A5A;
 }
@@ -41,7 +43,7 @@ p, span {
     background-attachment: fixed;
     /*background: url('images/headers/bloghead6.png');*/
     color: #ffffff;
-    height: 600px;
+    height: 100px; /* 600px */
     padding: 0 80px;
     font-family: 'Lato', sans-serif;
 	font-weight: 300;

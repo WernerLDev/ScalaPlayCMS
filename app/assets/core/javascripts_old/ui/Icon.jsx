@@ -4,11 +4,11 @@ export default function Icon(props) {
 
     if(props.type == "arrow-down") {
         return (
-            <i onClick={props.onClick} className="fa fa-minus-square-o arrow" aria-hidden="true"></i>
+            <i onClick={props.click} className="fa fa-minus-square-o arrow" aria-hidden="true"></i>
         )
     } else if(props.type == "arrow-right") {
        return (
-            <i onClick={props.onClick} className="fa fa-plus-square-o arrow" aria-hidden="true"></i>
+            <i onClick={props.click} className="fa fa-plus-square-o arrow" aria-hidden="true"></i>
        )
     } else if(props.type == "file") {
        return (

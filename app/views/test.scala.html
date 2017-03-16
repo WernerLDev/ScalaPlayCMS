@@ -3,17 +3,17 @@
 @(document:Document)(implicit request:PageRequest[AnyContent])
 
 @main(document.name) {
-<div class="row section-row">
+<div class="row section-rowww">
     <div class="col-md-6">
         <h1>@document.name</h1>
-        @inlineeditable("test", "h2")
-        @inlineeditable("blaat", "div")
+        @inlineeditable("test", "h2", false)
+        @inlineeditable("blaat", "div", true)
     </div>
     <div class="col-md-6">
-        @inlineeditable("nogeentest", "div")
+        @inlineeditable("nogeentest", "div", true)
     </div>
-    <div class="col-md-6">@inlineeditable("leftcol", "div")</div>
-    <div class="col-md-6">@inlineeditable("rightcol", "div")</div>
+    <div class="col-md-6">@inlineeditable("leftcol", "div", true)</div>
+    <div class="col-md-6">@inlineeditable("rightcol", "div", true)</div>
 </div>
 
 }

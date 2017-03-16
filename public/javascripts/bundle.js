@@ -4141,23 +4141,17 @@
 	
 	var _sidemenu = __webpack_require__(34);
 	
-	var _sidemenu2 = _interopRequireDefault(_sidemenu);
-	
-	var _PanelTreeView = __webpack_require__(35);
-	
-	var _PanelTreeView2 = _interopRequireDefault(_PanelTreeView);
-	
-	var _TabPanel = __webpack_require__(51);
-	
-	var _TabPanel2 = _interopRequireDefault(_TabPanel);
-	
-	var _TabViewActions = __webpack_require__(53);
-	
-	var TabActions = _interopRequireWildcard(_TabViewActions);
-	
 	var _reactSplitPane = __webpack_require__(56);
 	
 	var _reactSplitPane2 = _interopRequireDefault(_reactSplitPane);
+	
+	var _SplitPaneActions = __webpack_require__(244);
+	
+	var SplitPaneActions = _interopRequireWildcard(_SplitPaneActions);
+	
+	var _PagesPanel = __webpack_require__(245);
+	
+	var _PagesPanel2 = _interopRequireDefault(_PagesPanel);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -4177,66 +4171,16 @@
 	
 	        var _this = _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).call(this, props, context));
 	
-	        _this.state = {
-	            tabs: []
-	        };
+	        _this.state = { section: "pages" };
 	        return _this;
 	    }
 	
 	    _createClass(Main, [{
-	        key: 'closeTab',
-	        value: function closeTab(tab) {
-	            this.setState({
-	                tabs: TabActions.closeTab(tab, this.state.tabs)
-	            });
-	        }
-	    }, {
-	        key: 'clickTab',
-	        value: function clickTab(tab) {
-	            this.setState({
-	                tabs: TabActions.openTab(tab, this.state.tabs)
-	            });
-	        }
-	    }, {
-	        key: 'onTreeDblClick',
-	        value: function onTreeDblClick(obj) {
-	            this.setState({
-	                tabs: TabActions.addTab(obj, this.state.tabs)
-	            });
-	        }
-	    }, {
-	        key: 'deleteItem',
-	        value: function deleteItem(id) {
-	            var tab = TabActions.getTabById(id, this.state.tabs);
-	            this.closeTab(tab);
-	        }
-	    }, {
-	        key: 'itemRenamed',
-	        value: function itemRenamed(id, newname) {
-	            this.setState({
-	                tabs: TabActions.renameTab(id, newname, this.state.tabs)
-	            });
-	        }
-	    }, {
-	        key: 'resizingPanel',
-	        value: function resizingPanel() {
-	            [].forEach.call(document.getElementsByClassName("iframe-wrapper"), function (iframe) {
-	                var div = document.createElement("div");
-	                div.id = "iframeblocker";
-	                div.className = "blockiframe";
-	                iframe.appendChild(div);
-	            });
-	        }
-	    }, {
-	        key: 'resizingPanelFinished',
-	        value: function resizingPanelFinished() {
-	            [].forEach.call(document.getElementsByClassName("iframe-wrapper"), function (iframe) {
-	                [].forEach.call(iframe.childNodes, function (node) {
-	                    if (node.id == "iframeblocker") {
-	                        iframe.removeChild(node);
-	                    }
-	                });
-	            });
+	        key: 'switchSection',
+	        value: function switchSection(section) {
+	            if (this.state.section == section) SplitPaneActions.hideLeftPanel(this.refs.leftpane);
+	            if (this.state.section == "") SplitPaneActions.showLeftPanel(this.refs.leftpane);
+	            this.setState({ section: section == this.state.section ? "" : section });
 	        }
 	    }, {
 	        key: 'render',
@@ -4246,7 +4190,55 @@
 	            return _react2.default.createElement(
 	                'div',
 	                null,
-	                _react2.default.createElement(_sidemenu2.default, null),
+	                _react2.default.createElement(
+	                    _sidemenu.SideMenu,
+	                    null,
+	                    _react2.default.createElement(
+	                        _sidemenu.SideMenuItem,
+	                        {
+	                            active: this.state.section == "home", icon: 'home',
+	                            onClick: function onClick() {
+	                                return _this2.switchSection("home");
+	                            } },
+	                        'DashBoard'
+	                    ),
+	                    _react2.default.createElement(
+	                        _sidemenu.SideMenuItem,
+	                        {
+	                            active: this.state.section == "pages", icon: 'files-o',
+	                            onClick: function onClick() {
+	                                return _this2.switchSection("pages");
+	                            } },
+	                        'Pages'
+	                    ),
+	                    _react2.default.createElement(
+	                        _sidemenu.SideMenuItem,
+	                        {
+	                            active: this.state.section == "entities", icon: 'cubes',
+	                            onClick: function onClick() {
+	                                return _this2.switchSection("entities");
+	                            } },
+	                        'Entities'
+	                    ),
+	                    _react2.default.createElement(
+	                        _sidemenu.SideMenuItem,
+	                        {
+	                            active: this.state.section == "assets", icon: 'picture-o',
+	                            onClick: function onClick() {
+	                                return _this2.switchSection("assets");
+	                            } },
+	                        'Assets'
+	                    ),
+	                    _react2.default.createElement(
+	                        _sidemenu.SideMenuItem,
+	                        {
+	                            active: this.state.section == "settings", icon: 'gears',
+	                            onClick: function onClick() {
+	                                return _this2.switchSection("settings");
+	                            } },
+	                        'Settings'
+	                    )
+	                ),
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'splitpane-container' },
@@ -4254,16 +4246,42 @@
 	                        _reactSplitPane2.default,
 	                        {
 	                            split: 'vertical',
-	                            onDragStarted: this.resizingPanel.bind(this),
-	                            onDragFinished: this.resizingPanelFinished.bind(this),
+	                            onDragStarted: SplitPaneActions.resizingPanel.bind(this),
+	                            onDragFinished: SplitPaneActions.resizingPanelFinished.bind(this),
 	                            minSize: 200, defaultSize: 400 },
-	                        _react2.default.createElement(_PanelTreeView2.default, { renameItem: this.itemRenamed.bind(this), deleteItem: function deleteItem(id) {
-	                                return _this2.deleteItem(id);
-	                            }, dblclick: this.onTreeDblClick.bind(this) }),
 	                        _react2.default.createElement(
 	                            'div',
-	                            null,
-	                            _react2.default.createElement(_TabPanel2.default, { clickTab: this.clickTab.bind(this), closeTab: this.closeTab.bind(this), tabs: this.state.tabs })
+	                            { className: 'leftpane', ref: 'leftpane' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: this.state.section == "home" ? "visible" : "hidden" },
+	                                'Dashboard'
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: this.state.section == "pages" ? "visible tree" : "hidden" },
+	                                _react2.default.createElement(_PagesPanel2.default, null)
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: this.state.section == "entities" ? "visible" : "hidden" },
+	                                'Entities'
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: this.state.section == "assets" ? "visible" : "hidden" },
+	                                'Assets'
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: this.state.section == "settings" ? "visible" : "hidden" },
+	                                'Settings'
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { key: 'tabar' },
+	                            'tabbar'
 	                        )
 	                    )
 	                )
@@ -4285,8 +4303,11 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.SideMenu = undefined;
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	exports.SideMenuItem = SideMenuItem;
 	
 	var _react = __webpack_require__(2);
 	
@@ -4300,7 +4321,20 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var SideMenu = function (_React$Component) {
+	function SideMenuItem(props) {
+	    return _react2.default.createElement(
+	        "li",
+	        { className: props.active ? "active" : "", onClick: props.onClick },
+	        _react2.default.createElement("i", { className: "fa fa-" + props.icon, "aria-hidden": "true" }),
+	        _react2.default.createElement(
+	            "p",
+	            null,
+	            props.children
+	        )
+	    );
+	}
+	
+	var SideMenu = exports.SideMenu = function (_React$Component) {
 	    _inherits(SideMenu, _React$Component);
 	
 	    function SideMenu(props, context) {
@@ -4318,56 +4352,7 @@
 	                _react2.default.createElement(
 	                    "ul",
 	                    null,
-	                    _react2.default.createElement(
-	                        "li",
-	                        null,
-	                        _react2.default.createElement("i", { className: "fa fa-home", "aria-hidden": "true" }),
-	                        _react2.default.createElement(
-	                            "p",
-	                            null,
-	                            "Dashboard"
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        "li",
-	                        { className: "active" },
-	                        _react2.default.createElement("i", { className: "fa fa-files-o", "aria-hidden": "true" }),
-	                        _react2.default.createElement(
-	                            "p",
-	                            null,
-	                            "Pages"
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        "li",
-	                        null,
-	                        _react2.default.createElement("i", { className: "fa fa-cubes", "aria-hidden": "true" }),
-	                        _react2.default.createElement(
-	                            "p",
-	                            null,
-	                            "Entities"
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        "li",
-	                        null,
-	                        _react2.default.createElement("i", { className: "fa fa-picture-o", "aria-hidden": "true" }),
-	                        _react2.default.createElement(
-	                            "p",
-	                            null,
-	                            "Assets"
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        "li",
-	                        null,
-	                        _react2.default.createElement("i", { className: "fa fa-gear", "aria-hidden": "true" }),
-	                        _react2.default.createElement(
-	                            "p",
-	                            null,
-	                            "Settings"
-	                        )
-	                    ),
+	                    this.props.children,
 	                    _react2.default.createElement(
 	                        "li",
 	                        { className: "signoutbtn" },
@@ -4389,161 +4374,9 @@
 	
 	    return SideMenu;
 	}(_react2.default.Component);
-	
-	exports.default = SideMenu;
 
 /***/ },
-/* 35 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.ItemTypes = undefined;
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(2);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _TreeView = __webpack_require__(36);
-	
-	var _TreeView2 = _interopRequireDefault(_TreeView);
-	
-	var _api = __webpack_require__(47);
-	
-	var Api = _interopRequireWildcard(_api);
-	
-	var _TreeViewActions = __webpack_require__(49);
-	
-	var TreeActions = _interopRequireWildcard(_TreeViewActions);
-	
-	var _SmallToolBar = __webpack_require__(50);
-	
-	var _SmallToolBar2 = _interopRequireDefault(_SmallToolBar);
-	
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var PanelTreeView = function (_React$Component) {
-	    _inherits(PanelTreeView, _React$Component);
-	
-	    function PanelTreeView(props, context) {
-	        _classCallCheck(this, PanelTreeView);
-	
-	        var _this = _possibleConstructorReturn(this, (PanelTreeView.__proto__ || Object.getPrototypeOf(PanelTreeView)).call(this, props, context));
-	
-	        _this.state = { items: [], pagetypes: [] };
-	        return _this;
-	    }
-	
-	    _createClass(PanelTreeView, [{
-	        key: 'getData',
-	        value: function getData() {
-	            var _this2 = this;
-	
-	            return Api.getDocuments().then(function (data) {
-	                _this2.setState({ items: data, pagetypes: _this2.state.pagetypes });
-	            });
-	        }
-	    }, {
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            var _this3 = this;
-	
-	            Api.getPageTypes().then(function (types) {
-	                _this3.setState({ items: [], pagetypes: types.pagetypes });
-	                _this3.getData();
-	            });
-	        }
-	    }, {
-	        key: 'clickHandler',
-	        value: function clickHandler(prop, action) {
-	            var _this4 = this;
-	
-	            if (action == "collapse") {
-	                Api.collapseDocument(prop.id, !prop.collapsed);
-	                this.setState({ items: TreeActions.collapseTree(prop, this.state.items) });
-	            } else if (action == "select") {
-	                this.setState({ items: TreeActions.selectItem(prop, this.state.items) });
-	            } else if (action == "dblclick") {
-	                this.props.dblclick(prop);
-	            } else if (action == "delete") {
-	                Api.deleteDocument(prop.id).then(function (data) {
-	                    _this4.getData();
-	                    _this4.props.deleteItem(prop.id);
-	                });
-	            } else if (action == "newitemadded") {
-	                this.getData().then(function (x) {
-	                    _this4.setState({ items: TreeActions.selectItem(prop, _this4.state.items) });
-	                    _this4.props.dblclick(prop);
-	                });
-	            } else if (action == "refresh") {
-	                this.getData();
-	                this.props.renameItem(prop.id, prop.name);
-	            } else if (action == "updateparent") {
-	                Api.updateParentDocument(prop.id, prop.parent_id).then(function (r) {
-	                    _this4.getData();
-	                });
-	            }
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            var _this5 = this;
-	
-	            if (this.state.items.length <= 0) {
-	                return _react2.default.createElement(
-	                    'div',
-	                    { className: 'panel-treeview' },
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'loading' },
-	                        _react2.default.createElement('img', { src: '/assets/images/ring.svg' })
-	                    )
-	                );
-	            }
-	            return _react2.default.createElement(
-	                'div',
-	                { className: 'panel-treeview' },
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'toolbar' },
-	                    _react2.default.createElement(_SmallToolBar2.default, null)
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'tree' },
-	                    this.state.items.map(function (x) {
-	                        return _react2.default.createElement(_TreeView2.default, { pagetypes: _this5.state.pagetypes, id: x.id, selected: x.selected, type: x.doctype, label: x.label, key: x.id, callback: _this5.clickHandler.bind(_this5), collapsed: x.collapsed, children: x.children });
-	                    })
-	                )
-	            );
-	        }
-	    }]);
-	
-	    return PanelTreeView;
-	}(_react2.default.Component);
-	
-	//export default DragDropContext(HTML5Backend)(PanelTreeView);
-	
-	
-	exports.default = PanelTreeView;
-	var ItemTypes = exports.ItemTypes = {
-	    FILE: 'file'
-	};
-
-/***/ },
+/* 35 */,
 /* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -4552,6 +4385,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.TreeView = exports.TreeViewItem = undefined;
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
@@ -4565,16 +4399,6 @@
 	
 	var _reactContextmenu = __webpack_require__(38);
 	
-	var _api = __webpack_require__(47);
-	
-	var Api = _interopRequireWildcard(_api);
-	
-	var _DraggableTreeViewItem = __webpack_require__(48);
-	
-	var _DraggableTreeViewItem2 = _interopRequireDefault(_DraggableTreeViewItem);
-	
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -4583,229 +4407,79 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var TreeView = function (_React$Component) {
-	    _inherits(TreeView, _React$Component);
+	var TreeViewItem = exports.TreeViewItem = function (_React$Component) {
+	    _inherits(TreeViewItem, _React$Component);
 	
-	    function TreeView(props, context) {
-	        _classCallCheck(this, TreeView);
+	    function TreeViewItem(props, context) {
+	        _classCallCheck(this, TreeViewItem);
 	
-	        var _this = _possibleConstructorReturn(this, (TreeView.__proto__ || Object.getPrototypeOf(TreeView)).call(this, props, context));
+	        var _this = _possibleConstructorReturn(this, (TreeViewItem.__proto__ || Object.getPrototypeOf(TreeViewItem)).call(this, props, context));
 	
-	        _this.state = {
-	            lastClick: new Date().getTime(),
-	            deleted: false,
-	            newitem: false,
-	            newitemname: "",
-	            updating: false,
-	            renaming: false,
-	            pagetype: ""
-	        };
+	        _this.state = { collapsed: props.collapsed };
 	        return _this;
 	    }
 	
-	    _createClass(TreeView, [{
-	        key: 'collapseHandler',
-	        value: function collapseHandler() {
-	            this.props.callback(this.props, "collapse");
-	        }
-	    }, {
-	        key: 'itemClicked',
-	        value: function itemClicked() {
-	            var currTime = new Date().getTime();
-	            if (currTime - this.state.lastClick < 500) {
-	                this.props.callback(this.props, "dblclick");
-	            } else {
-	                this.props.callback(this.props, "select");
-	            }
-	            this.setState({ lastClick: currTime, deleted: this.state.deleted, newitem: this.state.newitem });
-	        }
-	    }, {
-	        key: 'handleClick',
-	        value: function handleClick() {
-	            console.log("clicked contextmenu item for " + this.props.label);
-	        }
-	    }, {
-	        key: 'deleteItem',
-	        value: function deleteItem() {
-	            this.setState({ lastClick: this.state.lastClick, deleted: true, newitem: this.state.newitem });
-	            this.props.callback(this.props, "delete");
-	        }
-	    }, {
-	        key: 'newItem',
-	        value: function newItem(pagetype) {
-	            this.setState({ lastclick: this.state.lastclick, deleted: this.state.deleted, newitem: true, pagetype: pagetype });
-	        }
-	    }, {
-	        key: 'hideNewItem',
-	        value: function hideNewItem() {
-	            this.setState({ lastclick: this.state.lastclick, deleted: this.state.deleted, newitem: false });
-	        }
-	    }, {
-	        key: 'keypress',
-	        value: function keypress(e) {
-	            var _this2 = this;
-	
-	            if (e.keyCode == 13) {
-	                this.setState({ updating: true });
-	                Api.addDocument(this.props.id, this.state.newitemname, this.state.pagetype).then(function (r) {
-	                    _this2.props.callback({ id: r.id, type: "file", label: _this2.state.newitemname }, "newitemadded");
-	                    _this2.setState({ newitemname: "", newitem: false, updating: false });
-	                });
-	            } else {
-	                this.setState({ newitemname: e.currentTarget.value });
-	            }
-	        }
-	    }, {
-	        key: 'editKeyPress',
-	        value: function editKeyPress(e) {
-	            var _this3 = this;
-	
-	            if (e.keyCode == 13) {
-	                this.setState({ updating: true });
-	                Api.renameDocument(this.props.id, this.state.newitemname).then(function (r) {
-	                    _this3.props.callback({ id: _this3.props.id, name: _this3.state.newitemname }, "refresh");
-	                    _this3.setState({ newitemname: "", updating: false, renaming: false });
-	                });
-	            } else {
-	                this.setState({ newitemname: e.currentTarget.value });
-	            }
-	        }
-	    }, {
-	        key: 'updateParent',
-	        value: function updateParent(id, parent_id) {
-	            this.props.callback({ id: id, parent_id: parent_id }, "updateparent");
-	        }
-	    }, {
-	        key: 'contextMenu',
-	        value: function contextMenu() {
-	            var _this4 = this;
-	
-	            return _react2.default.createElement(
-	                _reactContextmenu.ContextMenu,
-	                { id: String(this.props.id) },
-	                _react2.default.createElement(
-	                    _reactContextmenu.SubMenu,
-	                    { hoverDelay: 0, title: 'Add Page' },
-	                    this.props.pagetypes.map(function (x) {
-	                        return _react2.default.createElement(
-	                            _reactContextmenu.MenuItem,
-	                            { key: x.typekey, onClick: function onClick() {
-	                                    return _this4.newItem(x.typekey);
-	                                }, data: { item: 'newdefaultpage' } },
-	                            x.typename
-	                        );
-	                    })
-	                ),
-	                _react2.default.createElement(
-	                    _reactContextmenu.MenuItem,
-	                    { onClick: function onClick() {
-	                            return _this4.props.callback(_this4.props, "dblclick");
-	                        }, data: { item: 'open' } },
-	                    'Open'
-	                ),
-	                _react2.default.createElement(
-	                    _reactContextmenu.MenuItem,
-	                    { onClick: function onClick() {
-	                            return _this4.props.callback(_this4.props, "dblclick");
-	                        }, data: { item: 'open' } },
-	                    'Unpublish'
-	                ),
-	                _react2.default.createElement(
-	                    _reactContextmenu.MenuItem,
-	                    { onClick: function onClick() {
-	                            return _this4.setState({ renaming: true, newitemname: _this4.props.label });
-	                        }, data: { item: 'rename' } },
-	                    'Rename'
-	                ),
-	                _react2.default.createElement(
-	                    _reactContextmenu.MenuItem,
-	                    { onClick: function onClick() {
-	                            return _this4.props.callback(_this4.props, "dblclick");
-	                        }, data: { item: 'open' } },
-	                    'Dublicate'
-	                ),
-	                _react2.default.createElement(
-	                    _reactContextmenu.MenuItem,
-	                    { onClick: this.deleteItem.bind(this), data: { item: 'delete' } },
-	                    'Delete'
-	                ),
-	                _react2.default.createElement(
-	                    _reactContextmenu.MenuItem,
-	                    { onClick: function onClick() {
-	                            return _this4.props.callback(_this4.props, "dblclick");
-	                        }, data: { item: 'open' } },
-	                    'Settings'
-	                )
-	            );
+	    _createClass(TreeViewItem, [{
+	        key: 'collapse',
+	        value: function collapse() {
+	            this.setState({ collapsed: !this.state.collapsed });
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var _this5 = this;
-	
-	            var newitemform = "";
-	            if (this.state.newitem) {
-	                newitemform = _react2.default.createElement(
-	                    'ul',
-	                    null,
-	                    _react2.default.createElement(
-	                        'li',
-	                        null,
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: this.state.updating ? "treeitem adding" : "treeitem" },
-	                            _react2.default.createElement(_Icon2.default, { type: 'empty' }),
-	                            ' ',
-	                            _react2.default.createElement(_Icon2.default, { type: 'file' }),
-	                            ' ',
-	                            _react2.default.createElement('input', { disabled: this.state.updating, onKeyUp: this.keypress.bind(this), className: 'treeviewinput', autoFocus: true, placeholder: 'New item name', onBlur: this.hideNewItem.bind(this), type: 'text' })
-	                        )
-	                    )
-	                );
-	            }
-	            var label = this.props.label;
-	            if (this.state.renaming) {
-	                label = _react2.default.createElement('input', { autoFocus: true, disabled: this.state.updating, onBlur: function onBlur() {
-	                        return _this5.setState({ renaming: false });
-	                    }, onKeyUp: this.editKeyPress.bind(this), className: 'treeviewinputEdit', type: 'text', defaultValue: this.props.label });
-	            }
-	
+	            var icon = _react2.default.createElement(_Icon2.default, { onClick: this.collapse.bind(this), type: this.state.collapsed ? "arrow-down" : "arrow-right" });
+	            if (!this.props.children) icon = _react2.default.createElement(_Icon2.default, { type: 'empty' });
 	            return _react2.default.createElement(
-	                'ul',
+	                'li',
 	                null,
 	                _react2.default.createElement(
-	                    'li',
-	                    { className: this.state.deleted ? "deleted" : "" },
+	                    _reactContextmenu.ContextMenuTrigger,
+	                    { holdToDisplay: -1, id: String(this.props.id) },
 	                    _react2.default.createElement(
-	                        _reactContextmenu.ContextMenuTrigger,
-	                        { holdToDisplay: -1, id: String(this.props.id) },
-	                        _react2.default.createElement(_DraggableTreeViewItem2.default, {
-	                            id: this.props.id,
-	                            selected: this.props.selected,
-	                            type: this.props.type,
-	                            itemClicked: this.itemClicked.bind(this),
-	                            label: label,
-	                            collapsable: this.props.children.length > 0,
-	                            collapsed: this.props.collapsed,
-	                            collapseHandler: this.collapseHandler.bind(this),
-	                            onParentChange: this.updateParent.bind(this),
-	                            childNodes: this.props.children
-	                        })
-	                    ),
-	                    newitemform,
-	                    this.props.collapsed && this.props.children.length > 0 ? this.props.children.map(function (x) {
-	                        return _react2.default.createElement(TreeView, { pagetypes: _this5.props.pagetypes, id: x.id, selected: x.selected, type: x.doctype, collapsed: x.collapsed, key: x.id, label: x.label, callback: _this5.props.callback, children: x.children });
-	                    }) : ""
+	                        'div',
+	                        { onContextMenu: this.props.onClick, onClick: this.props.onClick, className: this.props.selected ? "selected treeitem" : "treeitem" },
+	                        icon,
+	                        ' ',
+	                        _react2.default.createElement(_Icon2.default, { type: 'file' }),
+	                        ' ',
+	                        this.props.label
+	                    )
 	                ),
-	                this.contextMenu()
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: this.state.collapsed ? "" : "hidden" },
+	                    this.props.children
+	                ),
+	                this.props.contextMenu(this.props.id)
+	            );
+	        }
+	    }]);
+	
+	    return TreeViewItem;
+	}(_react2.default.Component);
+	
+	var TreeView = exports.TreeView = function (_React$Component2) {
+	    _inherits(TreeView, _React$Component2);
+	
+	    function TreeView(props, context) {
+	        _classCallCheck(this, TreeView);
+	
+	        return _possibleConstructorReturn(this, (TreeView.__proto__ || Object.getPrototypeOf(TreeView)).call(this, props, context));
+	    }
+	
+	    _createClass(TreeView, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'ul',
+	                { className: 'treeview' },
+	                this.props.children
 	            );
 	        }
 	    }]);
 	
 	    return TreeView;
 	}(_react2.default.Component);
-	
-	exports.default = TreeView;
 
 /***/ },
 /* 37 */
@@ -4827,9 +4501,9 @@
 	function Icon(props) {
 	
 	    if (props.type == "arrow-down") {
-	        return _react2.default.createElement("i", { onClick: props.click, className: "fa fa-minus-square-o arrow", "aria-hidden": "true" });
+	        return _react2.default.createElement("i", { onClick: props.onClick, className: "fa fa-minus-square-o arrow", "aria-hidden": "true" });
 	    } else if (props.type == "arrow-right") {
-	        return _react2.default.createElement("i", { onClick: props.click, className: "fa fa-plus-square-o arrow", "aria-hidden": "true" });
+	        return _react2.default.createElement("i", { onClick: props.onClick, className: "fa fa-plus-square-o arrow", "aria-hidden": "true" });
 	    } else if (props.type == "file") {
 	        return _react2.default.createElement("i", { className: "fa fa-file-code-o fileicon", "aria-hidden": "true" });
 	    } else if (props.type == "folder") {
@@ -5937,731 +5611,14 @@
 	}
 
 /***/ },
-/* 48 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(2);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _Icon = __webpack_require__(37);
-	
-	var _Icon2 = _interopRequireDefault(_Icon);
-	
-	var _reactContextmenu = __webpack_require__(38);
-	
-	var _api = __webpack_require__(47);
-	
-	var Api = _interopRequireWildcard(_api);
-	
-	var _TreeViewActions = __webpack_require__(49);
-	
-	var TreeActions = _interopRequireWildcard(_TreeViewActions);
-	
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var DraggableTreeViewItem = function (_React$Component) {
-	    _inherits(DraggableTreeViewItem, _React$Component);
-	
-	    function DraggableTreeViewItem(props, context) {
-	        _classCallCheck(this, DraggableTreeViewItem);
-	
-	        return _possibleConstructorReturn(this, (DraggableTreeViewItem.__proto__ || Object.getPrototypeOf(DraggableTreeViewItem)).call(this, props));
-	    }
-	
-	    _createClass(DraggableTreeViewItem, [{
-	        key: 'preventDropInOwnChild',
-	        value: function preventDropInOwnChild(e) {
-	            var targetid = e.dataTransfer.getData("id");
-	            var childNodes = JSON.parse(e.dataTransfer.getData("children"));
-	            return targetid == this.props.id || TreeActions.isItemChild(this.props.id, childNodes);
-	        }
-	    }, {
-	        key: 'onDragStart',
-	        value: function onDragStart(ev) {
-	            ev.dataTransfer.setData("id", this.props.id);
-	            ev.dataTransfer.setData("children", JSON.stringify(this.props.childNodes));
-	            ev.target.parentNode.parentNode.style.opacity = "0.4";
-	        }
-	    }, {
-	        key: 'onDragOver',
-	        value: function onDragOver(e) {
-	            /*if(this.preventDropInOwnChild(e)) {
-	                return;
-	            }*/
-	            e.preventDefault();
-	            e.target.classList.add("draghover");
-	            return false;
-	        }
-	    }, {
-	        key: 'onDragLeave',
-	        value: function onDragLeave(e) {
-	            /*if(this.preventDropInOwnChild(e)) {
-	                return;
-	            }*/
-	            e.preventDefault();
-	            e.target.classList.remove("draghover");
-	            return false;
-	        }
-	    }, {
-	        key: 'onDragStop',
-	        value: function onDragStop(ev) {
-	            ev.target.parentNode.parentNode.style.opacity = "1";
-	        }
-	    }, {
-	        key: 'onDrop',
-	        value: function onDrop(e) {
-	            if (this.preventDropInOwnChild(e)) {
-	                e.target.classList.remove("draghover");
-	                return;
-	            }
-	            var targetid = e.dataTransfer.getData("id");
-	            this.props.onParentChange(targetid, this.props.id);
-	            e.target.classList.remove("draghover");
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            var icon = _react2.default.createElement(_Icon2.default, { type: 'empty' });
-	            if (this.props.collapsable) {
-	                icon = _react2.default.createElement(_Icon2.default, { click: this.props.collapseHandler, type: this.props.collapsed ? "arrow-down" : "arrow-right" });
-	            }
-	            return _react2.default.createElement(
-	                'div',
-	                {
-	                    draggable: 'true',
-	                    onDragStart: this.onDragStart.bind(this),
-	                    onDragEnd: this.onDragStop.bind(this),
-	                    onDragOver: this.onDragOver.bind(this),
-	                    onDragLeave: this.onDragLeave.bind(this),
-	                    onDropCapture: this.onDrop.bind(this),
-	                    className: this.props.selected ? "selected treeitem" : "treeitem",
-	                    onContextMenu: this.props.itemClicked,
-	                    onClick: this.props.itemClicked
-	                },
-	                icon,
-	                ' ',
-	                _react2.default.createElement(_Icon2.default, { type: this.props.type }),
-	                ' ',
-	                this.props.label
-	            );
-	        }
-	    }]);
-	
-	    return DraggableTreeViewItem;
-	}(_react2.default.Component);
-	
-	exports.default = DraggableTreeViewItem;
-
-/***/ },
-/* 49 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.updateTree = updateTree;
-	exports.collapseTree = collapseTree;
-	exports.selectItem = selectItem;
-	exports.isItemChild = isItemChild;
-	function updateTree(id, tree, f, f2) {
-	    return tree.map(function (x) {
-	        if (x.id == id) {
-	            var newx = f(x);
-	            newx.children = updateTree(id, x.children, f, f2);
-	            return newx;
-	        } else if (x.children.length > 0) {
-	            var newx = f2(x);
-	            newx.children = updateTree(id, x.children, f, f2);
-	            return newx;
-	        } else {
-	            return f2(x);
-	        }
-	    });
-	}
-	
-	function collapseTree(prop, items) {
-	    var collapseTree = function collapseTree(x) {
-	        x.collapsed = !x.collapsed;
-	        return x;
-	    };
-	    return updateTree(prop.id, items, collapseTree, function (x) {
-	        return x;
-	    });
-	}
-	
-	function selectItem(prop, items) {
-	    var deselect = function deselect(x) {
-	        x.selected = false;
-	        return x;
-	    };
-	    var select = function select(x) {
-	        x.selected = true;
-	        return x;
-	    };
-	    return updateTree(prop.id, items, select, deselect);
-	}
-	
-	function isItemChild(id, children) {
-	    var subset = children.filter(function (x) {
-	        return x.id == id;
-	    });
-	    if (subset.length > 0) {
-	        return true;
-	    } else {
-	        return children.map(function (x) {
-	            return isItemChild(id, x.children);
-	        }).filter(function (x) {
-	            return x == true;
-	        }).length > 0;
-	    }
-	}
-
-/***/ },
-/* 50 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(2);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var SmallToolBar = function (_React$Component) {
-	    _inherits(SmallToolBar, _React$Component);
-	
-	    function SmallToolBar(props) {
-	        _classCallCheck(this, SmallToolBar);
-	
-	        return _possibleConstructorReturn(this, (SmallToolBar.__proto__ || Object.getPrototypeOf(SmallToolBar)).call(this, props));
-	    }
-	
-	    _createClass(SmallToolBar, [{
-	        key: "render",
-	        value: function render() {
-	            return _react2.default.createElement(
-	                "ul",
-	                { className: "small-toolbar" },
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    _react2.default.createElement("i", { className: "fa fa-plus", "aria-hidden": "true" })
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    _react2.default.createElement("i", { className: "fa fa-trash", "aria-hidden": "true" })
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    { className: "tool-right" },
-	                    _react2.default.createElement("i", { className: "fa fa-refresh", "aria-hidden": "true" })
-	                )
-	            );
-	        }
-	    }]);
-	
-	    return SmallToolBar;
-	}(_react2.default.Component);
-	
-	exports.default = SmallToolBar;
-
-/***/ },
-/* 51 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(2);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _TabBar = __webpack_require__(52);
-	
-	var _TabBar2 = _interopRequireDefault(_TabBar);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var TabPanel = function (_React$Component) {
-	    _inherits(TabPanel, _React$Component);
-	
-	    function TabPanel(props, context) {
-	        _classCallCheck(this, TabPanel);
-	
-	        return _possibleConstructorReturn(this, (TabPanel.__proto__ || Object.getPrototypeOf(TabPanel)).call(this, props, context));
-	    }
-	
-	    _createClass(TabPanel, [{
-	        key: 'render',
-	        value: function render() {
-	            var active = this.props.tabs.filter(function (x) {
-	                return x.active;
-	            });
-	            active = active.length > 0 ? active[0] : this.props.tabs[0];
-	            return _react2.default.createElement(
-	                'div',
-	                null,
-	                _react2.default.createElement(_TabBar2.default, { onTabClick: this.props.clickTab, onTabClose: this.props.closeTab, tabs: this.props.tabs }),
-	                active ? active.content : ""
-	            );
-	        }
-	    }]);
-	
-	    return TabPanel;
-	}(_react2.default.Component);
-	
-	exports.default = TabPanel;
-
-/***/ },
-/* 52 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(2);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _Icon = __webpack_require__(37);
-	
-	var _Icon2 = _interopRequireDefault(_Icon);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var TabBar = function (_React$Component) {
-	    _inherits(TabBar, _React$Component);
-	
-	    function TabBar(props) {
-	        _classCallCheck(this, TabBar);
-	
-	        return _possibleConstructorReturn(this, (TabBar.__proto__ || Object.getPrototypeOf(TabBar)).call(this, props));
-	    }
-	
-	    _createClass(TabBar, [{
-	        key: 'render',
-	        value: function render() {
-	            var _this2 = this;
-	
-	            return _react2.default.createElement(
-	                'div',
-	                { className: 'tabsContainer' },
-	                _react2.default.createElement(
-	                    'ul',
-	                    { className: 'tabs' },
-	                    this.props.tabs.map(function (tab) {
-	                        return _react2.default.createElement(
-	                            'li',
-	                            { key: tab.id, className: tab.active ? "active" : "" },
-	                            _react2.default.createElement('div', { onClick: function onClick() {
-	                                    return _this2.props.onTabClick(tab);
-	                                }, className: 'clickarea' }),
-	                            _react2.default.createElement(_Icon2.default, { type: tab.type }),
-	                            ' ',
-	                            tab.name,
-	                            ' ',
-	                            _react2.default.createElement('i', { onClick: function onClick() {
-	                                    return _this2.props.onTabClose(tab);
-	                                }, className: 'fa fa-window-close', 'aria-hidden': 'true' })
-	                        );
-	                    })
-	                )
-	            );
-	        }
-	    }]);
-	
-	    return TabBar;
-	}(_react2.default.Component);
-	
-	exports.default = TabBar;
-
-/***/ },
-/* 53 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _react = __webpack_require__(2);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	exports.getTabById = getTabById;
-	exports.renameTab = renameTab;
-	exports.closeTab = closeTab;
-	exports.openTab = openTab;
-	exports.addTab = addTab;
-	
-	var _TestEditor = __webpack_require__(54);
-	
-	var _TestEditor2 = _interopRequireDefault(_TestEditor);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function getTabById(tabid, alltabs) {
-	    var tab = alltabs.filter(function (x) {
-	        return x.id == tabid;
-	    });
-	    if (tab.length > 0) {
-	        return tab[0];
-	    } else {
-	        return {};
-	    }
-	}
-	
-	function renameTab(tabid, newname, alltabs) {
-	    return alltabs.map(function (x) {
-	        if (x.id == tabid) {
-	            x.name = newname;
-	            return x;
-	        } else {
-	            return x;
-	        }
-	    });
-	}
-	
-	function closeTab(tab, alltabs) {
-	    var newtabs = alltabs.filter(function (x) {
-	        return x.id != tab.id;
-	    });
-	    if (tab.active == false) {
-	        return newtabs;
-	    }
-	    var prev = newtabs.filter(function (x) {
-	        return x.id < tab.id;
-	    });
-	    var next = newtabs.filter(function (x) {
-	        return x.id > tab.id;
-	    });
-	    if (prev.length > 0) {
-	        newtabs[prev.length - 1].active = true;
-	    } else if (next.length > 0) {
-	        newtabs[0].active = true;
-	    }
-	    return newtabs;
-	}
-	
-	function openTab(tab, alltabs) {
-	    return alltabs.map(function (x) {
-	        if (x.id == tab.id) {
-	            x.active = true;
-	            return x;
-	        } else {
-	            x.active = false;
-	            return x;
-	        }
-	    });
-	}
-	
-	function addTab(obj, alltabs) {
-	    [].forEach.call(alltabs, function (elem) {
-	        elem.active = elem.id == obj.id;
-	    });
-	    if (alltabs.filter(function (x) {
-	        return x.id == obj.id;
-	    }).length > 0) {
-	        return alltabs;
-	    }
-	    var newtab = {
-	        id: obj.id,
-	        active: true,
-	        name: obj.label,
-	        type: obj.type,
-	        content: _react2.default.createElement(
-	            _TestEditor2.default,
-	            { key: obj.id, docid: obj.id, name: obj.label },
-	            _react2.default.createElement(
-	                'h1',
-	                null,
-	                'blaat ',
-	                obj.id
-	            )
-	        )
-	    };
-	    alltabs.push(newtab);
-	    return alltabs;
-	}
-
-/***/ },
-/* 54 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(2);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _LargeToolBar = __webpack_require__(55);
-	
-	var _reactSplitPane = __webpack_require__(56);
-	
-	var _reactSplitPane2 = _interopRequireDefault(_reactSplitPane);
-	
-	var _api = __webpack_require__(47);
-	
-	var Api = _interopRequireWildcard(_api);
-	
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var TestEditor = function (_React$Component) {
-	    _inherits(TestEditor, _React$Component);
-	
-	    function TestEditor(props) {
-	        _classCallCheck(this, TestEditor);
-	
-	        var _this = _possibleConstructorReturn(this, (TestEditor.__proto__ || Object.getPrototypeOf(TestEditor)).call(this, props));
-	
-	        _this.state = { document: null };
-	        return _this;
-	    }
-	
-	    _createClass(TestEditor, [{
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            var _this2 = this;
-	
-	            Api.getDocument(this.props.docid).then(function (doc) {
-	                _this2.setState({ document: doc, iframeloaded: false });
-	            });
-	        }
-	    }, {
-	        key: 'publish',
-	        value: function publish() {
-	            console.log("publishing");
-	        }
-	    }, {
-	        key: 'saveItem',
-	        value: function saveItem() {
-	            console.log("CLicked save");
-	            var test = this.refs.docpage.contentDocument.getElementsByClassName("editable");
-	            var editables = [];
-	            [].forEach.call(test, function (elem) {
-	                if (elem.nodeName != "INPUT") {
-	                    editables.push({ id: 0, document_id: this.props.docid, name: elem.id, value: elem.innerHTML });
-	                } else {
-	                    editables.push({ id: 0, document_id: this.props.docid, name: elem.name, value: elem.value });
-	                }
-	            }.bind(this));
-	            Api.SaveEditables(this.props.docid, editables).then(function (r) {
-	                console.log("saved !");
-	            });
-	            console.log(editables);
-	            console.log(test);
-	        }
-	    }, {
-	        key: 'settings',
-	        value: function settings() {
-	            console.log("Open settings");
-	        }
-	    }, {
-	        key: 'preview',
-	        value: function preview() {
-	            console.log("Previewing");
-	        }
-	    }, {
-	        key: 'delete',
-	        value: function _delete() {
-	            console.log("Deleting");
-	        }
-	    }, {
-	        key: 'renderToolbar',
-	        value: function renderToolbar() {
-	            return _react2.default.createElement(
-	                _LargeToolBar.LargeToolBar,
-	                null,
-	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.publish.bind(this), icon: 'life-ring', label: 'Publish' }),
-	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.saveItem.bind(this), icon: 'floppy-o', label: 'Save' }),
-	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.settings.bind(this), icon: 'gears', label: 'Settings' }),
-	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.preview.bind(this), icon: 'eye', label: 'Preview' }),
-	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.delete.bind(this), icon: 'trash', label: '', classes: 'button-right redbtn' })
-	            );
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            var _this3 = this;
-	
-	            if (this.state.document == null) {
-	                return _react2.default.createElement(
-	                    'div',
-	                    { id: 'wrapper' },
-	                    this.renderToolbar(),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'loading' },
-	                        _react2.default.createElement('img', { src: '/assets/images/ring.svg' })
-	                    )
-	                );
-	            }
-	            return _react2.default.createElement(
-	                'div',
-	                { id: 'wrapper' },
-	                this.renderToolbar(),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'iframe-wrapper' },
-	                    _react2.default.createElement('iframe', { onLoad: function onLoad() {
-	                            return _this3.setState({ document: _this3.state.document, iframeloaded: true });
-	                        }, ref: 'docpage', src: this.state.document.path + "?editmode=editing" })
-	                ),
-	                this.state.iframeloaded ? null : _react2.default.createElement(
-	                    'div',
-	                    { className: 'loadingiframe' },
-	                    ' ',
-	                    _react2.default.createElement('img', { src: '/assets/images/ring.svg' }),
-	                    ' '
-	                )
-	            );
-	        }
-	    }]);
-	
-	    return TestEditor;
-	}(_react2.default.Component);
-	
-	exports.default = TestEditor;
-
-/***/ },
-/* 55 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.LargeToolBar = undefined;
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	exports.ToolbarItemLarge = ToolbarItemLarge;
-	
-	var _react = __webpack_require__(2);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var LargeToolBar = exports.LargeToolBar = function (_React$Component) {
-	    _inherits(LargeToolBar, _React$Component);
-	
-	    function LargeToolBar(props) {
-	        _classCallCheck(this, LargeToolBar);
-	
-	        return _possibleConstructorReturn(this, (LargeToolBar.__proto__ || Object.getPrototypeOf(LargeToolBar)).call(this, props));
-	    }
-	
-	    _createClass(LargeToolBar, [{
-	        key: "render",
-	        value: function render() {
-	            return _react2.default.createElement(
-	                "div",
-	                { className: "content-toolbar" },
-	                _react2.default.createElement(
-	                    "ul",
-	                    { className: "large-toolbar" },
-	                    this.props.children
-	                )
-	            );
-	        }
-	    }]);
-	
-	    return LargeToolBar;
-	}(_react2.default.Component);
-	
-	function ToolbarItemLarge(props) {
-	    return _react2.default.createElement(
-	        "li",
-	        { className: props.classes ? props.classes : "" },
-	        _react2.default.createElement(
-	            "a",
-	            { onClick: props.clicked, href: "#" },
-	            _react2.default.createElement("i", { className: "fa fa-" + props.icon, "aria-hidden": "true" }),
-	            " ",
-	            props.label
-	        )
-	    );
-	}
-
-/***/ },
+/* 48 */,
+/* 49 */,
+/* 50 */,
+/* 51 */,
+/* 52 */,
+/* 53 */,
+/* 54 */,
+/* 55 */,
 /* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -28288,6 +27245,238 @@
 	
 	exports.default = Resizer;
 	module.exports = exports['default'];
+
+/***/ },
+/* 243 */,
+/* 244 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.resizingPanel = resizingPanel;
+	exports.resizingPanelFinished = resizingPanelFinished;
+	exports.hideLeftPanel = hideLeftPanel;
+	exports.showLeftPanel = showLeftPanel;
+	function resizingPanel() {
+	    [].forEach.call(document.getElementsByClassName("iframe-wrapper"), function (iframe) {
+	        var div = document.createElement("div");
+	        div.id = "iframeblocker";
+	        div.className = "blockiframe";
+	        iframe.appendChild(div);
+	    });
+	}
+	
+	function resizingPanelFinished() {
+	    [].forEach.call(document.getElementsByClassName("iframe-wrapper"), function (iframe) {
+	        [].forEach.call(iframe.childNodes, function (node) {
+	            if (node.id == "iframeblocker") {
+	                iframe.removeChild(node);
+	            }
+	        });
+	    });
+	}
+	
+	function hideLeftPanel(leftpane) {
+	    leftpane.parentNode.style.display = "none";
+	}
+	
+	function showLeftPanel(leftpane) {
+	    leftpane.parentNode.style.display = "block";
+	}
+
+/***/ },
+/* 245 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _TreeView = __webpack_require__(36);
+	
+	var _api = __webpack_require__(47);
+	
+	var Api = _interopRequireWildcard(_api);
+	
+	var _reactContextmenu = __webpack_require__(38);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var PagesPanel = function (_React$Component) {
+	    _inherits(PagesPanel, _React$Component);
+	
+	    function PagesPanel(props, context) {
+	        _classCallCheck(this, PagesPanel);
+	
+	        var _this = _possibleConstructorReturn(this, (PagesPanel.__proto__ || Object.getPrototypeOf(PagesPanel)).call(this, props, context));
+	
+	        _this.state = { pages: [], selected: -1 };
+	        return _this;
+	    }
+	
+	    _createClass(PagesPanel, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+	
+	            Api.getDocuments().then(function (docs) {
+	                _this2.setState({ pages: docs, selected: _this2.state.selected });
+	            });
+	        }
+	    }, {
+	        key: 'clickItem',
+	        value: function clickItem(id) {
+	            this.setState({ pages: this.state.pages, selected: id });
+	        }
+	    }, {
+	        key: 'deleteItem',
+	        value: function deleteItem() {
+	            console.log("Deleting?" + this.state.selected);
+	        }
+	    }, {
+	        key: 'contextMenu',
+	        value: function contextMenu(id) {
+	            var _this3 = this;
+	
+	            return _react2.default.createElement(
+	                _reactContextmenu.ContextMenu,
+	                { id: String(id) },
+	                _react2.default.createElement(
+	                    _reactContextmenu.SubMenu,
+	                    { hoverDelay: 0, title: 'Add Page' },
+	                    _react2.default.createElement(
+	                        _reactContextmenu.MenuItem,
+	                        { data: { item: 'open' } },
+	                        'Default'
+	                    ),
+	                    _react2.default.createElement(
+	                        _reactContextmenu.MenuItem,
+	                        { data: { item: 'open' } },
+	                        'Test'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    _reactContextmenu.MenuItem,
+	                    { onClick: function onClick() {
+	                            return _this3.props.callback(_this3.props, "dblclick");
+	                        }, data: { item: 'open' } },
+	                    'Open'
+	                ),
+	                _react2.default.createElement(
+	                    _reactContextmenu.MenuItem,
+	                    { onClick: function onClick() {
+	                            return _this3.props.callback(_this3.props, "dblclick");
+	                        }, data: { item: 'open' } },
+	                    'Unpublish'
+	                ),
+	                _react2.default.createElement(
+	                    _reactContextmenu.MenuItem,
+	                    { onClick: function onClick() {
+	                            return console.log("renaming");
+	                        }, data: { item: 'rename' } },
+	                    'Rename'
+	                ),
+	                _react2.default.createElement(
+	                    _reactContextmenu.MenuItem,
+	                    { onClick: function onClick() {
+	                            return _this3.props.callback(_this3.props, "dblclick");
+	                        }, data: { item: 'open' } },
+	                    'Dublicate'
+	                ),
+	                _react2.default.createElement(
+	                    _reactContextmenu.MenuItem,
+	                    { onClick: this.deleteItem.bind(this), data: { item: 'delete' } },
+	                    'Delete'
+	                ),
+	                _react2.default.createElement(
+	                    _reactContextmenu.MenuItem,
+	                    { onClick: function onClick() {
+	                            return _this3.props.callback(_this3.props, "dblclick");
+	                        }, data: { item: 'open' } },
+	                    'Settings'
+	                )
+	            );
+	        }
+	    }, {
+	        key: 'renderTreeView',
+	        value: function renderTreeView(items) {
+	            var _this4 = this;
+	
+	            if (items.length <= 0) return null;
+	            return _react2.default.createElement(
+	                _TreeView.TreeView,
+	                null,
+	                items.map(function (x) {
+	                    return _react2.default.createElement(
+	                        _TreeView.TreeViewItem,
+	                        {
+	                            id: x.id,
+	                            onClick: function onClick() {
+	                                return _this4.clickItem(x.id);
+	                            },
+	                            selected: _this4.state.selected == x.id,
+	                            key: x.key, collapsed: x.collapsed,
+	                            contextMenu: _this4.contextMenu.bind(_this4),
+	                            label: x.label },
+	                        _this4.renderTreeView(x.children)
+	                    );
+	                })
+	            );
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                this.renderTreeView(this.state.pages)
+	            );
+	        }
+	    }]);
+	
+	    return PagesPanel;
+	}(_react2.default.Component);
+	
+	/*
+	
+	            <TreeView>
+	                <TreeViewItem collapsed={true} label="Home">
+	                    <TreeView>
+	                        <TreeViewItem label="test" />
+	                        <TreeViewItem label="blaat" />
+	                        <TreeViewItem collapsed={true} label="withsub">
+	                            <TreeView>
+	                                <TreeViewItem label="asdfasfd" />
+	                                <TreeViewItem label="bladiebla" />
+	                            </TreeView>
+	                        </TreeViewItem>
+	                        <TreeViewItem label="withoutsub" />
+	                    </TreeView>
+	                </TreeViewItem>
+	            </TreeView>
+	*/
+	
+	
+	exports.default = PagesPanel;
 
 /***/ }
 /******/ ]);
