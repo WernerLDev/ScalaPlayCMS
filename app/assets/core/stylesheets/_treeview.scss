@@ -1,8 +1,4 @@
 
-.toolbar {
-    height: 40px;
-    background: $color1;
-}
 
 .betweenDropTarget {
     height: 2px; background: #00ff00;
@@ -38,6 +34,7 @@ input.treeviewinputEdit {
 
 .tree {
     padding: 15px;
+    margin-bottom: 20px;
     ul {
         list-style-type: none;
         display: block;
@@ -98,3 +95,11 @@ input.treeviewinputEdit {
 .tree > ul > li { margin: 0 }
 
 .hidden { display: none; }
+
+.treeviewcontainer {
+    position: absolute;
+    top: 40px; left: 0; right: 0; bottom: 0;
+    padding: 20px 15px 20px 0;
+    overflow: auto;
+}
+

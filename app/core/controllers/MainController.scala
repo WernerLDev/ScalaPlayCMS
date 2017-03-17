@@ -47,6 +47,7 @@ class MainController @Inject()(documents:Documents, editables:Editables, templat
   implicit val DocWrites = Json.writes[DocumentJson]
   def listDocuments = WithAuthAction.async {
     documents.listJson map (x => {
+      Thread.sleep(500);
       Ok(Json.toJson(x))
     })
   }

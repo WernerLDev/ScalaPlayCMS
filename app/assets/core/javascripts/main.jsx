@@ -3,6 +3,7 @@ import {SideMenu, SideMenuItem} from './ui/sidemenu.jsx';
 import SplitPane from 'react-split-pane';
 import * as SplitPaneActions from './actions/SplitPaneActions.js';
 import PagesPanel from './ui/panels/PagesPanel.jsx';
+import TabPanel from './ui/panels/TabPanel.jsx';
 
 export default class Main extends React.Component {
 
@@ -61,7 +62,7 @@ export default class Main extends React.Component {
                             </div>
                         </div>
                         <div key="tabar">
-                            tabbar
+                            <TabPanel />
                         </div>
                     </SplitPane>
      

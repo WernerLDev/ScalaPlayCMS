@@ -15,7 +15,7 @@ import scala.concurrent._
 import scala.concurrent.duration._
 
 case class Document(id : Long , parent_id : Long, name : String, doctype : String, collapsed : Boolean, view:Option[String], path:String, created_at:Timestamp, updated_at:Timestamp, published_at:Timestamp )
-case class DocumentJson(id : Long, key: String, path:String, label : String, doctype : String, collapsed : Boolean, selected: Boolean, children: List[DocumentJson])
+case class DocumentJson(id : Long, key: String, path:String, label : String, doctype : String, collapsed : Boolean, children: List[DocumentJson])
 
 class DocumentTableDef(tag: Tag) extends Table[Document](tag, "document") {
 
@@ -46,7 +46,7 @@ class Documents @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
 
     def listJson():Future[List[DocumentJson]] = {
         def generateList(d:List[Document],parentid:Long):List[DocumentJson] = {
-            d.filter(x => x.parent_id == parentid).map(x => DocumentJson(x.id, x.name, x.path, x.name, x.doctype, x.collapsed, false, generateList(d ,x.id)))
+            d.filter(x => x.parent_id == parentid).map(x => DocumentJson(x.id, x.name, x.path, x.name, x.doctype, x.collapsed, generateList(d ,x.id)))
         }
         listAll map (x => generateList(x.toList, 0))
     }
