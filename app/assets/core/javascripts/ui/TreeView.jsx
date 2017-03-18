@@ -133,7 +133,7 @@ export class TreeViewItem extends React.Component {
                 </ContextMenuTrigger>
                 {this.props.adding ? this.renderNewForm() : null}
                 <div className={this.state.collapsed ? "" : "hidden"}>{this.props.children}</div>
-                {this.props.contextMenu(this.props.id)}
+                {this.props.contextMenu(this.props.id, this.props.label)}
             </li>
         )
     }

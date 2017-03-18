@@ -3,19 +3,67 @@ import {SideMenu, SideMenuItem} from './ui/sidemenu.jsx';
 import SplitPane from 'react-split-pane';
 import * as SplitPaneActions from './actions/SplitPaneActions.js';
 import PagesPanel from './ui/panels/PagesPanel.jsx';
-import TabPanel from './ui/panels/TabPanel.jsx';
+import {TabPanel, Tab, TabsList, TabContent} from './ui/panels/TabPanel.jsx';
+import PageEditPanel from './ui/panels/PageEditPanel.jsx';
+import * as TabsAction from './actions/TabViewActions.js';
+import _ from 'lodash/fp';
 
 export default class Main extends React.Component {
 
     constructor(props, context) {
         super(props, context);
-        this.state = { section: "pages" }
+        var initialTabs = TabsAction.getInitialTabs();
+        this.state = { section: "pages", activetab: 0, tabs: initialTabs }
     }
 
     switchSection(section) {
         if(this.state.section == section) SplitPaneActions.hideLeftPanel(this.refs.leftpane);
         if(this.state.section == "") SplitPaneActions.showLeftPanel(this.refs.leftpane); 
         this.setState({section: section == this.state.section ? "" : section});
+    }
+
+    switchTab(tabid) {
+        this.setState({activetab: tabid});
+    }
+
+    closeTab(tabid) {
+        var newtabs = this.state.tabs.filter(x => x.id != tabid);
+        var newactive = this.state.activetab;
+        if(tabid == this.state.activetab) {
+            newactive = TabsAction.findNewActive(tabid, this.state.tabs);
+        }
+        this.setState({ tabs: newtabs, activetab: newactive });
+    }
+
+    openTab(id, type, label) {
+        var content = (<div>{label}</div>);
+        if(type == "file") {
+            content = (<PageEditPanel id={id} />);
+        }
+        var newTab = {
+            id: id + type,
+            type: type,
+            label: label,
+            content: content
+        }
+        if(this.state.tabs.filter(x => x.id == newTab.id).length > 0) {
+            this.setState({ activetab: newTab.id })
+        } else {
+            this.setState({ tabs: _.union([newTab], this.state.tabs), activetab: newTab.id });
+        }
+    }
+
+    renameTab(id, type, name) {
+        var tabid = id + type;
+        var newtabs = this.state.tabs.map(function(tab){
+            if(tab.id == tabid) {
+                tab.label = name;
+                return tab;
+            } else  {
+                return tab;
+            }
+        });
+        this.setState({tabs: newtabs});
     }
 
     render() {
@@ -49,7 +97,10 @@ export default class Main extends React.Component {
                                 Dashboard
                             </div>
                             <div className={this.state.section == "pages" ? "visible tree" : "hidden"}>
-                                <PagesPanel />
+                                <PagesPanel
+                                onOpen={this.openTab.bind(this)}
+                                onRename={this.renameTab.bind(this)}
+                                onDelete={(id, type) => this.closeTab(id + type)} />
                             </div>
                             <div className={this.state.section == "entities" ? "visible" : "hidden"}>
                                 Entities
@@ -62,7 +113,11 @@ export default class Main extends React.Component {
                             </div>
                         </div>
                         <div key="tabar">
-                            <TabPanel />
+                            <TabsList active={this.state.activetab} onClose={this.closeTab.bind(this)} onClick={this.switchTab.bind(this)}>
+                                {this.state.tabs.map(t => <Tab key={t.id} id={t.id} label={t.label} type={t.type} />)}
+                            </TabsList>
+
+                            {this.state.tabs.map(t => <TabContent key={t.id} active={this.state.activetab == t.id}>{t.content}</TabContent>)}
                         </div>
                     </SplitPane>
      
@@ -70,5 +125,4 @@ export default class Main extends React.Component {
             </div>
         )
     }
-
 }

@@ -34,15 +34,20 @@ export default class PagesPanel extends React.Component {
             alert("No item selected");
             return;
         }
-        this.setState({working: true});
-        this.setState({ deleting: this.state.selected});
-        Api.deleteDocument(this.state.selected).then(x => this.updateData());
+        var docid = this.state.selected;
+        this.setState({ working: true, deleting: docid});
+        Api.deleteDocument(docid).then(x => {
+            this.updateData().then(y => {
+                this.props.onDelete(docid, "file");
+            })
+        });
     }
 
     renameItem(name) {
+        var docid = this.state.selected;
         this.setState({working: true});
-        Api.renameDocument(this.state.selected, name).then(x => {
-            this.updateData();
+        Api.renameDocument(docid, name).then(x => {
+            this.updateData().then(x => this.props.onRename(docid, "file", name) );
         })
     }
 
@@ -64,13 +69,13 @@ export default class PagesPanel extends React.Component {
         Api.updateParentDocument(id, parent_id).then(x => this.updateData());
     }
 
-    contextMenu(id) {
+    contextMenu(id, label) {
         return (
             <ContextMenu id={String(id)}>
                 <SubMenu hoverDelay={0} title="Add Page">
                     {this.state.pagetypes.map(x => <MenuItem key={x.typekey} onClick={() => this.setState({adding: id, newtype: x.typekey})}>{x.typename}</MenuItem> )}
                 </SubMenu>
-                <MenuItem onClick={() => this.props.callback(this.props, "dblclick")} data={{item: 'open'}}>Open</MenuItem>
+                <MenuItem onClick={() => this.props.onOpen(id, "file", label)} data={{item: 'open'}}>Open</MenuItem>
                 <MenuItem onClick={() => this.props.callback(this.props, "dblclick")} data={{item: 'open'}}>Unpublish</MenuItem>
                 <MenuItem onClick={() => this.setState({ renaming: id })} data={{item: 'rename'}}>Rename</MenuItem>
                 <MenuItem onClick={() => this.props.callback(this.props, "dblclick")} data={{item: 'open'}}>Dublicate</MenuItem>

@@ -1,33 +1,32 @@
 import React from 'react';
 import Icon from '../Icon.jsx';
 
-function Tab(props) {
+export function Tab(props) {
     return(
-        <li className={props.active ? "active" : ""}>
-            <div className="clickarea"></div>
-            <Icon type="file" /> {props.label} <i className="fa fa-window-close" aria-hidden="true"></i>
+        <li className={props.active == props.id ? "active" : ""}>
+            <div onClick={() => props.onClick(props.id)} className="clickarea"></div>
+            <Icon type={props.type} /> {props.label} <i onClick={() => props.onClose(props.id)} className="fa fa-window-close" aria-hidden="true"></i>
         </li>
     )
 }
 
+export function TabsList(props) {
 
-export default class TabPanel extends React.Component {
+    return(
+        <div className="tabsContainer">
+            <ul className="tabs">
+                {props.children.map(t => React.cloneElement(t, { active: props.active, onClick: props.onClick, onClose: props.onClose }))}
+            </ul>
+        </div>
+    );
+}
 
-    constructor(props, context) {
-        super(props, context);
-    }
+export function TabContent(props) {
 
-    render() {
-        return(
-            <div className="tabsContainer">
+    return(
+        <div className={props.active ? "visible" : "hidden"}>
+            {props.children}
+        </div>
+    )
 
-                <ul className="tabs">
-                    <Tab active={false} label="test" />
-                    <Tab active={true} label="nogeen" />
-                    <Tab active={false} label="bladiebla" />
-                </ul>
-
-            </div>
-        )
-    }
 }
