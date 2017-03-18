@@ -1,7 +1,7 @@
 import React from 'react';
 import Icon from './Icon.jsx';
 import { ContextMenu, MenuItem, SubMenu, ContextMenuTrigger } from "react-contextmenu";
-
+import * as Api from '../api/api.js';
 
 class TreeViewItemLabel extends React.Component {
 
@@ -77,6 +77,7 @@ export class TreeViewItem extends React.Component {
     }
 
     collapse() {
+        Api.collapseDocument(this.props.id, !this.state.collapsed);
         this.setState({ collapsed: !this.state.collapsed })
     }
 
@@ -121,7 +122,7 @@ export class TreeViewItem extends React.Component {
         if(!this.props.children) icon = (<Icon type="empty" />); 
         return(
             <li className={this.props.deleted ? "deleted" : ""}>
-                <ContextMenuTrigger holdToDisplay={-1} id={String(this.props.id)}>
+                <ContextMenuTrigger holdToDisplay={-1} id={String(this.props.id) + this.props.label}>
                 <TreeViewItemLabel
                     id={this.props.id}
                     parentChanged={this.props.parentChanged}

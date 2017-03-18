@@ -4145,27 +4145,31 @@
 	
 	var _reactSplitPane2 = _interopRequireDefault(_reactSplitPane);
 	
-	var _SplitPaneActions = __webpack_require__(222);
+	var _SplitPaneActions = __webpack_require__(226);
 	
 	var SplitPaneActions = _interopRequireWildcard(_SplitPaneActions);
 	
-	var _PagesPanel = __webpack_require__(223);
+	var _PagesPanel = __webpack_require__(227);
 	
 	var _PagesPanel2 = _interopRequireDefault(_PagesPanel);
 	
-	var _TabPanel = __webpack_require__(237);
+	var _TabPanel = __webpack_require__(241);
 	
-	var _PageEditPanel = __webpack_require__(246);
+	var _PageEditPanel = __webpack_require__(242);
 	
 	var _PageEditPanel2 = _interopRequireDefault(_PageEditPanel);
 	
-	var _TabViewActions = __webpack_require__(238);
+	var _TabViewActions = __webpack_require__(244);
 	
 	var TabsAction = _interopRequireWildcard(_TabViewActions);
 	
-	var _fp = __webpack_require__(241);
+	var _fp = __webpack_require__(245);
 	
 	var _fp2 = _interopRequireDefault(_fp);
+	
+	var _AssetsPanel = __webpack_require__(251);
+	
+	var _AssetsPanel2 = _interopRequireDefault(_AssetsPanel);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -4193,6 +4197,7 @@
 	    _createClass(Main, [{
 	        key: 'switchSection',
 	        value: function switchSection(section) {
+	
 	            if (this.state.section == section) SplitPaneActions.hideLeftPanel(this.refs.leftpane);
 	            if (this.state.section == "") SplitPaneActions.showLeftPanel(this.refs.leftpane);
 	            this.setState({ section: section == this.state.section ? "" : section });
@@ -4345,8 +4350,13 @@
 	                            ),
 	                            _react2.default.createElement(
 	                                'div',
-	                                { className: this.state.section == "assets" ? "visible" : "hidden" },
-	                                'Assets'
+	                                { className: this.state.section == "assets" ? "visible tree" : "hidden" },
+	                                _react2.default.createElement(_AssetsPanel2.default, {
+	                                    onOpen: this.openTab.bind(this),
+	                                    onRename: this.renameTab.bind(this),
+	                                    onDelete: function onDelete(id, type) {
+	                                        return _this2.closeTab(id + type);
+	                                    } })
 	                            ),
 	                            _react2.default.createElement(
 	                                'div',
@@ -4498,15 +4508,15 @@
 	
 	var _inlineStylePrefixer2 = _interopRequireDefault(_inlineStylePrefixer);
 	
-	var _reactStyleProptype = __webpack_require__(218);
+	var _reactStyleProptype = __webpack_require__(222);
 	
 	var _reactStyleProptype2 = _interopRequireDefault(_reactStyleProptype);
 	
-	var _Pane = __webpack_require__(220);
+	var _Pane = __webpack_require__(224);
 	
 	var _Pane2 = _interopRequireDefault(_Pane);
 	
-	var _Resizer = __webpack_require__(221);
+	var _Resizer = __webpack_require__(225);
 	
 	var _Resizer2 = _interopRequireDefault(_Resizer);
 	
@@ -22222,228 +22232,67 @@
 	  value: true
 	});
 	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	// special flexbox specifications
+	var _createPrefixer = __webpack_require__(184);
 	
+	var _createPrefixer2 = _interopRequireDefault(_createPrefixer);
 	
-	var _prefixAll2 = __webpack_require__(184);
+	var _cursor = __webpack_require__(193);
 	
-	var _prefixAll3 = _interopRequireDefault(_prefixAll2);
+	var _cursor2 = _interopRequireDefault(_cursor);
 	
-	var _getBrowserInformation = __webpack_require__(201);
+	var _crossFade = __webpack_require__(195);
 	
-	var _getBrowserInformation2 = _interopRequireDefault(_getBrowserInformation);
+	var _crossFade2 = _interopRequireDefault(_crossFade);
 	
-	var _getPrefixedKeyframes = __webpack_require__(204);
+	var _filter = __webpack_require__(196);
 	
-	var _getPrefixedKeyframes2 = _interopRequireDefault(_getPrefixedKeyframes);
+	var _filter2 = _interopRequireDefault(_filter);
 	
-	var _capitalizeString = __webpack_require__(186);
-	
-	var _capitalizeString2 = _interopRequireDefault(_capitalizeString);
-	
-	var _sortPrefixedStyle = __webpack_require__(187);
-	
-	var _sortPrefixedStyle2 = _interopRequireDefault(_sortPrefixedStyle);
-	
-	var _prefixProps = __webpack_require__(205);
-	
-	var _prefixProps2 = _interopRequireDefault(_prefixProps);
-	
-	var _position = __webpack_require__(206);
-	
-	var _position2 = _interopRequireDefault(_position);
-	
-	var _calc = __webpack_require__(208);
-	
-	var _calc2 = _interopRequireDefault(_calc);
-	
-	var _zoomCursor = __webpack_require__(209);
-	
-	var _zoomCursor2 = _interopRequireDefault(_zoomCursor);
-	
-	var _grabCursor = __webpack_require__(210);
-	
-	var _grabCursor2 = _interopRequireDefault(_grabCursor);
-	
-	var _flex = __webpack_require__(211);
+	var _flex = __webpack_require__(197);
 	
 	var _flex2 = _interopRequireDefault(_flex);
 	
-	var _sizing = __webpack_require__(212);
-	
-	var _sizing2 = _interopRequireDefault(_sizing);
-	
-	var _gradient = __webpack_require__(213);
-	
-	var _gradient2 = _interopRequireDefault(_gradient);
-	
-	var _transition = __webpack_require__(214);
-	
-	var _transition2 = _interopRequireDefault(_transition);
-	
-	var _flexboxIE = __webpack_require__(216);
-	
-	var _flexboxIE2 = _interopRequireDefault(_flexboxIE);
-	
-	var _flexboxOld = __webpack_require__(217);
+	var _flexboxOld = __webpack_require__(198);
 	
 	var _flexboxOld2 = _interopRequireDefault(_flexboxOld);
 	
+	var _gradient = __webpack_require__(199);
+	
+	var _gradient2 = _interopRequireDefault(_gradient);
+	
+	var _imageSet = __webpack_require__(200);
+	
+	var _imageSet2 = _interopRequireDefault(_imageSet);
+	
+	var _position = __webpack_require__(201);
+	
+	var _position2 = _interopRequireDefault(_position);
+	
+	var _sizing = __webpack_require__(202);
+	
+	var _sizing2 = _interopRequireDefault(_sizing);
+	
+	var _transition = __webpack_require__(203);
+	
+	var _transition2 = _interopRequireDefault(_transition);
+	
+	var _static = __webpack_require__(206);
+	
+	var _static2 = _interopRequireDefault(_static);
+	
+	var _dynamicData = __webpack_require__(221);
+	
+	var _dynamicData2 = _interopRequireDefault(_dynamicData);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	var plugins = [_crossFade2.default, _cursor2.default, _filter2.default, _flexboxOld2.default, _gradient2.default, _imageSet2.default, _position2.default, _sizing2.default, _transition2.default, _flex2.default];
 	
-	var plugins = [_position2.default, _calc2.default, _zoomCursor2.default, _grabCursor2.default, _sizing2.default, _gradient2.default, _transition2.default, _flexboxIE2.default, _flexboxOld2.default,
-	// this must be run AFTER the flexbox specs
-	_flex2.default];
-	
-	var Prefixer = function () {
-	  /**
-	   * Instantiante a new prefixer
-	   * @param {string} userAgent - userAgent to gather prefix information according to caniuse.com
-	   * @param {string} keepUnprefixed - keeps unprefixed properties and values
-	   */
-	
-	  function Prefixer() {
-	    var _this = this;
-	
-	    var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	
-	    _classCallCheck(this, Prefixer);
-	
-	    var defaultUserAgent = typeof navigator !== 'undefined' ? navigator.userAgent : undefined;
-	
-	    this._userAgent = options.userAgent || defaultUserAgent;
-	    this._keepUnprefixed = options.keepUnprefixed || false;
-	
-	    this._browserInfo = (0, _getBrowserInformation2.default)(this._userAgent);
-	
-	    // Checks if the userAgent was resolved correctly
-	    if (this._browserInfo && this._browserInfo.prefix) {
-	      // set additional prefix information
-	      this.cssPrefix = this._browserInfo.prefix.css;
-	      this.jsPrefix = this._browserInfo.prefix.inline;
-	      this.prefixedKeyframes = (0, _getPrefixedKeyframes2.default)(this._browserInfo);
-	    } else {
-	      this._usePrefixAllFallback = true;
-	      return false;
-	    }
-	
-	    var data = this._browserInfo.browser && _prefixProps2.default[this._browserInfo.browser];
-	    if (data) {
-	      this._requiresPrefix = Object.keys(data).filter(function (key) {
-	        return data[key] >= _this._browserInfo.version;
-	      }).reduce(function (result, name) {
-	        result[name] = true;
-	        return result;
-	      }, {});
-	      this._hasPropsRequiringPrefix = Object.keys(this._requiresPrefix).length > 0;
-	    } else {
-	      this._usePrefixAllFallback = true;
-	    }
-	  }
-	
-	  /**
-	   * Returns a prefixed version of the style object
-	   * @param {Object} styles - Style object that gets prefixed properties added
-	   * @returns {Object} - Style object with prefixed properties and values
-	   */
-	
-	
-	  _createClass(Prefixer, [{
-	    key: 'prefix',
-	    value: function prefix(styles) {
-	      var _this2 = this;
-	
-	      // use prefixAll as fallback if userAgent can not be resolved
-	      if (this._usePrefixAllFallback) {
-	        return (0, _prefixAll3.default)(styles);
-	      }
-	
-	      // only add prefixes if needed
-	      if (!this._hasPropsRequiringPrefix) {
-	        return styles;
-	      }
-	
-	      Object.keys(styles).forEach(function (property) {
-	        var value = styles[property];
-	        if (value instanceof Object && !Array.isArray(value)) {
-	          // recurse through nested style objects
-	          styles[property] = _this2.prefix(value);
-	        } else {
-	          // add prefixes if needed
-	          if (_this2._requiresPrefix[property]) {
-	            styles[_this2.jsPrefix + (0, _capitalizeString2.default)(property)] = value;
-	            if (!_this2._keepUnprefixed) {
-	              delete styles[property];
-	            }
-	          }
-	        }
-	      });
-	
-	      Object.keys(styles).forEach(function (property) {
-	        [].concat(styles[property]).forEach(function (value) {
-	          // resolve plugins
-	          plugins.forEach(function (plugin) {
-	            // generates a new plugin interface with current data
-	            assignStyles(styles, plugin({
-	              property: property,
-	              value: value,
-	              styles: styles,
-	              browserInfo: _this2._browserInfo,
-	              prefix: {
-	                js: _this2.jsPrefix,
-	                css: _this2.cssPrefix,
-	                keyframes: _this2.prefixedKeyframes
-	              },
-	              keepUnprefixed: _this2._keepUnprefixed,
-	              requiresPrefix: _this2._requiresPrefix
-	            }), value, _this2._keepUnprefixed);
-	          });
-	        });
-	      });
-	
-	      return (0, _sortPrefixedStyle2.default)(styles);
-	    }
-	
-	    /**
-	     * Returns a prefixed version of the style object using all vendor prefixes
-	     * @param {Object} styles - Style object that gets prefixed properties added
-	     * @returns {Object} - Style object with prefixed properties and values
-	     */
-	
-	  }], [{
-	    key: 'prefixAll',
-	    value: function prefixAll(styles) {
-	      return (0, _prefixAll3.default)(styles);
-	    }
-	  }]);
-	
-	  return Prefixer;
-	}();
-	
+	var Prefixer = (0, _createPrefixer2.default)({
+	  prefixMap: _dynamicData2.default.prefixMap,
+	  plugins: plugins
+	}, _static2.default);
 	exports.default = Prefixer;
-	
-	
-	function assignStyles(base) {
-	  var extend = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-	  var value = arguments[2];
-	  var keepUnprefixed = arguments[3];
-	
-	  Object.keys(extend).forEach(function (property) {
-	    var baseValue = base[property];
-	    if (Array.isArray(baseValue)) {
-	      [].concat(extend[property]).forEach(function (val) {
-	        if (base[property].indexOf(val) === -1) {
-	          base[property].splice(baseValue.indexOf(value), keepUnprefixed ? 0 : 1, val);
-	        }
-	      });
-	    } else {
-	      base[property] = extend[property];
-	    }
-	  });
-	}
 	module.exports = exports['default'];
 
 /***/ },
@@ -22455,148 +22304,179 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = prefixAll;
 	
-	var _prefixProps = __webpack_require__(185);
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _prefixProps2 = _interopRequireDefault(_prefixProps);
+	exports.default = createPrefixer;
 	
-	var _capitalizeString = __webpack_require__(186);
+	var _getBrowserInformation = __webpack_require__(185);
+	
+	var _getBrowserInformation2 = _interopRequireDefault(_getBrowserInformation);
+	
+	var _getPrefixedKeyframes = __webpack_require__(188);
+	
+	var _getPrefixedKeyframes2 = _interopRequireDefault(_getPrefixedKeyframes);
+	
+	var _capitalizeString = __webpack_require__(189);
 	
 	var _capitalizeString2 = _interopRequireDefault(_capitalizeString);
 	
-	var _sortPrefixedStyle = __webpack_require__(187);
+	var _addNewValuesOnly = __webpack_require__(190);
 	
-	var _sortPrefixedStyle2 = _interopRequireDefault(_sortPrefixedStyle);
+	var _addNewValuesOnly2 = _interopRequireDefault(_addNewValuesOnly);
 	
-	var _position = __webpack_require__(189);
+	var _isObject = __webpack_require__(191);
 	
-	var _position2 = _interopRequireDefault(_position);
+	var _isObject2 = _interopRequireDefault(_isObject);
 	
-	var _calc = __webpack_require__(190);
+	var _prefixValue = __webpack_require__(192);
 	
-	var _calc2 = _interopRequireDefault(_calc);
-	
-	var _cursor = __webpack_require__(193);
-	
-	var _cursor2 = _interopRequireDefault(_cursor);
-	
-	var _flex = __webpack_require__(194);
-	
-	var _flex2 = _interopRequireDefault(_flex);
-	
-	var _sizing = __webpack_require__(195);
-	
-	var _sizing2 = _interopRequireDefault(_sizing);
-	
-	var _gradient = __webpack_require__(196);
-	
-	var _gradient2 = _interopRequireDefault(_gradient);
-	
-	var _transition = __webpack_require__(197);
-	
-	var _transition2 = _interopRequireDefault(_transition);
-	
-	var _flexboxIE = __webpack_require__(199);
-	
-	var _flexboxIE2 = _interopRequireDefault(_flexboxIE);
-	
-	var _flexboxOld = __webpack_require__(200);
-	
-	var _flexboxOld2 = _interopRequireDefault(_flexboxOld);
+	var _prefixValue2 = _interopRequireDefault(_prefixValue);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// special flexbox specifications
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
+	function createPrefixer(_ref) {
+	  var prefixMap = _ref.prefixMap,
+	      plugins = _ref.plugins;
+	  var fallback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function (style) {
+	    return style;
+	  };
 	
-	var plugins = [_position2.default, _calc2.default, _cursor2.default, _sizing2.default, _gradient2.default, _transition2.default, _flexboxIE2.default, _flexboxOld2.default, _flex2.default];
+	  return function () {
+	    /**
+	    * Instantiante a new prefixer
+	    * @param {string} userAgent - userAgent to gather prefix information according to caniuse.com
+	    * @param {string} keepUnprefixed - keeps unprefixed properties and values
+	    */
+	    function Prefixer() {
+	      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	
-	/**
-	 * Returns a prefixed version of the style object using all vendor prefixes
-	 * @param {Object} styles - Style object that gets prefixed properties added
-	 * @returns {Object} - Style object with prefixed properties and values
-	 */
-	function prefixAll(styles) {
-	  Object.keys(styles).forEach(function (property) {
-	    var value = styles[property];
-	    if (value instanceof Object && !Array.isArray(value)) {
-	      // recurse through nested style objects
-	      styles[property] = prefixAll(value);
-	    } else {
-	      Object.keys(_prefixProps2.default).forEach(function (prefix) {
-	        var properties = _prefixProps2.default[prefix];
-	        // add prefixes if needed
-	        if (properties[property]) {
-	          styles[prefix + (0, _capitalizeString2.default)(property)] = value;
+	      _classCallCheck(this, Prefixer);
+	
+	      var defaultUserAgent = typeof navigator !== 'undefined' ? navigator.userAgent : undefined;
+	
+	      this._userAgent = options.userAgent || defaultUserAgent;
+	      this._keepUnprefixed = options.keepUnprefixed || false;
+	
+	      if (this._userAgent) {
+	        this._browserInfo = (0, _getBrowserInformation2.default)(this._userAgent);
+	      }
+	
+	      // Checks if the userAgent was resolved correctly
+	      if (this._browserInfo && this._browserInfo.cssPrefix) {
+	        this.prefixedKeyframes = (0, _getPrefixedKeyframes2.default)(this._browserInfo.browserName, this._browserInfo.browserVersion, this._browserInfo.cssPrefix);
+	      } else {
+	        this._useFallback = true;
+	        return false;
+	      }
+	
+	      var prefixData = this._browserInfo.browserName && prefixMap[this._browserInfo.browserName];
+	      if (prefixData) {
+	        this._requiresPrefix = {};
+	
+	        for (var property in prefixData) {
+	          if (prefixData[property] >= this._browserInfo.browserVersion) {
+	            this._requiresPrefix[property] = true;
+	          }
 	        }
-	      });
+	
+	        this._hasPropsRequiringPrefix = Object.keys(this._requiresPrefix).length > 0;
+	      } else {
+	        this._useFallback = true;
+	      }
+	
+	      this._metaData = {
+	        browserVersion: this._browserInfo.browserVersion,
+	        browserName: this._browserInfo.browserName,
+	        cssPrefix: this._browserInfo.cssPrefix,
+	        jsPrefix: this._browserInfo.jsPrefix,
+	        keepUnprefixed: this._keepUnprefixed,
+	        requiresPrefix: this._requiresPrefix
+	      };
 	    }
-	  });
 	
-	  Object.keys(styles).forEach(function (property) {
-	    [].concat(styles[property]).forEach(function (value, index) {
-	      // resolve every special plugins
-	      plugins.forEach(function (plugin) {
-	        return assignStyles(styles, plugin(property, value));
-	      });
-	    });
-	  });
-	
-	  return (0, _sortPrefixedStyle2.default)(styles);
-	}
-	
-	function assignStyles(base) {
-	  var extend = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-	
-	  Object.keys(extend).forEach(function (property) {
-	    var baseValue = base[property];
-	    if (Array.isArray(baseValue)) {
-	      [].concat(extend[property]).forEach(function (value) {
-	        var valueIndex = baseValue.indexOf(value);
-	        if (valueIndex > -1) {
-	          base[property].splice(valueIndex, 1);
+	    _createClass(Prefixer, [{
+	      key: 'prefix',
+	      value: function prefix(style) {
+	        // use static prefixer as fallback if userAgent can not be resolved
+	        if (this._useFallback) {
+	          return fallback(style);
 	        }
-	        base[property].push(value);
-	      });
-	    } else {
-	      base[property] = extend[property];
-	    }
-	  });
+	
+	        // only add prefixes if needed
+	        if (!this._hasPropsRequiringPrefix) {
+	          return style;
+	        }
+	
+	        return this._prefixStyle(style);
+	      }
+	    }, {
+	      key: '_prefixStyle',
+	      value: function _prefixStyle(style) {
+	        for (var property in style) {
+	          var value = style[property];
+	
+	          // handle nested objects
+	          if ((0, _isObject2.default)(value)) {
+	            style[property] = this.prefix(value);
+	            // handle array values
+	          } else if (Array.isArray(value)) {
+	            var combinedValue = [];
+	
+	            for (var i = 0, len = value.length; i < len; ++i) {
+	              var processedValue = (0, _prefixValue2.default)(plugins, property, value[i], style, this._metaData);
+	              (0, _addNewValuesOnly2.default)(combinedValue, processedValue || value[i]);
+	            }
+	
+	            // only modify the value if it was touched
+	            // by any plugin to prevent unnecessary mutations
+	            if (combinedValue.length > 0) {
+	              style[property] = combinedValue;
+	            }
+	          } else {
+	            var _processedValue = (0, _prefixValue2.default)(plugins, property, value, style, this._metaData);
+	
+	            // only modify the value if it was touched
+	            // by any plugin to prevent unnecessary mutations
+	            if (_processedValue) {
+	              style[property] = _processedValue;
+	            }
+	
+	            // add prefixes to properties
+	            if (this._requiresPrefix.hasOwnProperty(property)) {
+	              style[this._browserInfo.jsPrefix + (0, _capitalizeString2.default)(property)] = value;
+	              if (!this._keepUnprefixed) {
+	                delete style[property];
+	              }
+	            }
+	          }
+	        }
+	
+	        return style;
+	      }
+	
+	      /**
+	      * Returns a prefixed version of the style object using all vendor prefixes
+	      * @param {Object} styles - Style object that gets prefixed properties added
+	      * @returns {Object} - Style object with prefixed properties and values
+	      */
+	
+	    }], [{
+	      key: 'prefixAll',
+	      value: function prefixAll(styles) {
+	        return fallback(styles);
+	      }
+	    }]);
+	
+	    return Prefixer;
+	  }();
 	}
 	module.exports = exports['default'];
 
 /***/ },
 /* 185 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = { "Webkit": { "transform": true, "transformOrigin": true, "transformOriginX": true, "transformOriginY": true, "backfaceVisibility": true, "perspective": true, "perspectiveOrigin": true, "transformStyle": true, "transformOriginZ": true, "animation": true, "animationDelay": true, "animationDirection": true, "animationFillMode": true, "animationDuration": true, "animationIterationCount": true, "animationName": true, "animationPlayState": true, "animationTimingFunction": true, "appearance": true, "userSelect": true, "fontKerning": true, "textEmphasisPosition": true, "textEmphasis": true, "textEmphasisStyle": true, "textEmphasisColor": true, "boxDecorationBreak": true, "clipPath": true, "maskImage": true, "maskMode": true, "maskRepeat": true, "maskPosition": true, "maskClip": true, "maskOrigin": true, "maskSize": true, "maskComposite": true, "mask": true, "maskBorderSource": true, "maskBorderMode": true, "maskBorderSlice": true, "maskBorderWidth": true, "maskBorderOutset": true, "maskBorderRepeat": true, "maskBorder": true, "maskType": true, "textDecorationStyle": true, "textDecorationSkip": true, "textDecorationLine": true, "textDecorationColor": true, "filter": true, "fontFeatureSettings": true, "breakAfter": true, "breakBefore": true, "breakInside": true, "columnCount": true, "columnFill": true, "columnGap": true, "columnRule": true, "columnRuleColor": true, "columnRuleStyle": true, "columnRuleWidth": true, "columns": true, "columnSpan": true, "columnWidth": true, "flex": true, "flexBasis": true, "flexDirection": true, "flexGrow": true, "flexFlow": true, "flexShrink": true, "flexWrap": true, "alignContent": true, "alignItems": true, "alignSelf": true, "justifyContent": true, "order": true, "transition": true, "transitionDelay": true, "transitionDuration": true, "transitionProperty": true, "transitionTimingFunction": true, "backdropFilter": true, "scrollSnapType": true, "scrollSnapPointsX": true, "scrollSnapPointsY": true, "scrollSnapDestination": true, "scrollSnapCoordinate": true, "shapeImageThreshold": true, "shapeImageMargin": true, "shapeImageOutside": true, "hyphens": true, "flowInto": true, "flowFrom": true, "regionFragment": true, "textSizeAdjust": true }, "Moz": { "appearance": true, "userSelect": true, "boxSizing": true, "textAlignLast": true, "textDecorationStyle": true, "textDecorationSkip": true, "textDecorationLine": true, "textDecorationColor": true, "tabSize": true, "hyphens": true, "fontFeatureSettings": true, "breakAfter": true, "breakBefore": true, "breakInside": true, "columnCount": true, "columnFill": true, "columnGap": true, "columnRule": true, "columnRuleColor": true, "columnRuleStyle": true, "columnRuleWidth": true, "columns": true, "columnSpan": true, "columnWidth": true }, "ms": { "flex": true, "flexBasis": false, "flexDirection": true, "flexGrow": false, "flexFlow": true, "flexShrink": false, "flexWrap": true, "alignContent": false, "alignItems": false, "alignSelf": false, "justifyContent": false, "order": false, "transform": true, "transformOrigin": true, "transformOriginX": true, "transformOriginY": true, "userSelect": true, "wrapFlow": true, "wrapThrough": true, "wrapMargin": true, "scrollSnapType": true, "scrollSnapPointsX": true, "scrollSnapPointsY": true, "scrollSnapDestination": true, "scrollSnapCoordinate": true, "touchAction": true, "hyphens": true, "flowInto": true, "flowFrom": true, "breakBefore": true, "breakAfter": true, "breakInside": true, "regionFragment": true, "gridTemplateColumns": true, "gridTemplateRows": true, "gridTemplateAreas": true, "gridTemplate": true, "gridAutoColumns": true, "gridAutoRows": true, "gridAutoFlow": true, "grid": true, "gridRowStart": true, "gridColumnStart": true, "gridRowEnd": true, "gridRow": true, "gridColumn": true, "gridColumnEnd": true, "gridColumnGap": true, "gridRowGap": true, "gridArea": true, "gridGap": true, "textSizeAdjust": true } };
-	module.exports = exports["default"];
-
-/***/ },
-/* 186 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	// helper to capitalize strings
-	
-	exports.default = function (str) {
-	  return str.charAt(0).toUpperCase() + str.slice(1);
-	};
-	
-	module.exports = exports["default"];
-
-/***/ },
-/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22604,560 +22484,131 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = sortPrefixedStyle;
+	exports.default = getBrowserInformation;
 	
-	var _isPrefixedProperty = __webpack_require__(188);
-	
-	var _isPrefixedProperty2 = _interopRequireDefault(_isPrefixedProperty);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function sortPrefixedStyle(style) {
-	  return Object.keys(style).sort(function (left, right) {
-	    if ((0, _isPrefixedProperty2.default)(left) && !(0, _isPrefixedProperty2.default)(right)) {
-	      return -1;
-	    } else if (!(0, _isPrefixedProperty2.default)(left) && (0, _isPrefixedProperty2.default)(right)) {
-	      return 1;
-	    }
-	    return 0;
-	  }).reduce(function (sortedStyle, prop) {
-	    sortedStyle[prop] = style[prop];
-	    return sortedStyle;
-	  }, {});
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 188 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	exports.default = function (property) {
-	  return property.match(/^(Webkit|Moz|O|ms)/) !== null;
-	};
-	
-	module.exports = exports["default"];
-
-/***/ },
-/* 189 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = position;
-	function position(property, value) {
-	  if (property === 'position' && value === 'sticky') {
-	    return { position: ['-webkit-sticky', 'sticky'] };
-	  }
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 190 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = calc;
-	
-	var _joinPrefixedValue = __webpack_require__(191);
-	
-	var _joinPrefixedValue2 = _interopRequireDefault(_joinPrefixedValue);
-	
-	var _isPrefixedValue = __webpack_require__(192);
-	
-	var _isPrefixedValue2 = _interopRequireDefault(_isPrefixedValue);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function calc(property, value) {
-	  if (typeof value === 'string' && !(0, _isPrefixedValue2.default)(value) && value.indexOf('calc(') > -1) {
-	    return (0, _joinPrefixedValue2.default)(property, value, function (prefix, value) {
-	      return value.replace(/calc\(/g, prefix + 'calc(');
-	    });
-	  }
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 191 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-	
-	// returns a style object with a single concated prefixed value string
-	
-	exports.default = function (property, value) {
-	  var replacer = arguments.length <= 2 || arguments[2] === undefined ? function (prefix, value) {
-	    return prefix + value;
-	  } : arguments[2];
-	  return _defineProperty({}, property, ['-webkit-', '-moz-', ''].map(function (prefix) {
-	    return replacer(prefix, value);
-	  }));
-	};
-	
-	module.exports = exports['default'];
-
-/***/ },
-/* 192 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	exports.default = function (value) {
-	  if (Array.isArray(value)) value = value.join(',');
-	
-	  return value.match(/-webkit-|-moz-|-ms-/) !== null;
-	};
-	
-	module.exports = exports['default'];
-
-/***/ },
-/* 193 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = cursor;
-	
-	var _joinPrefixedValue = __webpack_require__(191);
-	
-	var _joinPrefixedValue2 = _interopRequireDefault(_joinPrefixedValue);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var values = {
-	  'zoom-in': true,
-	  'zoom-out': true,
-	  grab: true,
-	  grabbing: true
-	};
-	
-	function cursor(property, value) {
-	  if (property === 'cursor' && values[value]) {
-	    return (0, _joinPrefixedValue2.default)(property, value);
-	  }
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 194 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = flex;
-	var values = { flex: true, 'inline-flex': true };
-	
-	function flex(property, value) {
-	  if (property === 'display' && values[value]) {
-	    return {
-	      display: ['-webkit-box', '-moz-box', '-ms-' + value + 'box', '-webkit-' + value, value]
-	    };
-	  }
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 195 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = sizing;
-	
-	var _joinPrefixedValue = __webpack_require__(191);
-	
-	var _joinPrefixedValue2 = _interopRequireDefault(_joinPrefixedValue);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var properties = {
-	  maxHeight: true,
-	  maxWidth: true,
-	  width: true,
-	  height: true,
-	  columnWidth: true,
-	  minWidth: true,
-	  minHeight: true
-	};
-	var values = {
-	  'min-content': true,
-	  'max-content': true,
-	  'fill-available': true,
-	  'fit-content': true,
-	  'contain-floats': true
-	};
-	
-	function sizing(property, value) {
-	  if (properties[property] && values[value]) {
-	    return (0, _joinPrefixedValue2.default)(property, value);
-	  }
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 196 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = gradient;
-	
-	var _joinPrefixedValue = __webpack_require__(191);
-	
-	var _joinPrefixedValue2 = _interopRequireDefault(_joinPrefixedValue);
-	
-	var _isPrefixedValue = __webpack_require__(192);
-	
-	var _isPrefixedValue2 = _interopRequireDefault(_isPrefixedValue);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var values = /linear-gradient|radial-gradient|repeating-linear-gradient|repeating-radial-gradient/;
-	
-	function gradient(property, value) {
-	  if (typeof value === 'string' && !(0, _isPrefixedValue2.default)(value) && value.match(values) !== null) {
-	    return (0, _joinPrefixedValue2.default)(property, value);
-	  }
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 197 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = transition;
-	
-	var _hyphenateStyleName = __webpack_require__(198);
-	
-	var _hyphenateStyleName2 = _interopRequireDefault(_hyphenateStyleName);
-	
-	var _capitalizeString = __webpack_require__(186);
-	
-	var _capitalizeString2 = _interopRequireDefault(_capitalizeString);
-	
-	var _isPrefixedValue = __webpack_require__(192);
-	
-	var _isPrefixedValue2 = _interopRequireDefault(_isPrefixedValue);
-	
-	var _prefixProps = __webpack_require__(185);
-	
-	var _prefixProps2 = _interopRequireDefault(_prefixProps);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-	
-	var properties = {
-	  transition: true,
-	  transitionProperty: true,
-	  WebkitTransition: true,
-	  WebkitTransitionProperty: true
-	};
-	
-	function transition(property, value) {
-	  // also check for already prefixed transitions
-	  if (typeof value === 'string' && properties[property]) {
-	    var _ref2;
-	
-	    var outputValue = prefixValue(value);
-	    var webkitOutput = outputValue.split(/,(?![^()]*(?:\([^()]*\))?\))/g).filter(function (value) {
-	      return value.match(/-moz-|-ms-/) === null;
-	    }).join(',');
-	
-	    // if the property is already prefixed
-	    if (property.indexOf('Webkit') > -1) {
-	      return _defineProperty({}, property, webkitOutput);
-	    }
-	
-	    return _ref2 = {}, _defineProperty(_ref2, 'Webkit' + (0, _capitalizeString2.default)(property), webkitOutput), _defineProperty(_ref2, property, outputValue), _ref2;
-	  }
-	}
-	
-	function prefixValue(value) {
-	  if ((0, _isPrefixedValue2.default)(value)) {
-	    return value;
-	  }
-	
-	  // only split multi values, not cubic beziers
-	  var multipleValues = value.split(/,(?![^()]*(?:\([^()]*\))?\))/g);
-	
-	  // iterate each single value and check for transitioned properties
-	  // that need to be prefixed as well
-	  multipleValues.forEach(function (val, index) {
-	    multipleValues[index] = Object.keys(_prefixProps2.default).reduce(function (out, prefix) {
-	      var dashCasePrefix = '-' + prefix.toLowerCase() + '-';
-	
-	      Object.keys(_prefixProps2.default[prefix]).forEach(function (prop) {
-	        var dashCaseProperty = (0, _hyphenateStyleName2.default)(prop);
-	
-	        if (val.indexOf(dashCaseProperty) > -1 && dashCaseProperty !== 'order') {
-	          // join all prefixes and create a new value
-	          out = val.replace(dashCaseProperty, dashCasePrefix + dashCaseProperty) + ',' + out;
-	        }
-	      });
-	      return out;
-	    }, val);
-	  });
-	
-	  return multipleValues.join(',');
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 198 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	var uppercasePattern = /[A-Z]/g;
-	var msPattern = /^ms-/;
-	var cache = {};
-	
-	function hyphenateStyleName(string) {
-	    return string in cache
-	    ? cache[string]
-	    : cache[string] = string
-	      .replace(uppercasePattern, '-$&')
-	      .toLowerCase()
-	      .replace(msPattern, '-ms-');
-	}
-	
-	module.exports = hyphenateStyleName;
-
-
-/***/ },
-/* 199 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = flexboxIE;
-	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-	
-	var alternativeValues = {
-	  'space-around': 'distribute',
-	  'space-between': 'justify',
-	  'flex-start': 'start',
-	  'flex-end': 'end'
-	};
-	var alternativeProps = {
-	  alignContent: 'msFlexLinePack',
-	  alignSelf: 'msFlexItemAlign',
-	  alignItems: 'msFlexAlign',
-	  justifyContent: 'msFlexPack',
-	  order: 'msFlexOrder',
-	  flexGrow: 'msFlexPositive',
-	  flexShrink: 'msFlexNegative',
-	  flexBasis: 'msPreferredSize'
-	};
-	
-	function flexboxIE(property, value) {
-	  if (alternativeProps[property]) {
-	    return _defineProperty({}, alternativeProps[property], alternativeValues[value] || value);
-	  }
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 200 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = flexboxOld;
-	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-	
-	var alternativeValues = {
-	  'space-around': 'justify',
-	  'space-between': 'justify',
-	  'flex-start': 'start',
-	  'flex-end': 'end',
-	  'wrap-reverse': 'multiple',
-	  wrap: 'multiple'
-	};
-	
-	var alternativeProps = {
-	  alignItems: 'WebkitBoxAlign',
-	  justifyContent: 'WebkitBoxPack',
-	  flexWrap: 'WebkitBoxLines'
-	};
-	
-	function flexboxOld(property, value) {
-	  if (property === 'flexDirection' && typeof value === 'string') {
-	    return {
-	      WebkitBoxOrient: value.indexOf('column') > -1 ? 'vertical' : 'horizontal',
-	      WebkitBoxDirection: value.indexOf('reverse') > -1 ? 'reverse' : 'normal'
-	    };
-	  }
-	  if (alternativeProps[property]) {
-	    return _defineProperty({}, alternativeProps[property], alternativeValues[value] || value);
-	  }
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 201 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _bowser = __webpack_require__(202);
+	var _bowser = __webpack_require__(186);
 	
 	var _bowser2 = _interopRequireDefault(_bowser);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var vendorPrefixes = {
-	  Webkit: ['chrome', 'safari', 'ios', 'android', 'phantom', 'opera', 'webos', 'blackberry', 'bada', 'tizen', 'chromium', 'vivaldi'],
-	  Moz: ['firefox', 'seamonkey', 'sailfish'],
-	  ms: ['msie', 'msedge']
-	};
-	var browsers = {
-	  chrome: [['chrome'], ['chromium']],
-	  safari: [['safari']],
-	  firefox: [['firefox']],
-	  edge: [['msedge']],
-	  opera: [['opera'], ['vivaldi']],
-	  ios_saf: [['ios', 'mobile'], ['ios', 'tablet']],
-	  ie: [['msie']],
-	  op_mini: [['opera', 'mobile'], ['opera', 'tablet']],
-	  and_uc: [['android', 'mobile'], ['android', 'tablet']],
-	  android: [['android', 'mobile'], ['android', 'tablet']]
+	var prefixByBrowser = {
+	  chrome: 'Webkit',
+	  safari: 'Webkit',
+	  ios: 'Webkit',
+	  android: 'Webkit',
+	  phantom: 'Webkit',
+	  opera: 'Webkit',
+	  webos: 'Webkit',
+	  blackberry: 'Webkit',
+	  bada: 'Webkit',
+	  tizen: 'Webkit',
+	  chromium: 'Webkit',
+	  vivaldi: 'Webkit',
+	  firefox: 'Moz',
+	  seamoney: 'Moz',
+	  sailfish: 'Moz',
+	  msie: 'ms',
+	  msedge: 'ms'
 	};
 	
-	var browserByInfo = function browserByInfo(info) {
-	  if (info.firefox) {
+	
+	var browserByCanIuseAlias = {
+	  chrome: 'chrome',
+	  chromium: 'chrome',
+	  safari: 'safari',
+	  firfox: 'firefox',
+	  msedge: 'edge',
+	  opera: 'opera',
+	  vivaldi: 'opera',
+	  msie: 'ie'
+	};
+	
+	function getBrowserName(browserInfo) {
+	  if (browserInfo.firefox) {
 	    return 'firefox';
 	  }
-	  var name = '';
 	
-	  Object.keys(browsers).forEach(function (browser) {
-	    browsers[browser].forEach(function (condition) {
-	      var match = 0;
-	      condition.forEach(function (single) {
-	        if (info[single]) {
-	          match += 1;
-	        }
-	      });
-	      if (condition.length === match) {
-	        name = browser;
-	      }
-	    });
-	  });
+	  if (browserInfo.mobile || browserInfo.tablet) {
+	    if (browserInfo.ios) {
+	      return 'ios_saf';
+	    } else if (browserInfo.android) {
+	      return 'android';
+	    } else if (browserInfo.opera) {
+	      return 'op_mini';
+	    }
+	  }
 	
-	  return name;
-	};
+	  for (var browser in browserByCanIuseAlias) {
+	    if (browserInfo.hasOwnProperty(browser)) {
+	      return browserByCanIuseAlias[browser];
+	    }
+	  }
+	}
 	
 	/**
-	 * Uses bowser to get default browser information such as version and name
-	 * Evaluates bowser info and adds vendorPrefix information
+	 * Uses bowser to get default browser browserInformation such as version and name
+	 * Evaluates bowser browserInfo and adds vendorPrefix browserInformation
 	 * @param {string} userAgent - userAgent that gets evaluated
 	 */
+	function getBrowserInformation(userAgent) {
+	  var browserInfo = _bowser2.default._detect(userAgent);
 	
-	exports.default = function (userAgent) {
-	  if (!userAgent) {
-	    return false;
+	  for (var browser in prefixByBrowser) {
+	    if (browserInfo.hasOwnProperty(browser)) {
+	      var prefix = prefixByBrowser[browser];
+	
+	      browserInfo.jsPrefix = prefix;
+	      browserInfo.cssPrefix = '-' + prefix.toLowerCase() + '-';
+	      break;
+	    }
 	  }
-	  var info = _bowser2.default._detect(userAgent);
 	
-	  Object.keys(vendorPrefixes).forEach(function (prefix) {
-	    vendorPrefixes[prefix].forEach(function (browser) {
-	      if (info[browser]) {
-	        info.prefix = {
-	          inline: prefix,
-	          css: '-' + prefix.toLowerCase() + '-'
-	        };
-	      }
-	    });
-	  });
-	
-	  info.browser = browserByInfo(info);
+	  browserInfo.browserName = getBrowserName(browserInfo);
 	
 	  // For cordova IOS 8 the version is missing, set truncated osversion to prevent NaN
-	  info.version = info.version ? parseFloat(info.version) : parseInt(parseFloat(info.osversion), 10);
-	  info.osversion = parseFloat(info.osversion);
+	  if (browserInfo.version) {
+	    browserInfo.browserVersion = parseFloat(browserInfo.version);
+	  } else {
+	    browserInfo.browserVersion = parseInt(parseFloat(browserInfo.osversion), 10);
+	  }
+	
+	  browserInfo.osVersion = parseFloat(browserInfo.osversion);
 	
 	  // iOS forces all browsers to use Safari under the hood
 	  // as the Safari version seems to match the iOS version
 	  // we just explicitely use the osversion instead
 	  // https://github.com/rofrischmann/inline-style-prefixer/issues/72
-	  if (info.browser === 'ios_saf' && info.version > info.osversion) {
-	    info.version = info.osversion;
-	    info.safari = true;
+	  if (browserInfo.browserName === 'ios_saf' && browserInfo.browserVersion > browserInfo.osVersion) {
+	    browserInfo.browserVersion = browserInfo.osVersion;
 	  }
 	
 	  // seperate native android chrome
 	  // https://github.com/rofrischmann/inline-style-prefixer/issues/45
-	  if (info.browser === 'android' && info.chrome && info.version > 37) {
-	    info.browser = 'and_chr';
+	  if (browserInfo.browserName === 'android' && browserInfo.chrome && browserInfo.browserVersion > 37) {
+	    browserInfo.browserName = 'and_chr';
 	  }
 	
 	  // For android < 4.4 we want to check the osversion
 	  // not the chrome version, see issue #26
 	  // https://github.com/rofrischmann/inline-style-prefixer/issues/26
-	  if (info.browser === 'android' && info.osversion < 5) {
-	    info.version = info.osversion;
+	  if (browserInfo.browserName === 'android' && browserInfo.osVersion < 5) {
+	    browserInfo.browserVersion = browserInfo.osVersion;
 	  }
 	
-	  return info;
-	};
+	  // Samsung browser are basically build on Chrome > 44
+	  // https://github.com/rofrischmann/inline-style-prefixer/issues/102
+	  if (browserInfo.browserName === 'android' && browserInfo.samsungBrowser) {
+	    browserInfo.browserName = 'and_chr';
+	    browserInfo.browserVersion = 44;
+	  }
 	
+	  return browserInfo;
+	}
 	module.exports = exports['default'];
 
 /***/ },
-/* 202 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -23168,7 +22619,7 @@
 	
 	!function (root, name, definition) {
 	  if (typeof module != 'undefined' && module.exports) module.exports = definition()
-	  else if (true) __webpack_require__(203)(name, definition)
+	  else if (true) __webpack_require__(187)(name, definition)
 	  else root[name] = definition()
 	}(this, 'bowser', function () {
 	  /**
@@ -23743,14 +23194,14 @@
 
 
 /***/ },
-/* 203 */
+/* 187 */
 /***/ function(module, exports) {
 
 	module.exports = function() { throw new Error("define cannot be used indirect"); };
 
 
 /***/ },
-/* 204 */
+/* 188 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -23758,24 +23209,19 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	
-	exports.default = function (_ref) {
-	  var browser = _ref.browser;
-	  var version = _ref.version;
-	  var prefix = _ref.prefix;
-	
+	exports.default = getPrefixedKeyframes;
+	function getPrefixedKeyframes(browserName, browserVersion, cssPrefix) {
 	  var prefixedKeyframes = 'keyframes';
 	
-	  if (browser === 'chrome' && version < 43 || (browser === 'safari' || browser === 'ios_saf') && version < 9 || browser === 'opera' && version < 30 || browser === 'android' && version <= 4.4 || browser === 'and_uc') {
-	    prefixedKeyframes = prefix.css + prefixedKeyframes;
+	  if (browserName === 'chrome' && browserVersion < 43 || (browserName === 'safari' || browserName === 'ios_saf') && browserVersion < 9 || browserName === 'opera' && browserVersion < 30 || browserName === 'android' && browserVersion <= 4.4 || browserName === 'and_uc') {
+	    return cssPrefix + prefixedKeyframes;
 	  }
 	  return prefixedKeyframes;
-	};
-	
+	}
 	module.exports = exports['default'];
 
 /***/ },
-/* 205 */
+/* 189 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -23783,8 +23229,549 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = { "chrome": { "transform": 35, "transformOrigin": 35, "transformOriginX": 35, "transformOriginY": 35, "backfaceVisibility": 35, "perspective": 35, "perspectiveOrigin": 35, "transformStyle": 35, "transformOriginZ": 35, "animation": 42, "animationDelay": 42, "animationDirection": 42, "animationFillMode": 42, "animationDuration": 42, "animationIterationCount": 42, "animationName": 42, "animationPlayState": 42, "animationTimingFunction": 42, "appearance": 55, "userSelect": 55, "fontKerning": 32, "textEmphasisPosition": 55, "textEmphasis": 55, "textEmphasisStyle": 55, "textEmphasisColor": 55, "boxDecorationBreak": 55, "clipPath": 55, "maskImage": 55, "maskMode": 55, "maskRepeat": 55, "maskPosition": 55, "maskClip": 55, "maskOrigin": 55, "maskSize": 55, "maskComposite": 55, "mask": 55, "maskBorderSource": 55, "maskBorderMode": 55, "maskBorderSlice": 55, "maskBorderWidth": 55, "maskBorderOutset": 55, "maskBorderRepeat": 55, "maskBorder": 55, "maskType": 55, "textDecorationStyle": 55, "textDecorationSkip": 55, "textDecorationLine": 55, "textDecorationColor": 55, "filter": 52, "fontFeatureSettings": 47, "breakAfter": 49, "breakBefore": 49, "breakInside": 49, "columnCount": 49, "columnFill": 49, "columnGap": 49, "columnRule": 49, "columnRuleColor": 49, "columnRuleStyle": 49, "columnRuleWidth": 49, "columns": 49, "columnSpan": 49, "columnWidth": 49 }, "safari": { "flex": 8, "flexBasis": 8, "flexDirection": 8, "flexGrow": 8, "flexFlow": 8, "flexShrink": 8, "flexWrap": 8, "alignContent": 8, "alignItems": 8, "alignSelf": 8, "justifyContent": 8, "order": 8, "transition": 6, "transitionDelay": 6, "transitionDuration": 6, "transitionProperty": 6, "transitionTimingFunction": 6, "transform": 8, "transformOrigin": 8, "transformOriginX": 8, "transformOriginY": 8, "backfaceVisibility": 8, "perspective": 8, "perspectiveOrigin": 8, "transformStyle": 8, "transformOriginZ": 8, "animation": 8, "animationDelay": 8, "animationDirection": 8, "animationFillMode": 8, "animationDuration": 8, "animationIterationCount": 8, "animationName": 8, "animationPlayState": 8, "animationTimingFunction": 8, "appearance": 10, "userSelect": 10, "backdropFilter": 10, "fontKerning": 9, "scrollSnapType": 10, "scrollSnapPointsX": 10, "scrollSnapPointsY": 10, "scrollSnapDestination": 10, "scrollSnapCoordinate": 10, "textEmphasisPosition": 7, "textEmphasis": 7, "textEmphasisStyle": 7, "textEmphasisColor": 7, "boxDecorationBreak": 10, "clipPath": 10, "maskImage": 10, "maskMode": 10, "maskRepeat": 10, "maskPosition": 10, "maskClip": 10, "maskOrigin": 10, "maskSize": 10, "maskComposite": 10, "mask": 10, "maskBorderSource": 10, "maskBorderMode": 10, "maskBorderSlice": 10, "maskBorderWidth": 10, "maskBorderOutset": 10, "maskBorderRepeat": 10, "maskBorder": 10, "maskType": 10, "textDecorationStyle": 10, "textDecorationSkip": 10, "textDecorationLine": 10, "textDecorationColor": 10, "shapeImageThreshold": 10, "shapeImageMargin": 10, "shapeImageOutside": 10, "filter": 9, "hyphens": 10, "flowInto": 10, "flowFrom": 10, "breakBefore": 8, "breakAfter": 8, "breakInside": 8, "regionFragment": 10, "columnCount": 8, "columnFill": 8, "columnGap": 8, "columnRule": 8, "columnRuleColor": 8, "columnRuleStyle": 8, "columnRuleWidth": 8, "columns": 8, "columnSpan": 8, "columnWidth": 8 }, "firefox": { "appearance": 51, "userSelect": 51, "boxSizing": 28, "textAlignLast": 48, "textDecorationStyle": 35, "textDecorationSkip": 35, "textDecorationLine": 35, "textDecorationColor": 35, "tabSize": 51, "hyphens": 42, "fontFeatureSettings": 33, "breakAfter": 51, "breakBefore": 51, "breakInside": 51, "columnCount": 51, "columnFill": 51, "columnGap": 51, "columnRule": 51, "columnRuleColor": 51, "columnRuleStyle": 51, "columnRuleWidth": 51, "columns": 51, "columnSpan": 51, "columnWidth": 51 }, "opera": { "flex": 16, "flexBasis": 16, "flexDirection": 16, "flexGrow": 16, "flexFlow": 16, "flexShrink": 16, "flexWrap": 16, "alignContent": 16, "alignItems": 16, "alignSelf": 16, "justifyContent": 16, "order": 16, "transform": 22, "transformOrigin": 22, "transformOriginX": 22, "transformOriginY": 22, "backfaceVisibility": 22, "perspective": 22, "perspectiveOrigin": 22, "transformStyle": 22, "transformOriginZ": 22, "animation": 29, "animationDelay": 29, "animationDirection": 29, "animationFillMode": 29, "animationDuration": 29, "animationIterationCount": 29, "animationName": 29, "animationPlayState": 29, "animationTimingFunction": 29, "appearance": 41, "userSelect": 41, "fontKerning": 19, "textEmphasisPosition": 41, "textEmphasis": 41, "textEmphasisStyle": 41, "textEmphasisColor": 41, "boxDecorationBreak": 41, "clipPath": 41, "maskImage": 41, "maskMode": 41, "maskRepeat": 41, "maskPosition": 41, "maskClip": 41, "maskOrigin": 41, "maskSize": 41, "maskComposite": 41, "mask": 41, "maskBorderSource": 41, "maskBorderMode": 41, "maskBorderSlice": 41, "maskBorderWidth": 41, "maskBorderOutset": 41, "maskBorderRepeat": 41, "maskBorder": 41, "maskType": 41, "textDecorationStyle": 41, "textDecorationSkip": 41, "textDecorationLine": 41, "textDecorationColor": 41, "filter": 39, "fontFeatureSettings": 34, "breakAfter": 36, "breakBefore": 36, "breakInside": 36, "columnCount": 36, "columnFill": 36, "columnGap": 36, "columnRule": 36, "columnRuleColor": 36, "columnRuleStyle": 36, "columnRuleWidth": 36, "columns": 36, "columnSpan": 36, "columnWidth": 36 }, "ie": { "flex": 10, "flexDirection": 10, "flexFlow": 10, "flexWrap": 10, "transform": 9, "transformOrigin": 9, "transformOriginX": 9, "transformOriginY": 9, "userSelect": 11, "wrapFlow": 11, "wrapThrough": 11, "wrapMargin": 11, "scrollSnapType": 11, "scrollSnapPointsX": 11, "scrollSnapPointsY": 11, "scrollSnapDestination": 11, "scrollSnapCoordinate": 11, "touchAction": 10, "hyphens": 11, "flowInto": 11, "flowFrom": 11, "breakBefore": 11, "breakAfter": 11, "breakInside": 11, "regionFragment": 11, "gridTemplateColumns": 11, "gridTemplateRows": 11, "gridTemplateAreas": 11, "gridTemplate": 11, "gridAutoColumns": 11, "gridAutoRows": 11, "gridAutoFlow": 11, "grid": 11, "gridRowStart": 11, "gridColumnStart": 11, "gridRowEnd": 11, "gridRow": 11, "gridColumn": 11, "gridColumnEnd": 11, "gridColumnGap": 11, "gridRowGap": 11, "gridArea": 11, "gridGap": 11, "textSizeAdjust": 11 }, "edge": { "userSelect": 14, "wrapFlow": 14, "wrapThrough": 14, "wrapMargin": 14, "scrollSnapType": 14, "scrollSnapPointsX": 14, "scrollSnapPointsY": 14, "scrollSnapDestination": 14, "scrollSnapCoordinate": 14, "hyphens": 14, "flowInto": 14, "flowFrom": 14, "breakBefore": 14, "breakAfter": 14, "breakInside": 14, "regionFragment": 14, "gridTemplateColumns": 14, "gridTemplateRows": 14, "gridTemplateAreas": 14, "gridTemplate": 14, "gridAutoColumns": 14, "gridAutoRows": 14, "gridAutoFlow": 14, "grid": 14, "gridRowStart": 14, "gridColumnStart": 14, "gridRowEnd": 14, "gridRow": 14, "gridColumn": 14, "gridColumnEnd": 14, "gridColumnGap": 14, "gridRowGap": 14, "gridArea": 14, "gridGap": 14 }, "ios_saf": { "flex": 8.1, "flexBasis": 8.1, "flexDirection": 8.1, "flexGrow": 8.1, "flexFlow": 8.1, "flexShrink": 8.1, "flexWrap": 8.1, "alignContent": 8.1, "alignItems": 8.1, "alignSelf": 8.1, "justifyContent": 8.1, "order": 8.1, "transition": 6, "transitionDelay": 6, "transitionDuration": 6, "transitionProperty": 6, "transitionTimingFunction": 6, "transform": 8.1, "transformOrigin": 8.1, "transformOriginX": 8.1, "transformOriginY": 8.1, "backfaceVisibility": 8.1, "perspective": 8.1, "perspectiveOrigin": 8.1, "transformStyle": 8.1, "transformOriginZ": 8.1, "animation": 8.1, "animationDelay": 8.1, "animationDirection": 8.1, "animationFillMode": 8.1, "animationDuration": 8.1, "animationIterationCount": 8.1, "animationName": 8.1, "animationPlayState": 8.1, "animationTimingFunction": 8.1, "appearance": 9.3, "userSelect": 9.3, "backdropFilter": 9.3, "fontKerning": 9.3, "scrollSnapType": 9.3, "scrollSnapPointsX": 9.3, "scrollSnapPointsY": 9.3, "scrollSnapDestination": 9.3, "scrollSnapCoordinate": 9.3, "boxDecorationBreak": 9.3, "clipPath": 9.3, "maskImage": 9.3, "maskMode": 9.3, "maskRepeat": 9.3, "maskPosition": 9.3, "maskClip": 9.3, "maskOrigin": 9.3, "maskSize": 9.3, "maskComposite": 9.3, "mask": 9.3, "maskBorderSource": 9.3, "maskBorderMode": 9.3, "maskBorderSlice": 9.3, "maskBorderWidth": 9.3, "maskBorderOutset": 9.3, "maskBorderRepeat": 9.3, "maskBorder": 9.3, "maskType": 9.3, "textSizeAdjust": 9.3, "textDecorationStyle": 9.3, "textDecorationSkip": 9.3, "textDecorationLine": 9.3, "textDecorationColor": 9.3, "shapeImageThreshold": 9.3, "shapeImageMargin": 9.3, "shapeImageOutside": 9.3, "filter": 9, "hyphens": 9.3, "flowInto": 9.3, "flowFrom": 9.3, "breakBefore": 8.1, "breakAfter": 8.1, "breakInside": 8.1, "regionFragment": 9.3, "columnCount": 8.1, "columnFill": 8.1, "columnGap": 8.1, "columnRule": 8.1, "columnRuleColor": 8.1, "columnRuleStyle": 8.1, "columnRuleWidth": 8.1, "columns": 8.1, "columnSpan": 8.1, "columnWidth": 8.1 }, "android": { "flex": 4.2, "flexBasis": 4.2, "flexDirection": 4.2, "flexGrow": 4.2, "flexFlow": 4.2, "flexShrink": 4.2, "flexWrap": 4.2, "alignContent": 4.2, "alignItems": 4.2, "alignSelf": 4.2, "justifyContent": 4.2, "order": 4.2, "transition": 4.2, "transitionDelay": 4.2, "transitionDuration": 4.2, "transitionProperty": 4.2, "transitionTimingFunction": 4.2, "transform": 4.4, "transformOrigin": 4.4, "transformOriginX": 4.4, "transformOriginY": 4.4, "backfaceVisibility": 4.4, "perspective": 4.4, "perspectiveOrigin": 4.4, "transformStyle": 4.4, "transformOriginZ": 4.4, "animation": 4.4, "animationDelay": 4.4, "animationDirection": 4.4, "animationFillMode": 4.4, "animationDuration": 4.4, "animationIterationCount": 4.4, "animationName": 4.4, "animationPlayState": 4.4, "animationTimingFunction": 4.4, "appearance": 51, "userSelect": 51, "fontKerning": 4.4, "textEmphasisPosition": 51, "textEmphasis": 51, "textEmphasisStyle": 51, "textEmphasisColor": 51, "boxDecorationBreak": 51, "clipPath": 51, "maskImage": 51, "maskMode": 51, "maskRepeat": 51, "maskPosition": 51, "maskClip": 51, "maskOrigin": 51, "maskSize": 51, "maskComposite": 51, "mask": 51, "maskBorderSource": 51, "maskBorderMode": 51, "maskBorderSlice": 51, "maskBorderWidth": 51, "maskBorderOutset": 51, "maskBorderRepeat": 51, "maskBorder": 51, "maskType": 51, "filter": 51, "fontFeatureSettings": 4.4, "breakAfter": 51, "breakBefore": 51, "breakInside": 51, "columnCount": 51, "columnFill": 51, "columnGap": 51, "columnRule": 51, "columnRuleColor": 51, "columnRuleStyle": 51, "columnRuleWidth": 51, "columns": 51, "columnSpan": 51, "columnWidth": 51 }, "and_chr": { "appearance": 51, "userSelect": 51, "textEmphasisPosition": 51, "textEmphasis": 51, "textEmphasisStyle": 51, "textEmphasisColor": 51, "boxDecorationBreak": 51, "clipPath": 51, "maskImage": 51, "maskMode": 51, "maskRepeat": 51, "maskPosition": 51, "maskClip": 51, "maskOrigin": 51, "maskSize": 51, "maskComposite": 51, "mask": 51, "maskBorderSource": 51, "maskBorderMode": 51, "maskBorderSlice": 51, "maskBorderWidth": 51, "maskBorderOutset": 51, "maskBorderRepeat": 51, "maskBorder": 51, "maskType": 51, "textDecorationStyle": 51, "textDecorationSkip": 51, "textDecorationLine": 51, "textDecorationColor": 51, "filter": 51 }, "and_uc": { "flex": 9.9, "flexBasis": 9.9, "flexDirection": 9.9, "flexGrow": 9.9, "flexFlow": 9.9, "flexShrink": 9.9, "flexWrap": 9.9, "alignContent": 9.9, "alignItems": 9.9, "alignSelf": 9.9, "justifyContent": 9.9, "order": 9.9, "transition": 9.9, "transitionDelay": 9.9, "transitionDuration": 9.9, "transitionProperty": 9.9, "transitionTimingFunction": 9.9, "transform": 9.9, "transformOrigin": 9.9, "transformOriginX": 9.9, "transformOriginY": 9.9, "backfaceVisibility": 9.9, "perspective": 9.9, "perspectiveOrigin": 9.9, "transformStyle": 9.9, "transformOriginZ": 9.9, "animation": 9.9, "animationDelay": 9.9, "animationDirection": 9.9, "animationFillMode": 9.9, "animationDuration": 9.9, "animationIterationCount": 9.9, "animationName": 9.9, "animationPlayState": 9.9, "animationTimingFunction": 9.9, "appearance": 9.9, "userSelect": 9.9, "fontKerning": 9.9, "textEmphasisPosition": 9.9, "textEmphasis": 9.9, "textEmphasisStyle": 9.9, "textEmphasisColor": 9.9, "maskImage": 9.9, "maskMode": 9.9, "maskRepeat": 9.9, "maskPosition": 9.9, "maskClip": 9.9, "maskOrigin": 9.9, "maskSize": 9.9, "maskComposite": 9.9, "mask": 9.9, "maskBorderSource": 9.9, "maskBorderMode": 9.9, "maskBorderSlice": 9.9, "maskBorderWidth": 9.9, "maskBorderOutset": 9.9, "maskBorderRepeat": 9.9, "maskBorder": 9.9, "maskType": 9.9, "textSizeAdjust": 9.9, "filter": 9.9, "hyphens": 9.9, "flowInto": 9.9, "flowFrom": 9.9, "breakBefore": 9.9, "breakAfter": 9.9, "breakInside": 9.9, "regionFragment": 9.9, "fontFeatureSettings": 9.9, "columnCount": 9.9, "columnFill": 9.9, "columnGap": 9.9, "columnRule": 9.9, "columnRuleColor": 9.9, "columnRuleStyle": 9.9, "columnRuleWidth": 9.9, "columns": 9.9, "columnSpan": 9.9, "columnWidth": 9.9 }, "op_mini": {} };
+	exports.default = capitalizeString;
+	function capitalizeString(str) {
+	  return str.charAt(0).toUpperCase() + str.slice(1);
+	}
 	module.exports = exports["default"];
+
+/***/ },
+/* 190 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = addNewValuesOnly;
+	function addIfNew(list, value) {
+	  if (list.indexOf(value) === -1) {
+	    list.push(value);
+	  }
+	}
+	
+	function addNewValuesOnly(list, values) {
+	  if (Array.isArray(values)) {
+	    for (var i = 0, len = values.length; i < len; ++i) {
+	      addIfNew(list, values[i]);
+	    }
+	  } else {
+	    addIfNew(list, values);
+	  }
+	}
+	module.exports = exports["default"];
+
+/***/ },
+/* 191 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isObject;
+	function isObject(value) {
+	  return value instanceof Object && !Array.isArray(value);
+	}
+	module.exports = exports["default"];
+
+/***/ },
+/* 192 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = prefixValue;
+	function prefixValue(plugins, property, value, style, metaData) {
+	  for (var i = 0, len = plugins.length; i < len; ++i) {
+	    var processedValue = plugins[i](property, value, style, metaData);
+	
+	    // we can stop processing if a value is returned
+	    // as all plugin criteria are unique
+	    if (processedValue) {
+	      return processedValue;
+	    }
+	  }
+	}
+	module.exports = exports["default"];
+
+/***/ },
+/* 193 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = cursor;
+	
+	var _getPrefixedValue = __webpack_require__(194);
+	
+	var _getPrefixedValue2 = _interopRequireDefault(_getPrefixedValue);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var grabValues = {
+	  grab: true,
+	  grabbing: true
+	};
+	
+	
+	var zoomValues = {
+	  'zoom-in': true,
+	  'zoom-out': true
+	};
+	
+	function cursor(property, value, style, _ref) {
+	  var browserName = _ref.browserName,
+	      browserVersion = _ref.browserVersion,
+	      cssPrefix = _ref.cssPrefix,
+	      keepUnprefixed = _ref.keepUnprefixed;
+	
+	  // adds prefixes for firefox, chrome, safari, and opera regardless of
+	  // version until a reliable browser support info can be found
+	  // see: https://github.com/rofrischmann/inline-style-prefixer/issues/79
+	  if (property === 'cursor' && grabValues[value] && (browserName === 'firefox' || browserName === 'chrome' || browserName === 'safari' || browserName === 'opera')) {
+	    return (0, _getPrefixedValue2.default)(cssPrefix + value, value, keepUnprefixed);
+	  }
+	
+	  if (property === 'cursor' && zoomValues[value] && (browserName === 'firefox' && browserVersion < 24 || browserName === 'chrome' && browserVersion < 37 || browserName === 'safari' && browserVersion < 9 || browserName === 'opera' && browserVersion < 24)) {
+	    return (0, _getPrefixedValue2.default)(cssPrefix + value, value, keepUnprefixed);
+	  }
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 194 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = getPrefixedValue;
+	function getPrefixedValue(prefixedValue, value, keepUnprefixed) {
+	  if (keepUnprefixed) {
+	    return [prefixedValue, value];
+	  }
+	  return prefixedValue;
+	}
+	module.exports = exports["default"];
+
+/***/ },
+/* 195 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = crossFade;
+	
+	var _getPrefixedValue = __webpack_require__(194);
+	
+	var _getPrefixedValue2 = _interopRequireDefault(_getPrefixedValue);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function crossFade(property, value, style, _ref) {
+	  var browserName = _ref.browserName,
+	      browserVersion = _ref.browserVersion,
+	      cssPrefix = _ref.cssPrefix,
+	      keepUnprefixed = _ref.keepUnprefixed;
+	
+	  if (typeof value === 'string' && value.indexOf('cross-fade(') > -1 && (browserName === 'chrome' || browserName === 'opera' || browserName === 'and_chr' || (browserName === 'ios_saf' || browserName === 'safari') && browserVersion < 10)) {
+	    return (0, _getPrefixedValue2.default)(value.replace(/cross-fade\(/g, cssPrefix + 'cross-fade('), value, keepUnprefixed);
+	  }
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 196 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = filter;
+	
+	var _getPrefixedValue = __webpack_require__(194);
+	
+	var _getPrefixedValue2 = _interopRequireDefault(_getPrefixedValue);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function filter(property, value, style, _ref) {
+	  var browserName = _ref.browserName,
+	      browserVersion = _ref.browserVersion,
+	      cssPrefix = _ref.cssPrefix,
+	      keepUnprefixed = _ref.keepUnprefixed;
+	
+	  if (typeof value === 'string' && value.indexOf('filter(') > -1 && (browserName === 'ios_saf' || browserName === 'safari' && browserVersion < 9.1)) {
+	    return (0, _getPrefixedValue2.default)(value.replace(/filter\(/g, cssPrefix + 'filter('), value, keepUnprefixed);
+	  }
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 197 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = flex;
+	
+	var _getPrefixedValue = __webpack_require__(194);
+	
+	var _getPrefixedValue2 = _interopRequireDefault(_getPrefixedValue);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var values = {
+	  flex: true,
+	  'inline-flex': true
+	};
+	function flex(property, value, style, _ref) {
+	  var browserName = _ref.browserName,
+	      browserVersion = _ref.browserVersion,
+	      cssPrefix = _ref.cssPrefix,
+	      keepUnprefixed = _ref.keepUnprefixed;
+	
+	  if (property === 'display' && values[value] && (browserName === 'chrome' && browserVersion < 29 && browserVersion > 20 || (browserName === 'safari' || browserName === 'ios_saf') && browserVersion < 9 && browserVersion > 6 || browserName === 'opera' && (browserVersion === 15 || browserVersion === 16))) {
+	    return (0, _getPrefixedValue2.default)(cssPrefix + value, value, keepUnprefixed);
+	  }
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 198 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = flexboxOld;
+	
+	var _getPrefixedValue = __webpack_require__(194);
+	
+	var _getPrefixedValue2 = _interopRequireDefault(_getPrefixedValue);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var alternativeValues = {
+	  'space-around': 'justify',
+	  'space-between': 'justify',
+	  'flex-start': 'start',
+	  'flex-end': 'end',
+	  'wrap-reverse': 'multiple',
+	  wrap: 'multiple',
+	  flex: 'box',
+	  'inline-flex': 'inline-box'
+	};
+	
+	
+	var alternativeProps = {
+	  alignItems: 'WebkitBoxAlign',
+	  justifyContent: 'WebkitBoxPack',
+	  flexWrap: 'WebkitBoxLines'
+	};
+	
+	var otherProps = ['alignContent', 'alignSelf', 'order', 'flexGrow', 'flexShrink', 'flexBasis', 'flexDirection'];
+	var properties = Object.keys(alternativeProps).concat(otherProps);
+	
+	function flexboxOld(property, value, style, _ref) {
+	  var browserName = _ref.browserName,
+	      browserVersion = _ref.browserVersion,
+	      cssPrefix = _ref.cssPrefix,
+	      keepUnprefixed = _ref.keepUnprefixed,
+	      requiresPrefix = _ref.requiresPrefix;
+	
+	  if ((properties.indexOf(property) > -1 || property === 'display' && typeof value === 'string' && value.indexOf('flex') > -1) && (browserName === 'firefox' && browserVersion < 22 || browserName === 'chrome' && browserVersion < 21 || (browserName === 'safari' || browserName === 'ios_saf') && browserVersion <= 6.1 || browserName === 'android' && browserVersion < 4.4 || browserName === 'and_uc')) {
+	    delete requiresPrefix[property];
+	
+	    if (!keepUnprefixed && !Array.isArray(style[property])) {
+	      delete style[property];
+	    }
+	    if (property === 'flexDirection' && typeof value === 'string') {
+	      if (value.indexOf('column') > -1) {
+	        style.WebkitBoxOrient = 'vertical';
+	      } else {
+	        style.WebkitBoxOrient = 'horizontal';
+	      }
+	      if (value.indexOf('reverse') > -1) {
+	        style.WebkitBoxDirection = 'reverse';
+	      } else {
+	        style.WebkitBoxDirection = 'normal';
+	      }
+	    }
+	    if (property === 'display' && alternativeValues.hasOwnProperty(value)) {
+	      return (0, _getPrefixedValue2.default)(cssPrefix + alternativeValues[value], value, keepUnprefixed);
+	    }
+	    if (alternativeProps.hasOwnProperty(property)) {
+	      style[alternativeProps[property]] = alternativeValues[value] || value;
+	    }
+	  }
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 199 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = gradient;
+	
+	var _getPrefixedValue = __webpack_require__(194);
+	
+	var _getPrefixedValue2 = _interopRequireDefault(_getPrefixedValue);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var values = /linear-gradient|radial-gradient|repeating-linear-gradient|repeating-radial-gradient/;
+	function gradient(property, value, style, _ref) {
+	  var browserName = _ref.browserName,
+	      browserVersion = _ref.browserVersion,
+	      cssPrefix = _ref.cssPrefix,
+	      keepUnprefixed = _ref.keepUnprefixed;
+	
+	  if (typeof value === 'string' && values.test(value) && (browserName === 'firefox' && browserVersion < 16 || browserName === 'chrome' && browserVersion < 26 || (browserName === 'safari' || browserName === 'ios_saf') && browserVersion < 7 || (browserName === 'opera' || browserName === 'op_mini') && browserVersion < 12.1 || browserName === 'android' && browserVersion < 4.4 || browserName === 'and_uc')) {
+	    return (0, _getPrefixedValue2.default)(cssPrefix + value, value, keepUnprefixed);
+	  }
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 200 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = imageSet;
+	
+	var _getPrefixedValue = __webpack_require__(194);
+	
+	var _getPrefixedValue2 = _interopRequireDefault(_getPrefixedValue);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function imageSet(property, value, style, _ref) {
+	  var browserName = _ref.browserName,
+	      cssPrefix = _ref.cssPrefix,
+	      keepUnprefixed = _ref.keepUnprefixed;
+	
+	  if (typeof value === 'string' && value.indexOf('image-set(') > -1 && (browserName === 'chrome' || browserName === 'opera' || browserName === 'and_chr' || browserName === 'and_uc' || browserName === 'ios_saf' || browserName === 'safari')) {
+	    return (0, _getPrefixedValue2.default)(value.replace(/image-set\(/g, cssPrefix + 'image-set('), value, keepUnprefixed);
+	  }
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 201 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = position;
+	
+	var _getPrefixedValue = __webpack_require__(194);
+	
+	var _getPrefixedValue2 = _interopRequireDefault(_getPrefixedValue);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function position(property, value, _ref) {
+	  var browserName = _ref.browserName,
+	      cssPrefix = _ref.cssPrefix,
+	      keepUnprefixed = _ref.keepUnprefixed;
+	
+	  if (property === 'position' && value === 'sticky' && (browserName === 'safari' || browserName === 'ios_saf')) {
+	    return (0, _getPrefixedValue2.default)(cssPrefix + value, value, keepUnprefixed);
+	  }
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 202 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = sizing;
+	
+	var _getPrefixedValue = __webpack_require__(194);
+	
+	var _getPrefixedValue2 = _interopRequireDefault(_getPrefixedValue);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var properties = {
+	  maxHeight: true,
+	  maxWidth: true,
+	  width: true,
+	  height: true,
+	  columnWidth: true,
+	  minWidth: true,
+	  minHeight: true
+	};
+	
+	var values = {
+	  'min-content': true,
+	  'max-content': true,
+	  'fill-available': true,
+	  'fit-content': true,
+	  'contain-floats': true
+	};
+	
+	// TODO: chrome & opera support it
+	function sizing(property, value, style, _ref) {
+	  var cssPrefix = _ref.cssPrefix,
+	      keepUnprefixed = _ref.keepUnprefixed;
+	
+	  // This might change in the future
+	  // Keep an eye on it
+	  if (properties.hasOwnProperty(property) && values.hasOwnProperty(value)) {
+	    return (0, _getPrefixedValue2.default)(cssPrefix + value, value, keepUnprefixed);
+	  }
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 203 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	
+	exports.default = transition;
+	
+	var _hyphenateProperty = __webpack_require__(204);
+	
+	var _hyphenateProperty2 = _interopRequireDefault(_hyphenateProperty);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var properties = {
+	  transition: true,
+	  transitionProperty: true,
+	  WebkitTransition: true,
+	  WebkitTransitionProperty: true,
+	  MozTransition: true,
+	  MozTransitionProperty: true
+	};
+	
+	var requiresPrefixDashCased = void 0;
+	
+	function transition(property, value, style, _ref) {
+	  var cssPrefix = _ref.cssPrefix,
+	      keepUnprefixed = _ref.keepUnprefixed,
+	      requiresPrefix = _ref.requiresPrefix;
+	
+	  if (typeof value === 'string' && properties.hasOwnProperty(property)) {
+	    var _ret = function () {
+	      // memoize the prefix array for later use
+	      if (!requiresPrefixDashCased) {
+	        requiresPrefixDashCased = Object.keys(requiresPrefix).map(function (prop) {
+	          return (0, _hyphenateProperty2.default)(prop);
+	        });
+	      }
+	
+	      // only split multi values, not cubic beziers
+	      var multipleValues = value.split(/,(?![^()]*(?:\([^()]*\))?\))/g);
+	
+	      requiresPrefixDashCased.forEach(function (prop) {
+	        multipleValues.forEach(function (val, index) {
+	          if (val.indexOf(prop) > -1 && prop !== 'order') {
+	            multipleValues[index] = val.replace(prop, cssPrefix + prop) + (keepUnprefixed ? ',' + val : '');
+	          }
+	        });
+	      });
+	
+	      return {
+	        v: multipleValues.join(',')
+	      };
+	    }();
+	
+	    if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+	  }
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 204 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = hyphenateProperty;
+	
+	var _hyphenateStyleName = __webpack_require__(205);
+	
+	var _hyphenateStyleName2 = _interopRequireDefault(_hyphenateStyleName);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function hyphenateProperty(property) {
+	  return (0, _hyphenateStyleName2.default)(property);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 205 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	var uppercasePattern = /[A-Z]/g;
+	var msPattern = /^ms-/;
+	var cache = {};
+	
+	function hyphenateStyleName(string) {
+	    return string in cache
+	    ? cache[string]
+	    : cache[string] = string
+	      .replace(uppercasePattern, '-$&')
+	      .toLowerCase()
+	      .replace(msPattern, '-ms-');
+	}
+	
+	module.exports = hyphenateStyleName;
+
 
 /***/ },
 /* 206 */
@@ -23795,44 +23782,138 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = position;
 	
-	var _getPrefixedValue = __webpack_require__(207);
+	var _createPrefixer = __webpack_require__(207);
 	
-	var _getPrefixedValue2 = _interopRequireDefault(_getPrefixedValue);
+	var _createPrefixer2 = _interopRequireDefault(_createPrefixer);
+	
+	var _staticData = __webpack_require__(209);
+	
+	var _staticData2 = _interopRequireDefault(_staticData);
+	
+	var _cursor = __webpack_require__(210);
+	
+	var _cursor2 = _interopRequireDefault(_cursor);
+	
+	var _crossFade = __webpack_require__(211);
+	
+	var _crossFade2 = _interopRequireDefault(_crossFade);
+	
+	var _filter = __webpack_require__(213);
+	
+	var _filter2 = _interopRequireDefault(_filter);
+	
+	var _flex = __webpack_require__(214);
+	
+	var _flex2 = _interopRequireDefault(_flex);
+	
+	var _flexboxOld = __webpack_require__(215);
+	
+	var _flexboxOld2 = _interopRequireDefault(_flexboxOld);
+	
+	var _gradient = __webpack_require__(216);
+	
+	var _gradient2 = _interopRequireDefault(_gradient);
+	
+	var _imageSet = __webpack_require__(217);
+	
+	var _imageSet2 = _interopRequireDefault(_imageSet);
+	
+	var _position = __webpack_require__(218);
+	
+	var _position2 = _interopRequireDefault(_position);
+	
+	var _sizing = __webpack_require__(219);
+	
+	var _sizing2 = _interopRequireDefault(_sizing);
+	
+	var _transition = __webpack_require__(220);
+	
+	var _transition2 = _interopRequireDefault(_transition);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	var plugins = [_crossFade2.default, _cursor2.default, _filter2.default, _flexboxOld2.default, _gradient2.default, _imageSet2.default, _position2.default, _sizing2.default, _transition2.default, _flex2.default];
 	
-	function position(_ref) {
-	  var property = _ref.property;
-	  var value = _ref.value;
-	  var browser = _ref.browserInfo.browser;
-	  var css = _ref.prefix.css;
-	  var keepUnprefixed = _ref.keepUnprefixed;
-	
-	  if (property === 'position' && value === 'sticky' && (browser === 'safari' || browser === 'ios_saf')) {
-	    return _defineProperty({}, property, (0, _getPrefixedValue2.default)(css + value, value, keepUnprefixed));
-	  }
-	}
+	exports.default = (0, _createPrefixer2.default)({
+	  prefixMap: _staticData2.default.prefixMap,
+	  plugins: plugins
+	});
 	module.exports = exports['default'];
 
 /***/ },
 /* 207 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.default = createPrefixer;
 	
-	exports.default = function (prefixedValue, value, keepUnprefixed) {
-	  return keepUnprefixed ? [prefixedValue, value] : prefixedValue;
-	};
+	var _prefixProperty = __webpack_require__(208);
 	
-	module.exports = exports["default"];
+	var _prefixProperty2 = _interopRequireDefault(_prefixProperty);
+	
+	var _prefixValue = __webpack_require__(192);
+	
+	var _prefixValue2 = _interopRequireDefault(_prefixValue);
+	
+	var _addNewValuesOnly = __webpack_require__(190);
+	
+	var _addNewValuesOnly2 = _interopRequireDefault(_addNewValuesOnly);
+	
+	var _isObject = __webpack_require__(191);
+	
+	var _isObject2 = _interopRequireDefault(_isObject);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function createPrefixer(_ref) {
+	  var prefixMap = _ref.prefixMap,
+	      plugins = _ref.plugins;
+	
+	  function prefixAll(style) {
+	    for (var property in style) {
+	      var value = style[property];
+	
+	      // handle nested objects
+	      if ((0, _isObject2.default)(value)) {
+	        style[property] = prefixAll(value);
+	        // handle array values
+	      } else if (Array.isArray(value)) {
+	        var combinedValue = [];
+	
+	        for (var i = 0, len = value.length; i < len; ++i) {
+	          var processedValue = (0, _prefixValue2.default)(plugins, property, value[i], style, prefixMap);
+	          (0, _addNewValuesOnly2.default)(combinedValue, processedValue || value[i]);
+	        }
+	
+	        // only modify the value if it was touched
+	        // by any plugin to prevent unnecessary mutations
+	        if (combinedValue.length > 0) {
+	          style[property] = combinedValue;
+	        }
+	      } else {
+	        var _processedValue = (0, _prefixValue2.default)(plugins, property, value, style, prefixMap);
+	
+	        // only modify the value if it was touched
+	        // by any plugin to prevent unnecessary mutations
+	        if (_processedValue) {
+	          style[property] = _processedValue;
+	        }
+	
+	        (0, _prefixProperty2.default)(prefixMap, property, style);
+	      }
+	    }
+	
+	    return style;
+	  }
+	
+	  return prefixAll;
+	}
+	module.exports = exports['default'];
 
 /***/ },
 /* 208 */
@@ -23843,98 +23924,63 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = calc;
+	exports.default = prefixProperty;
 	
-	var _getPrefixedValue = __webpack_require__(207);
+	var _capitalizeString = __webpack_require__(189);
 	
-	var _getPrefixedValue2 = _interopRequireDefault(_getPrefixedValue);
+	var _capitalizeString2 = _interopRequireDefault(_capitalizeString);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-	
-	function calc(_ref) {
-	  var property = _ref.property;
-	  var value = _ref.value;
-	  var _ref$browserInfo = _ref.browserInfo;
-	  var browser = _ref$browserInfo.browser;
-	  var version = _ref$browserInfo.version;
-	  var css = _ref.prefix.css;
-	  var keepUnprefixed = _ref.keepUnprefixed;
-	
-	  if (typeof value === 'string' && value.indexOf('calc(') > -1 && (browser === 'firefox' && version < 15 || browser === 'chrome' && version < 25 || browser === 'safari' && version < 6.1 || browser === 'ios_saf' && version < 7)) {
-	    return _defineProperty({}, property, (0, _getPrefixedValue2.default)(value.replace(/calc\(/g, css + 'calc('), value, keepUnprefixed));
+	function prefixProperty(prefixProperties, property, style) {
+	  if (prefixProperties.hasOwnProperty(property)) {
+	    var requiredPrefixes = prefixProperties[property];
+	    for (var i = 0, len = requiredPrefixes.length; i < len; ++i) {
+	      style[requiredPrefixes[i] + (0, _capitalizeString2.default)(property)] = style[property];
+	    }
 	  }
 	}
 	module.exports = exports['default'];
 
 /***/ },
 /* 209 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = zoomCursor;
-	
-	var _getPrefixedValue = __webpack_require__(207);
-	
-	var _getPrefixedValue2 = _interopRequireDefault(_getPrefixedValue);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var values = { 'zoom-in': true, 'zoom-out': true };
-	
-	function zoomCursor(_ref) {
-	  var property = _ref.property;
-	  var value = _ref.value;
-	  var _ref$browserInfo = _ref.browserInfo;
-	  var browser = _ref$browserInfo.browser;
-	  var version = _ref$browserInfo.version;
-	  var css = _ref.prefix.css;
-	  var keepUnprefixed = _ref.keepUnprefixed;
-	
-	  if (property === 'cursor' && values[value] && (browser === 'firefox' && version < 24 || browser === 'chrome' && version < 37 || browser === 'safari' && version < 9 || browser === 'opera' && version < 24)) {
-	    return {
-	      cursor: (0, _getPrefixedValue2.default)(css + value, value, keepUnprefixed)
-	    };
-	  }
-	}
-	module.exports = exports['default'];
+	exports.default = {
+	  plugins: [],
+	  prefixMap: { "appearance": ["Webkit", "Moz"], "userSelect": ["Webkit", "Moz", "ms"], "textEmphasisPosition": ["Webkit"], "textEmphasis": ["Webkit"], "textEmphasisStyle": ["Webkit"], "textEmphasisColor": ["Webkit"], "boxDecorationBreak": ["Webkit"], "clipPath": ["Webkit"], "maskImage": ["Webkit"], "maskMode": ["Webkit"], "maskRepeat": ["Webkit"], "maskPosition": ["Webkit"], "maskClip": ["Webkit"], "maskOrigin": ["Webkit"], "maskSize": ["Webkit"], "maskComposite": ["Webkit"], "mask": ["Webkit"], "maskBorderSource": ["Webkit"], "maskBorderMode": ["Webkit"], "maskBorderSlice": ["Webkit"], "maskBorderWidth": ["Webkit"], "maskBorderOutset": ["Webkit"], "maskBorderRepeat": ["Webkit"], "maskBorder": ["Webkit"], "maskType": ["Webkit"], "textDecorationStyle": ["Webkit"], "textDecorationSkip": ["Webkit"], "textDecorationLine": ["Webkit"], "textDecorationColor": ["Webkit"], "filter": ["Webkit"], "fontFeatureSettings": ["Webkit"], "breakAfter": ["Webkit", "Moz", "ms"], "breakBefore": ["Webkit", "Moz", "ms"], "breakInside": ["Webkit", "Moz", "ms"], "columnCount": ["Webkit", "Moz"], "columnFill": ["Webkit", "Moz"], "columnGap": ["Webkit", "Moz"], "columnRule": ["Webkit", "Moz"], "columnRuleColor": ["Webkit", "Moz"], "columnRuleStyle": ["Webkit", "Moz"], "columnRuleWidth": ["Webkit", "Moz"], "columns": ["Webkit", "Moz"], "columnSpan": ["Webkit", "Moz"], "columnWidth": ["Webkit", "Moz"], "flex": ["Webkit"], "flexBasis": ["Webkit"], "flexDirection": ["Webkit"], "flexGrow": ["Webkit"], "flexFlow": ["Webkit"], "flexShrink": ["Webkit"], "flexWrap": ["Webkit"], "alignContent": ["Webkit"], "alignItems": ["Webkit"], "alignSelf": ["Webkit"], "justifyContent": ["Webkit"], "order": ["Webkit"], "transform": ["Webkit"], "transformOrigin": ["Webkit"], "transformOriginX": ["Webkit"], "transformOriginY": ["Webkit"], "backfaceVisibility": ["Webkit"], "perspective": ["Webkit"], "perspectiveOrigin": ["Webkit"], "transformStyle": ["Webkit"], "transformOriginZ": ["Webkit"], "animation": ["Webkit"], "animationDelay": ["Webkit"], "animationDirection": ["Webkit"], "animationFillMode": ["Webkit"], "animationDuration": ["Webkit"], "animationIterationCount": ["Webkit"], "animationName": ["Webkit"], "animationPlayState": ["Webkit"], "animationTimingFunction": ["Webkit"], "backdropFilter": ["Webkit"], "fontKerning": ["Webkit"], "scrollSnapType": ["Webkit", "ms"], "scrollSnapPointsX": ["Webkit", "ms"], "scrollSnapPointsY": ["Webkit", "ms"], "scrollSnapDestination": ["Webkit", "ms"], "scrollSnapCoordinate": ["Webkit", "ms"], "shapeImageThreshold": ["Webkit"], "shapeImageMargin": ["Webkit"], "shapeImageOutside": ["Webkit"], "hyphens": ["Webkit", "Moz", "ms"], "flowInto": ["Webkit", "ms"], "flowFrom": ["Webkit", "ms"], "regionFragment": ["Webkit", "ms"], "textAlignLast": ["Moz"], "tabSize": ["Moz"], "wrapFlow": ["ms"], "wrapThrough": ["ms"], "wrapMargin": ["ms"], "gridTemplateColumns": ["ms"], "gridTemplateRows": ["ms"], "gridTemplateAreas": ["ms"], "gridTemplate": ["ms"], "gridAutoColumns": ["ms"], "gridAutoRows": ["ms"], "gridAutoFlow": ["ms"], "grid": ["ms"], "gridRowStart": ["ms"], "gridColumnStart": ["ms"], "gridRowEnd": ["ms"], "gridRow": ["ms"], "gridColumn": ["ms"], "gridColumnEnd": ["ms"], "gridColumnGap": ["ms"], "gridRowGap": ["ms"], "gridArea": ["ms"], "gridGap": ["ms"], "textSizeAdjust": ["Webkit", "ms"], "transitionDelay": ["Webkit"], "transitionDuration": ["Webkit"], "transitionProperty": ["Webkit"], "transitionTimingFunction": ["Webkit"] }
+	};
+	module.exports = exports["default"];
 
 /***/ },
 /* 210 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = grabCursor;
+	exports.default = cursor;
+	var prefixes = ['-webkit-', '-moz-', ''];
 	
-	var _getPrefixedValue = __webpack_require__(207);
+	var values = {
+	  'zoom-in': true,
+	  'zoom-out': true,
+	  grab: true,
+	  grabbing: true
+	};
 	
-	var _getPrefixedValue2 = _interopRequireDefault(_getPrefixedValue);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var values = { grab: true, grabbing: true };
-	
-	function grabCursor(_ref) {
-	  var property = _ref.property;
-	  var value = _ref.value;
-	  var browser = _ref.browserInfo.browser;
-	  var css = _ref.prefix.css;
-	  var keepUnprefixed = _ref.keepUnprefixed;
-	
-	  // adds prefixes for firefox, chrome, safari, and opera regardless of version until a reliable brwoser support info can be found (see: https://github.com/rofrischmann/inline-style-prefixer/issues/79)
-	  if (property === 'cursor' && values[value] && (browser === 'firefox' || browser === 'chrome' || browser === 'safari' || browser === 'opera')) {
-	    return {
-	      cursor: (0, _getPrefixedValue2.default)(css + value, value, keepUnprefixed)
-	    };
+	function cursor(property, value) {
+	  if (property === 'cursor' && values.hasOwnProperty(value)) {
+	    return prefixes.map(function (prefix) {
+	      return prefix + value;
+	    });
 	  }
 	}
 	module.exports = exports['default'];
@@ -23948,35 +23994,45 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = flex;
+	exports.default = crossFade;
 	
-	var _getPrefixedValue = __webpack_require__(207);
+	var _isPrefixedValue = __webpack_require__(212);
 	
-	var _getPrefixedValue2 = _interopRequireDefault(_getPrefixedValue);
+	var _isPrefixedValue2 = _interopRequireDefault(_isPrefixedValue);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var values = { flex: true, 'inline-flex': true };
-	
-	function flex(_ref) {
-	  var property = _ref.property;
-	  var value = _ref.value;
-	  var _ref$browserInfo = _ref.browserInfo;
-	  var browser = _ref$browserInfo.browser;
-	  var version = _ref$browserInfo.version;
-	  var css = _ref.prefix.css;
-	  var keepUnprefixed = _ref.keepUnprefixed;
-	
-	  if (property === 'display' && values[value] && (browser === 'chrome' && version < 29 && version > 20 || (browser === 'safari' || browser === 'ios_saf') && version < 9 && version > 6 || browser === 'opera' && (version == 15 || version == 16))) {
-	    return {
-	      display: (0, _getPrefixedValue2.default)(css + value, value, keepUnprefixed)
-	    };
+	// http://caniuse.com/#search=cross-fade
+	var prefixes = ['-webkit-', ''];
+	function crossFade(property, value) {
+	  if (typeof value === 'string' && !(0, _isPrefixedValue2.default)(value) && value.indexOf('cross-fade(') > -1) {
+	    return prefixes.map(function (prefix) {
+	      return value.replace(/cross-fade\(/g, prefix + 'cross-fade(');
+	    });
 	  }
 	}
 	module.exports = exports['default'];
 
 /***/ },
 /* 212 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isPrefixedValue;
+	
+	var regex = /-webkit-|-moz-|-ms-/;
+	
+	function isPrefixedValue(value) {
+	  return typeof value === 'string' && regex.test(value);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23984,15 +24040,177 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = sizing;
+	exports.default = filter;
 	
-	var _getPrefixedValue = __webpack_require__(207);
+	var _isPrefixedValue = __webpack_require__(212);
 	
-	var _getPrefixedValue2 = _interopRequireDefault(_getPrefixedValue);
+	var _isPrefixedValue2 = _interopRequireDefault(_isPrefixedValue);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	// http://caniuse.com/#feat=css-filter-function
+	var prefixes = ['-webkit-', ''];
+	function filter(property, value) {
+	  if (typeof value === 'string' && !(0, _isPrefixedValue2.default)(value) && value.indexOf('filter(') > -1) {
+	    return prefixes.map(function (prefix) {
+	      return value.replace(/filter\(/g, prefix + 'filter(');
+	    });
+	  }
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 214 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = flex;
+	var values = {
+	  flex: true,
+	  'inline-flex': true
+	};
+	
+	function flex(property, value) {
+	  if (property === 'display' && values.hasOwnProperty(value)) {
+	    return ['-webkit-box', '-moz-box', '-ms-' + value + 'box', '-webkit-' + value, value];
+	  }
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 215 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = flexboxOld;
+	var alternativeValues = {
+	  'space-around': 'justify',
+	  'space-between': 'justify',
+	  'flex-start': 'start',
+	  'flex-end': 'end',
+	  'wrap-reverse': 'multiple',
+	  wrap: 'multiple'
+	};
+	
+	var alternativeProps = {
+	  alignItems: 'WebkitBoxAlign',
+	  justifyContent: 'WebkitBoxPack',
+	  flexWrap: 'WebkitBoxLines'
+	};
+	
+	function flexboxOld(property, value, style) {
+	  if (property === 'flexDirection' && typeof value === 'string') {
+	    if (value.indexOf('column') > -1) {
+	      style.WebkitBoxOrient = 'vertical';
+	    } else {
+	      style.WebkitBoxOrient = 'horizontal';
+	    }
+	    if (value.indexOf('reverse') > -1) {
+	      style.WebkitBoxDirection = 'reverse';
+	    } else {
+	      style.WebkitBoxDirection = 'normal';
+	    }
+	  }
+	  if (alternativeProps.hasOwnProperty(property)) {
+	    style[alternativeProps[property]] = alternativeValues[value] || value;
+	  }
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 216 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = gradient;
+	
+	var _isPrefixedValue = __webpack_require__(212);
+	
+	var _isPrefixedValue2 = _interopRequireDefault(_isPrefixedValue);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var prefixes = ['-webkit-', '-moz-', ''];
+	
+	var values = /linear-gradient|radial-gradient|repeating-linear-gradient|repeating-radial-gradient/;
+	
+	function gradient(property, value) {
+	  if (typeof value === 'string' && !(0, _isPrefixedValue2.default)(value) && values.test(value)) {
+	    return prefixes.map(function (prefix) {
+	      return prefix + value;
+	    });
+	  }
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 217 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = imageSet;
+	
+	var _isPrefixedValue = __webpack_require__(212);
+	
+	var _isPrefixedValue2 = _interopRequireDefault(_isPrefixedValue);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// http://caniuse.com/#feat=css-image-set
+	var prefixes = ['-webkit-', ''];
+	function imageSet(property, value) {
+	  if (typeof value === 'string' && !(0, _isPrefixedValue2.default)(value) && value.indexOf('image-set(') > -1) {
+	    return prefixes.map(function (prefix) {
+	      return value.replace(/image-set\(/g, prefix + 'image-set(');
+	    });
+	  }
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 218 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = position;
+	function position(property, value) {
+	  if (property === 'position' && value === 'sticky') {
+	    return ['-webkit-sticky', 'sticky'];
+	  }
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 219 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = sizing;
+	var prefixes = ['-webkit-', '-moz-', ''];
 	
 	var properties = {
 	  maxHeight: true,
@@ -24011,22 +24229,17 @@
 	  'contain-floats': true
 	};
 	
-	function sizing(_ref) {
-	  var property = _ref.property;
-	  var value = _ref.value;
-	  var css = _ref.prefix.css;
-	  var keepUnprefixed = _ref.keepUnprefixed;
-	
-	  // This might change in the future
-	  // Keep an eye on it
-	  if (properties[property] && values[value]) {
-	    return _defineProperty({}, property, (0, _getPrefixedValue2.default)(css + value, value, keepUnprefixed));
+	function sizing(property, value) {
+	  if (properties.hasOwnProperty(property) && values.hasOwnProperty(value)) {
+	    return prefixes.map(function (prefix) {
+	      return prefix + value;
+	    });
 	  }
 	}
 	module.exports = exports['default'];
 
 /***/ },
-/* 213 */
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24034,256 +24247,115 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = gradient;
-	
-	var _getPrefixedValue = __webpack_require__(207);
-	
-	var _getPrefixedValue2 = _interopRequireDefault(_getPrefixedValue);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-	
-	var values = /linear-gradient|radial-gradient|repeating-linear-gradient|repeating-radial-gradient/;
-	
-	function gradient(_ref) {
-	  var property = _ref.property;
-	  var value = _ref.value;
-	  var _ref$browserInfo = _ref.browserInfo;
-	  var browser = _ref$browserInfo.browser;
-	  var version = _ref$browserInfo.version;
-	  var css = _ref.prefix.css;
-	  var keepUnprefixed = _ref.keepUnprefixed;
-	
-	  if (typeof value === 'string' && value.match(values) !== null && (browser === 'firefox' && version < 16 || browser === 'chrome' && version < 26 || (browser === 'safari' || browser === 'ios_saf') && version < 7 || (browser === 'opera' || browser === 'op_mini') && version < 12.1 || browser === 'android' && version < 4.4 || browser === 'and_uc')) {
-	    return _defineProperty({}, property, (0, _getPrefixedValue2.default)(css + value, value, keepUnprefixed));
-	  }
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 214 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-	
 	exports.default = transition;
 	
-	var _hyphenateStyleName = __webpack_require__(198);
+	var _hyphenateProperty = __webpack_require__(204);
 	
-	var _hyphenateStyleName2 = _interopRequireDefault(_hyphenateStyleName);
+	var _hyphenateProperty2 = _interopRequireDefault(_hyphenateProperty);
 	
-	var _unprefixProperty = __webpack_require__(215);
+	var _isPrefixedValue = __webpack_require__(212);
 	
-	var _unprefixProperty2 = _interopRequireDefault(_unprefixProperty);
+	var _isPrefixedValue2 = _interopRequireDefault(_isPrefixedValue);
+	
+	var _capitalizeString = __webpack_require__(189);
+	
+	var _capitalizeString2 = _interopRequireDefault(_capitalizeString);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	var properties = {
+	  transition: true,
+	  transitionProperty: true,
+	  WebkitTransition: true,
+	  WebkitTransitionProperty: true,
+	  MozTransition: true,
+	  MozTransitionProperty: true
+	};
 	
-	var properties = { transition: true, transitionProperty: true };
 	
-	function transition(_ref) {
-	  var property = _ref.property;
-	  var value = _ref.value;
-	  var css = _ref.prefix.css;
-	  var requiresPrefix = _ref.requiresPrefix;
-	  var keepUnprefixed = _ref.keepUnprefixed;
+	var prefixMapping = {
+	  Webkit: '-webkit-',
+	  Moz: '-moz-',
+	  ms: '-ms-'
+	};
 	
+	function prefixValue(value, propertyPrefixMap) {
+	  if ((0, _isPrefixedValue2.default)(value)) {
+	    return value;
+	  }
+	
+	  // only split multi values, not cubic beziers
+	  var multipleValues = value.split(/,(?![^()]*(?:\([^()]*\))?\))/g);
+	
+	  for (var i = 0, len = multipleValues.length; i < len; ++i) {
+	    var singleValue = multipleValues[i];
+	    var values = [singleValue];
+	    for (var property in propertyPrefixMap) {
+	      var dashCaseProperty = (0, _hyphenateProperty2.default)(property);
+	
+	      if (singleValue.indexOf(dashCaseProperty) > -1 && dashCaseProperty !== 'order') {
+	        var prefixes = propertyPrefixMap[property];
+	        for (var j = 0, pLen = prefixes.length; j < pLen; ++j) {
+	          // join all prefixes and create a new value
+	          values.unshift(singleValue.replace(dashCaseProperty, prefixMapping[prefixes[j]] + dashCaseProperty));
+	        }
+	      }
+	    }
+	
+	    multipleValues[i] = values.join(',');
+	  }
+	
+	  return multipleValues.join(',');
+	}
+	
+	function transition(property, value, style, propertyPrefixMap) {
 	  // also check for already prefixed transitions
-	  var unprefixedProperty = (0, _unprefixProperty2.default)(property);
+	  if (typeof value === 'string' && properties.hasOwnProperty(property)) {
+	    var outputValue = prefixValue(value, propertyPrefixMap);
+	    // if the property is already prefixed
+	    var webkitOutput = outputValue.split(/,(?![^()]*(?:\([^()]*\))?\))/g).filter(function (val) {
+	      return !/-moz-|-ms-/.test(val);
+	    }).join(',');
 	
-	  if (typeof value === 'string' && properties[unprefixedProperty]) {
-	    var _ret = function () {
-	      // TODO: memoize this array
-	      var requiresPrefixDashCased = Object.keys(requiresPrefix).map(function (prop) {
-	        return (0, _hyphenateStyleName2.default)(prop);
-	      });
+	    if (property.indexOf('Webkit') > -1) {
+	      return webkitOutput;
+	    }
 	
-	      // only split multi values, not cubic beziers
-	      var multipleValues = value.split(/,(?![^()]*(?:\([^()]*\))?\))/g);
+	    var mozOutput = outputValue.split(/,(?![^()]*(?:\([^()]*\))?\))/g).filter(function (val) {
+	      return !/-webkit-|-ms-/.test(val);
+	    }).join(',');
 	
-	      requiresPrefixDashCased.forEach(function (prop) {
-	        multipleValues.forEach(function (val, index) {
-	          if (val.indexOf(prop) > -1 && prop !== 'order') {
-	            multipleValues[index] = val.replace(prop, css + prop) + (keepUnprefixed ? ',' + val : '');
-	          }
-	        });
-	      });
+	    if (property.indexOf('Moz') > -1) {
+	      return mozOutput;
+	    }
 	
-	      return {
-	        v: _defineProperty({}, property, multipleValues.join(','))
-	      };
-	    }();
-	
-	    if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+	    style['Webkit' + (0, _capitalizeString2.default)(property)] = webkitOutput;
+	    style['Moz' + (0, _capitalizeString2.default)(property)] = mozOutput;
+	    return outputValue;
 	  }
 	}
 	module.exports = exports['default'];
 
 /***/ },
-/* 215 */
+/* 221 */
 /***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	
-	exports.default = function (property) {
-	  var unprefixed = property.replace(/^(ms|Webkit|Moz|O)/, '');
-	  return unprefixed.charAt(0).toLowerCase() + unprefixed.slice(1);
+	exports.default = {
+	  plugins: [],
+	  prefixMap: { "chrome": { "appearance": 59, "userSelect": 53, "textEmphasisPosition": 59, "textEmphasis": 59, "textEmphasisStyle": 59, "textEmphasisColor": 59, "boxDecorationBreak": 59, "clipPath": 54, "maskImage": 59, "maskMode": 59, "maskRepeat": 59, "maskPosition": 59, "maskClip": 59, "maskOrigin": 59, "maskSize": 59, "maskComposite": 59, "mask": 59, "maskBorderSource": 59, "maskBorderMode": 59, "maskBorderSlice": 59, "maskBorderWidth": 59, "maskBorderOutset": 59, "maskBorderRepeat": 59, "maskBorder": 59, "maskType": 59, "textDecorationStyle": 56, "textDecorationSkip": 56, "textDecorationLine": 56, "textDecorationColor": 56, "filter": 52, "fontFeatureSettings": 47, "breakAfter": 49, "breakBefore": 49, "breakInside": 49, "columnCount": 49, "columnFill": 49, "columnGap": 49, "columnRule": 49, "columnRuleColor": 49, "columnRuleStyle": 49, "columnRuleWidth": 49, "columns": 49, "columnSpan": 49, "columnWidth": 49 }, "safari": { "flex": 8, "flexBasis": 8, "flexDirection": 8, "flexGrow": 8, "flexFlow": 8, "flexShrink": 8, "flexWrap": 8, "alignContent": 8, "alignItems": 8, "alignSelf": 8, "justifyContent": 8, "order": 8, "transform": 8, "transformOrigin": 8, "transformOriginX": 8, "transformOriginY": 8, "backfaceVisibility": 8, "perspective": 8, "perspectiveOrigin": 8, "transformStyle": 8, "transformOriginZ": 8, "animation": 8, "animationDelay": 8, "animationDirection": 8, "animationFillMode": 8, "animationDuration": 8, "animationIterationCount": 8, "animationName": 8, "animationPlayState": 8, "animationTimingFunction": 8, "appearance": 10.1, "userSelect": 10.1, "backdropFilter": 10.1, "fontKerning": 9, "scrollSnapType": 10.1, "scrollSnapPointsX": 10.1, "scrollSnapPointsY": 10.1, "scrollSnapDestination": 10.1, "scrollSnapCoordinate": 10.1, "boxDecorationBreak": 10.1, "clipPath": 10.1, "maskImage": 10.1, "maskMode": 10.1, "maskRepeat": 10.1, "maskPosition": 10.1, "maskClip": 10.1, "maskOrigin": 10.1, "maskSize": 10.1, "maskComposite": 10.1, "mask": 10.1, "maskBorderSource": 10.1, "maskBorderMode": 10.1, "maskBorderSlice": 10.1, "maskBorderWidth": 10.1, "maskBorderOutset": 10.1, "maskBorderRepeat": 10.1, "maskBorder": 10.1, "maskType": 10.1, "textDecorationStyle": 10.1, "textDecorationSkip": 10.1, "textDecorationLine": 10.1, "textDecorationColor": 10.1, "shapeImageThreshold": 10, "shapeImageMargin": 10, "shapeImageOutside": 10, "filter": 9, "hyphens": 10.1, "flowInto": 10.1, "flowFrom": 10.1, "breakBefore": 8, "breakAfter": 8, "breakInside": 8, "regionFragment": 10.1, "columnCount": 8, "columnFill": 8, "columnGap": 8, "columnRule": 8, "columnRuleColor": 8, "columnRuleStyle": 8, "columnRuleWidth": 8, "columns": 8, "columnSpan": 8, "columnWidth": 8 }, "firefox": { "appearance": 54, "userSelect": 54, "textAlignLast": 48, "tabSize": 54, "hyphens": 42, "breakAfter": 51, "breakBefore": 51, "breakInside": 51, "columnCount": 51, "columnFill": 51, "columnGap": 51, "columnRule": 51, "columnRuleColor": 51, "columnRuleStyle": 51, "columnRuleWidth": 51, "columns": 51, "columnSpan": 51, "columnWidth": 51 }, "opera": { "flex": 16, "flexBasis": 16, "flexDirection": 16, "flexGrow": 16, "flexFlow": 16, "flexShrink": 16, "flexWrap": 16, "alignContent": 16, "alignItems": 16, "alignSelf": 16, "justifyContent": 16, "order": 16, "transform": 22, "transformOrigin": 22, "transformOriginX": 22, "transformOriginY": 22, "backfaceVisibility": 22, "perspective": 22, "perspectiveOrigin": 22, "transformStyle": 22, "transformOriginZ": 22, "animation": 29, "animationDelay": 29, "animationDirection": 29, "animationFillMode": 29, "animationDuration": 29, "animationIterationCount": 29, "animationName": 29, "animationPlayState": 29, "animationTimingFunction": 29, "appearance": 44, "userSelect": 40, "fontKerning": 19, "textEmphasisPosition": 44, "textEmphasis": 44, "textEmphasisStyle": 44, "textEmphasisColor": 44, "boxDecorationBreak": 44, "clipPath": 41, "maskImage": 44, "maskMode": 44, "maskRepeat": 44, "maskPosition": 44, "maskClip": 44, "maskOrigin": 44, "maskSize": 44, "maskComposite": 44, "mask": 44, "maskBorderSource": 44, "maskBorderMode": 44, "maskBorderSlice": 44, "maskBorderWidth": 44, "maskBorderOutset": 44, "maskBorderRepeat": 44, "maskBorder": 44, "maskType": 44, "textDecorationStyle": 43, "textDecorationSkip": 43, "textDecorationLine": 43, "textDecorationColor": 43, "filter": 39, "fontFeatureSettings": 34, "breakAfter": 36, "breakBefore": 36, "breakInside": 36, "columnCount": 36, "columnFill": 36, "columnGap": 36, "columnRule": 36, "columnRuleColor": 36, "columnRuleStyle": 36, "columnRuleWidth": 36, "columns": 36, "columnSpan": 36, "columnWidth": 36 }, "ie": { "userSelect": 11, "wrapFlow": 11, "wrapThrough": 11, "wrapMargin": 11, "scrollSnapType": 11, "scrollSnapPointsX": 11, "scrollSnapPointsY": 11, "scrollSnapDestination": 11, "scrollSnapCoordinate": 11, "hyphens": 11, "flowInto": 11, "flowFrom": 11, "breakBefore": 11, "breakAfter": 11, "breakInside": 11, "regionFragment": 11, "gridTemplateColumns": 11, "gridTemplateRows": 11, "gridTemplateAreas": 11, "gridTemplate": 11, "gridAutoColumns": 11, "gridAutoRows": 11, "gridAutoFlow": 11, "grid": 11, "gridRowStart": 11, "gridColumnStart": 11, "gridRowEnd": 11, "gridRow": 11, "gridColumn": 11, "gridColumnEnd": 11, "gridColumnGap": 11, "gridRowGap": 11, "gridArea": 11, "gridGap": 11, "textSizeAdjust": 11 }, "edge": { "userSelect": 15, "wrapFlow": 15, "wrapThrough": 15, "wrapMargin": 15, "scrollSnapType": 15, "scrollSnapPointsX": 15, "scrollSnapPointsY": 15, "scrollSnapDestination": 15, "scrollSnapCoordinate": 15, "hyphens": 15, "flowInto": 15, "flowFrom": 15, "breakBefore": 15, "breakAfter": 15, "breakInside": 15, "regionFragment": 15, "gridTemplateColumns": 15, "gridTemplateRows": 15, "gridTemplateAreas": 15, "gridTemplate": 15, "gridAutoColumns": 15, "gridAutoRows": 15, "gridAutoFlow": 15, "grid": 15, "gridRowStart": 15, "gridColumnStart": 15, "gridRowEnd": 15, "gridRow": 15, "gridColumn": 15, "gridColumnEnd": 15, "gridColumnGap": 15, "gridRowGap": 15, "gridArea": 15, "gridGap": 15 }, "ios_saf": { "flex": 8.1, "flexBasis": 8.1, "flexDirection": 8.1, "flexGrow": 8.1, "flexFlow": 8.1, "flexShrink": 8.1, "flexWrap": 8.1, "alignContent": 8.1, "alignItems": 8.1, "alignSelf": 8.1, "justifyContent": 8.1, "order": 8.1, "transform": 8.1, "transformOrigin": 8.1, "transformOriginX": 8.1, "transformOriginY": 8.1, "backfaceVisibility": 8.1, "perspective": 8.1, "perspectiveOrigin": 8.1, "transformStyle": 8.1, "transformOriginZ": 8.1, "animation": 8.1, "animationDelay": 8.1, "animationDirection": 8.1, "animationFillMode": 8.1, "animationDuration": 8.1, "animationIterationCount": 8.1, "animationName": 8.1, "animationPlayState": 8.1, "animationTimingFunction": 8.1, "appearance": 10, "userSelect": 10, "backdropFilter": 10, "fontKerning": 10, "scrollSnapType": 10, "scrollSnapPointsX": 10, "scrollSnapPointsY": 10, "scrollSnapDestination": 10, "scrollSnapCoordinate": 10, "boxDecorationBreak": 10, "clipPath": 10, "maskImage": 10, "maskMode": 10, "maskRepeat": 10, "maskPosition": 10, "maskClip": 10, "maskOrigin": 10, "maskSize": 10, "maskComposite": 10, "mask": 10, "maskBorderSource": 10, "maskBorderMode": 10, "maskBorderSlice": 10, "maskBorderWidth": 10, "maskBorderOutset": 10, "maskBorderRepeat": 10, "maskBorder": 10, "maskType": 10, "textSizeAdjust": 10, "textDecorationStyle": 10, "textDecorationSkip": 10, "textDecorationLine": 10, "textDecorationColor": 10, "shapeImageThreshold": 10, "shapeImageMargin": 10, "shapeImageOutside": 10, "filter": 9, "hyphens": 10, "flowInto": 10, "flowFrom": 10, "breakBefore": 8.1, "breakAfter": 8.1, "breakInside": 8.1, "regionFragment": 10, "columnCount": 8.1, "columnFill": 8.1, "columnGap": 8.1, "columnRule": 8.1, "columnRuleColor": 8.1, "columnRuleStyle": 8.1, "columnRuleWidth": 8.1, "columns": 8.1, "columnSpan": 8.1, "columnWidth": 8.1 }, "android": { "flex": 4.2, "flexBasis": 4.2, "flexDirection": 4.2, "flexGrow": 4.2, "flexFlow": 4.2, "flexShrink": 4.2, "flexWrap": 4.2, "alignContent": 4.2, "alignItems": 4.2, "alignSelf": 4.2, "justifyContent": 4.2, "order": 4.2, "transition": 4.2, "transitionDelay": 4.2, "transitionDuration": 4.2, "transitionProperty": 4.2, "transitionTimingFunction": 4.2, "transform": 4.4, "transformOrigin": 4.4, "transformOriginX": 4.4, "transformOriginY": 4.4, "backfaceVisibility": 4.4, "perspective": 4.4, "perspectiveOrigin": 4.4, "transformStyle": 4.4, "transformOriginZ": 4.4, "animation": 4.4, "animationDelay": 4.4, "animationDirection": 4.4, "animationFillMode": 4.4, "animationDuration": 4.4, "animationIterationCount": 4.4, "animationName": 4.4, "animationPlayState": 4.4, "animationTimingFunction": 4.4, "appearance": 53, "userSelect": 53, "fontKerning": 4.4, "textEmphasisPosition": 53, "textEmphasis": 53, "textEmphasisStyle": 53, "textEmphasisColor": 53, "boxDecorationBreak": 53, "clipPath": 53, "maskImage": 53, "maskMode": 53, "maskRepeat": 53, "maskPosition": 53, "maskClip": 53, "maskOrigin": 53, "maskSize": 53, "maskComposite": 53, "mask": 53, "maskBorderSource": 53, "maskBorderMode": 53, "maskBorderSlice": 53, "maskBorderWidth": 53, "maskBorderOutset": 53, "maskBorderRepeat": 53, "maskBorder": 53, "maskType": 53, "filter": 4.4, "fontFeatureSettings": 4.4, "breakAfter": 53, "breakBefore": 53, "breakInside": 53, "columnCount": 53, "columnFill": 53, "columnGap": 53, "columnRule": 53, "columnRuleColor": 53, "columnRuleStyle": 53, "columnRuleWidth": 53, "columns": 53, "columnSpan": 53, "columnWidth": 53 }, "and_chr": { "appearance": 55, "textEmphasisPosition": 55, "textEmphasis": 55, "textEmphasisStyle": 55, "textEmphasisColor": 55, "boxDecorationBreak": 55, "maskImage": 55, "maskMode": 55, "maskRepeat": 55, "maskPosition": 55, "maskClip": 55, "maskOrigin": 55, "maskSize": 55, "maskComposite": 55, "mask": 55, "maskBorderSource": 55, "maskBorderMode": 55, "maskBorderSlice": 55, "maskBorderWidth": 55, "maskBorderOutset": 55, "maskBorderRepeat": 55, "maskBorder": 55, "maskType": 55, "textDecorationStyle": 55, "textDecorationSkip": 55, "textDecorationLine": 55, "textDecorationColor": 55 }, "and_uc": { "flex": 11, "flexBasis": 11, "flexDirection": 11, "flexGrow": 11, "flexFlow": 11, "flexShrink": 11, "flexWrap": 11, "alignContent": 11, "alignItems": 11, "alignSelf": 11, "justifyContent": 11, "order": 11, "transition": 11, "transitionDelay": 11, "transitionDuration": 11, "transitionProperty": 11, "transitionTimingFunction": 11, "transform": 11, "transformOrigin": 11, "transformOriginX": 11, "transformOriginY": 11, "backfaceVisibility": 11, "perspective": 11, "perspectiveOrigin": 11, "transformStyle": 11, "transformOriginZ": 11, "animation": 11, "animationDelay": 11, "animationDirection": 11, "animationFillMode": 11, "animationDuration": 11, "animationIterationCount": 11, "animationName": 11, "animationPlayState": 11, "animationTimingFunction": 11, "appearance": 11, "userSelect": 11, "fontKerning": 11, "textEmphasisPosition": 11, "textEmphasis": 11, "textEmphasisStyle": 11, "textEmphasisColor": 11, "maskImage": 11, "maskMode": 11, "maskRepeat": 11, "maskPosition": 11, "maskClip": 11, "maskOrigin": 11, "maskSize": 11, "maskComposite": 11, "mask": 11, "maskBorderSource": 11, "maskBorderMode": 11, "maskBorderSlice": 11, "maskBorderWidth": 11, "maskBorderOutset": 11, "maskBorderRepeat": 11, "maskBorder": 11, "maskType": 11, "textSizeAdjust": 11, "filter": 11, "hyphens": 11, "flowInto": 11, "flowFrom": 11, "breakBefore": 11, "breakAfter": 11, "breakInside": 11, "regionFragment": 11, "fontFeatureSettings": 11, "columnCount": 11, "columnFill": 11, "columnGap": 11, "columnRule": 11, "columnRuleColor": 11, "columnRuleStyle": 11, "columnRuleWidth": 11, "columns": 11, "columnSpan": 11, "columnWidth": 11 }, "op_mini": {} }
 	};
-	
-	module.exports = exports['default'];
+	module.exports = exports["default"];
 
 /***/ },
-/* 216 */
+/* 222 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = flexboxIE;
-	
-	var _getPrefixedValue = __webpack_require__(207);
-	
-	var _getPrefixedValue2 = _interopRequireDefault(_getPrefixedValue);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-	
-	var alternativeValues = {
-	  'space-around': 'distribute',
-	  'space-between': 'justify',
-	  'flex-start': 'start',
-	  'flex-end': 'end',
-	  flex: 'flexbox',
-	  'inline-flex': 'inline-flexbox'
-	};
-	var alternativeProps = {
-	  alignContent: 'msFlexLinePack',
-	  alignSelf: 'msFlexItemAlign',
-	  alignItems: 'msFlexAlign',
-	  justifyContent: 'msFlexPack',
-	  order: 'msFlexOrder',
-	  flexGrow: 'msFlexPositive',
-	  flexShrink: 'msFlexNegative',
-	  flexBasis: 'msPreferredSize'
-	};
-	
-	function flexboxIE(_ref) {
-	  var property = _ref.property;
-	  var value = _ref.value;
-	  var styles = _ref.styles;
-	  var _ref$browserInfo = _ref.browserInfo;
-	  var browser = _ref$browserInfo.browser;
-	  var version = _ref$browserInfo.version;
-	  var css = _ref.prefix.css;
-	  var keepUnprefixed = _ref.keepUnprefixed;
-	
-	  if ((alternativeProps[property] || property === 'display' && typeof value === 'string' && value.indexOf('flex') > -1) && (browser === 'ie_mob' || browser === 'ie') && version == 10) {
-	    if (!keepUnprefixed && !Array.isArray(styles[property])) {
-	      delete styles[property];
-	    }
-	    if (property === 'display' && alternativeValues[value]) {
-	      return {
-	        display: (0, _getPrefixedValue2.default)(css + alternativeValues[value], value, keepUnprefixed)
-	      };
-	    }
-	    if (alternativeProps[property]) {
-	      return _defineProperty({}, alternativeProps[property], alternativeValues[value] || value);
-	    }
-	  }
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 217 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = flexboxOld;
-	
-	var _getPrefixedValue = __webpack_require__(207);
-	
-	var _getPrefixedValue2 = _interopRequireDefault(_getPrefixedValue);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-	
-	var alternativeValues = {
-	  'space-around': 'justify',
-	  'space-between': 'justify',
-	  'flex-start': 'start',
-	  'flex-end': 'end',
-	  'wrap-reverse': 'multiple',
-	  wrap: 'multiple',
-	  flex: 'box',
-	  'inline-flex': 'inline-box'
-	};
-	
-	var alternativeProps = {
-	  alignItems: 'WebkitBoxAlign',
-	  justifyContent: 'WebkitBoxPack',
-	  flexWrap: 'WebkitBoxLines'
-	};
-	
-	var otherProps = ['alignContent', 'alignSelf', 'order', 'flexGrow', 'flexShrink', 'flexBasis', 'flexDirection'];
-	var properties = Object.keys(alternativeProps).concat(otherProps);
-	
-	function flexboxOld(_ref) {
-	  var property = _ref.property;
-	  var value = _ref.value;
-	  var styles = _ref.styles;
-	  var _ref$browserInfo = _ref.browserInfo;
-	  var browser = _ref$browserInfo.browser;
-	  var version = _ref$browserInfo.version;
-	  var css = _ref.prefix.css;
-	  var keepUnprefixed = _ref.keepUnprefixed;
-	
-	  if ((properties.indexOf(property) > -1 || property === 'display' && typeof value === 'string' && value.indexOf('flex') > -1) && (browser === 'firefox' && version < 22 || browser === 'chrome' && version < 21 || (browser === 'safari' || browser === 'ios_saf') && version <= 6.1 || browser === 'android' && version < 4.4 || browser === 'and_uc')) {
-	    if (!keepUnprefixed && !Array.isArray(styles[property])) {
-	      delete styles[property];
-	    }
-	    if (property === 'flexDirection' && typeof value === 'string') {
-	      return {
-	        WebkitBoxOrient: value.indexOf('column') > -1 ? 'vertical' : 'horizontal',
-	        WebkitBoxDirection: value.indexOf('reverse') > -1 ? 'reverse' : 'normal'
-	      };
-	    }
-	    if (property === 'display' && alternativeValues[value]) {
-	      return {
-	        display: (0, _getPrefixedValue2.default)(css + alternativeValues[value], value, keepUnprefixed)
-	      };
-	    }
-	    if (alternativeProps[property]) {
-	      return _defineProperty({}, alternativeProps[property], alternativeValues[value] || value);
-	    }
-	  }
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 218 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var properties = __webpack_require__(219);
+	var properties = __webpack_require__(223);
 	var React = __webpack_require__(2);
 	
 	module.exports = function(props, propName, componentName) {
@@ -24318,1585 +24390,1600 @@
 
 
 /***/ },
-/* 219 */
+/* 223 */
 /***/ function(module, exports) {
 
 	module.exports = [
 	  "alignContent",
 	  "MozAlignContent",
-	  "WebKitAlignContent",
+	  "WebkitAlignContent",
 	  "MSAlignContent",
 	  "OAlignContent",
 	  "alignItems",
 	  "MozAlignItems",
-	  "WebKitAlignItems",
+	  "WebkitAlignItems",
 	  "MSAlignItems",
 	  "OAlignItems",
 	  "alignSelf",
 	  "MozAlignSelf",
-	  "WebKitAlignSelf",
+	  "WebkitAlignSelf",
 	  "MSAlignSelf",
 	  "OAlignSelf",
 	  "all",
 	  "MozAll",
-	  "WebKitAll",
+	  "WebkitAll",
 	  "MSAll",
 	  "OAll",
 	  "animation",
 	  "MozAnimation",
-	  "WebKitAnimation",
+	  "WebkitAnimation",
 	  "MSAnimation",
 	  "OAnimation",
 	  "animationDelay",
 	  "MozAnimationDelay",
-	  "WebKitAnimationDelay",
+	  "WebkitAnimationDelay",
 	  "MSAnimationDelay",
 	  "OAnimationDelay",
 	  "animationDirection",
 	  "MozAnimationDirection",
-	  "WebKitAnimationDirection",
+	  "WebkitAnimationDirection",
 	  "MSAnimationDirection",
 	  "OAnimationDirection",
 	  "animationDuration",
 	  "MozAnimationDuration",
-	  "WebKitAnimationDuration",
+	  "WebkitAnimationDuration",
 	  "MSAnimationDuration",
 	  "OAnimationDuration",
 	  "animationFillMode",
 	  "MozAnimationFillMode",
-	  "WebKitAnimationFillMode",
+	  "WebkitAnimationFillMode",
 	  "MSAnimationFillMode",
 	  "OAnimationFillMode",
 	  "animationIterationCount",
 	  "MozAnimationIterationCount",
-	  "WebKitAnimationIterationCount",
+	  "WebkitAnimationIterationCount",
 	  "MSAnimationIterationCount",
 	  "OAnimationIterationCount",
 	  "animationName",
 	  "MozAnimationName",
-	  "WebKitAnimationName",
+	  "WebkitAnimationName",
 	  "MSAnimationName",
 	  "OAnimationName",
 	  "animationPlayState",
 	  "MozAnimationPlayState",
-	  "WebKitAnimationPlayState",
+	  "WebkitAnimationPlayState",
 	  "MSAnimationPlayState",
 	  "OAnimationPlayState",
 	  "animationTimingFunction",
 	  "MozAnimationTimingFunction",
-	  "WebKitAnimationTimingFunction",
+	  "WebkitAnimationTimingFunction",
 	  "MSAnimationTimingFunction",
 	  "OAnimationTimingFunction",
 	  "backfaceVisibility",
 	  "MozBackfaceVisibility",
-	  "WebKitBackfaceVisibility",
+	  "WebkitBackfaceVisibility",
 	  "MSBackfaceVisibility",
 	  "OBackfaceVisibility",
 	  "background",
 	  "MozBackground",
-	  "WebKitBackground",
+	  "WebkitBackground",
 	  "MSBackground",
 	  "OBackground",
 	  "backgroundAttachment",
 	  "MozBackgroundAttachment",
-	  "WebKitBackgroundAttachment",
+	  "WebkitBackgroundAttachment",
 	  "MSBackgroundAttachment",
 	  "OBackgroundAttachment",
 	  "backgroundBlendMode",
 	  "MozBackgroundBlendMode",
-	  "WebKitBackgroundBlendMode",
+	  "WebkitBackgroundBlendMode",
 	  "MSBackgroundBlendMode",
 	  "OBackgroundBlendMode",
 	  "backgroundClip",
 	  "MozBackgroundClip",
-	  "WebKitBackgroundClip",
+	  "WebkitBackgroundClip",
 	  "MSBackgroundClip",
 	  "OBackgroundClip",
 	  "backgroundColor",
 	  "MozBackgroundColor",
-	  "WebKitBackgroundColor",
+	  "WebkitBackgroundColor",
 	  "MSBackgroundColor",
 	  "OBackgroundColor",
 	  "backgroundImage",
 	  "MozBackgroundImage",
-	  "WebKitBackgroundImage",
+	  "WebkitBackgroundImage",
 	  "MSBackgroundImage",
 	  "OBackgroundImage",
 	  "backgroundOrigin",
 	  "MozBackgroundOrigin",
-	  "WebKitBackgroundOrigin",
+	  "WebkitBackgroundOrigin",
 	  "MSBackgroundOrigin",
 	  "OBackgroundOrigin",
 	  "backgroundPosition",
 	  "MozBackgroundPosition",
-	  "WebKitBackgroundPosition",
+	  "WebkitBackgroundPosition",
 	  "MSBackgroundPosition",
 	  "OBackgroundPosition",
 	  "backgroundRepeat",
 	  "MozBackgroundRepeat",
-	  "WebKitBackgroundRepeat",
+	  "WebkitBackgroundRepeat",
 	  "MSBackgroundRepeat",
 	  "OBackgroundRepeat",
 	  "backgroundSize",
 	  "MozBackgroundSize",
-	  "WebKitBackgroundSize",
+	  "WebkitBackgroundSize",
 	  "MSBackgroundSize",
 	  "OBackgroundSize",
 	  "blockSize",
 	  "MozBlockSize",
-	  "WebKitBlockSize",
+	  "WebkitBlockSize",
 	  "MSBlockSize",
 	  "OBlockSize",
 	  "border",
 	  "MozBorder",
-	  "WebKitBorder",
+	  "WebkitBorder",
 	  "MSBorder",
 	  "OBorder",
 	  "borderBlockEnd",
 	  "MozBorderBlockEnd",
-	  "WebKitBorderBlockEnd",
+	  "WebkitBorderBlockEnd",
 	  "MSBorderBlockEnd",
 	  "OBorderBlockEnd",
 	  "borderBlockEndColor",
 	  "MozBorderBlockEndColor",
-	  "WebKitBorderBlockEndColor",
+	  "WebkitBorderBlockEndColor",
 	  "MSBorderBlockEndColor",
 	  "OBorderBlockEndColor",
 	  "borderBlockEndStyle",
 	  "MozBorderBlockEndStyle",
-	  "WebKitBorderBlockEndStyle",
+	  "WebkitBorderBlockEndStyle",
 	  "MSBorderBlockEndStyle",
 	  "OBorderBlockEndStyle",
 	  "borderBlockEndWidth",
 	  "MozBorderBlockEndWidth",
-	  "WebKitBorderBlockEndWidth",
+	  "WebkitBorderBlockEndWidth",
 	  "MSBorderBlockEndWidth",
 	  "OBorderBlockEndWidth",
 	  "borderBlockStart",
 	  "MozBorderBlockStart",
-	  "WebKitBorderBlockStart",
+	  "WebkitBorderBlockStart",
 	  "MSBorderBlockStart",
 	  "OBorderBlockStart",
 	  "borderBlockStartColor",
 	  "MozBorderBlockStartColor",
-	  "WebKitBorderBlockStartColor",
+	  "WebkitBorderBlockStartColor",
 	  "MSBorderBlockStartColor",
 	  "OBorderBlockStartColor",
 	  "borderBlockStartStyle",
 	  "MozBorderBlockStartStyle",
-	  "WebKitBorderBlockStartStyle",
+	  "WebkitBorderBlockStartStyle",
 	  "MSBorderBlockStartStyle",
 	  "OBorderBlockStartStyle",
 	  "borderBlockStartWidth",
 	  "MozBorderBlockStartWidth",
-	  "WebKitBorderBlockStartWidth",
+	  "WebkitBorderBlockStartWidth",
 	  "MSBorderBlockStartWidth",
 	  "OBorderBlockStartWidth",
 	  "borderBottom",
 	  "MozBorderBottom",
-	  "WebKitBorderBottom",
+	  "WebkitBorderBottom",
 	  "MSBorderBottom",
 	  "OBorderBottom",
 	  "borderBottomColor",
 	  "MozBorderBottomColor",
-	  "WebKitBorderBottomColor",
+	  "WebkitBorderBottomColor",
 	  "MSBorderBottomColor",
 	  "OBorderBottomColor",
 	  "borderBottomLeftRadius",
 	  "MozBorderBottomLeftRadius",
-	  "WebKitBorderBottomLeftRadius",
+	  "WebkitBorderBottomLeftRadius",
 	  "MSBorderBottomLeftRadius",
 	  "OBorderBottomLeftRadius",
 	  "borderBottomRightRadius",
 	  "MozBorderBottomRightRadius",
-	  "WebKitBorderBottomRightRadius",
+	  "WebkitBorderBottomRightRadius",
 	  "MSBorderBottomRightRadius",
 	  "OBorderBottomRightRadius",
 	  "borderBottomStyle",
 	  "MozBorderBottomStyle",
-	  "WebKitBorderBottomStyle",
+	  "WebkitBorderBottomStyle",
 	  "MSBorderBottomStyle",
 	  "OBorderBottomStyle",
 	  "borderBottomWidth",
 	  "MozBorderBottomWidth",
-	  "WebKitBorderBottomWidth",
+	  "WebkitBorderBottomWidth",
 	  "MSBorderBottomWidth",
 	  "OBorderBottomWidth",
 	  "borderCollapse",
 	  "MozBorderCollapse",
-	  "WebKitBorderCollapse",
+	  "WebkitBorderCollapse",
 	  "MSBorderCollapse",
 	  "OBorderCollapse",
 	  "borderColor",
 	  "MozBorderColor",
-	  "WebKitBorderColor",
+	  "WebkitBorderColor",
 	  "MSBorderColor",
 	  "OBorderColor",
 	  "borderImage",
 	  "MozBorderImage",
-	  "WebKitBorderImage",
+	  "WebkitBorderImage",
 	  "MSBorderImage",
 	  "OBorderImage",
 	  "borderImageOutset",
 	  "MozBorderImageOutset",
-	  "WebKitBorderImageOutset",
+	  "WebkitBorderImageOutset",
 	  "MSBorderImageOutset",
 	  "OBorderImageOutset",
 	  "borderImageRepeat",
 	  "MozBorderImageRepeat",
-	  "WebKitBorderImageRepeat",
+	  "WebkitBorderImageRepeat",
 	  "MSBorderImageRepeat",
 	  "OBorderImageRepeat",
 	  "borderImageSlice",
 	  "MozBorderImageSlice",
-	  "WebKitBorderImageSlice",
+	  "WebkitBorderImageSlice",
 	  "MSBorderImageSlice",
 	  "OBorderImageSlice",
 	  "borderImageSource",
 	  "MozBorderImageSource",
-	  "WebKitBorderImageSource",
+	  "WebkitBorderImageSource",
 	  "MSBorderImageSource",
 	  "OBorderImageSource",
 	  "borderImageWidth",
 	  "MozBorderImageWidth",
-	  "WebKitBorderImageWidth",
+	  "WebkitBorderImageWidth",
 	  "MSBorderImageWidth",
 	  "OBorderImageWidth",
 	  "borderInlineEnd",
 	  "MozBorderInlineEnd",
-	  "WebKitBorderInlineEnd",
+	  "WebkitBorderInlineEnd",
 	  "MSBorderInlineEnd",
 	  "OBorderInlineEnd",
 	  "borderInlineEndColor",
 	  "MozBorderInlineEndColor",
-	  "WebKitBorderInlineEndColor",
+	  "WebkitBorderInlineEndColor",
 	  "MSBorderInlineEndColor",
 	  "OBorderInlineEndColor",
 	  "borderInlineEndStyle",
 	  "MozBorderInlineEndStyle",
-	  "WebKitBorderInlineEndStyle",
+	  "WebkitBorderInlineEndStyle",
 	  "MSBorderInlineEndStyle",
 	  "OBorderInlineEndStyle",
 	  "borderInlineEndWidth",
 	  "MozBorderInlineEndWidth",
-	  "WebKitBorderInlineEndWidth",
+	  "WebkitBorderInlineEndWidth",
 	  "MSBorderInlineEndWidth",
 	  "OBorderInlineEndWidth",
 	  "borderInlineStart",
 	  "MozBorderInlineStart",
-	  "WebKitBorderInlineStart",
+	  "WebkitBorderInlineStart",
 	  "MSBorderInlineStart",
 	  "OBorderInlineStart",
 	  "borderInlineStartColor",
 	  "MozBorderInlineStartColor",
-	  "WebKitBorderInlineStartColor",
+	  "WebkitBorderInlineStartColor",
 	  "MSBorderInlineStartColor",
 	  "OBorderInlineStartColor",
 	  "borderInlineStartStyle",
 	  "MozBorderInlineStartStyle",
-	  "WebKitBorderInlineStartStyle",
+	  "WebkitBorderInlineStartStyle",
 	  "MSBorderInlineStartStyle",
 	  "OBorderInlineStartStyle",
 	  "borderInlineStartWidth",
 	  "MozBorderInlineStartWidth",
-	  "WebKitBorderInlineStartWidth",
+	  "WebkitBorderInlineStartWidth",
 	  "MSBorderInlineStartWidth",
 	  "OBorderInlineStartWidth",
 	  "borderLeft",
 	  "MozBorderLeft",
-	  "WebKitBorderLeft",
+	  "WebkitBorderLeft",
 	  "MSBorderLeft",
 	  "OBorderLeft",
 	  "borderLeftColor",
 	  "MozBorderLeftColor",
-	  "WebKitBorderLeftColor",
+	  "WebkitBorderLeftColor",
 	  "MSBorderLeftColor",
 	  "OBorderLeftColor",
 	  "borderLeftStyle",
 	  "MozBorderLeftStyle",
-	  "WebKitBorderLeftStyle",
+	  "WebkitBorderLeftStyle",
 	  "MSBorderLeftStyle",
 	  "OBorderLeftStyle",
 	  "borderLeftWidth",
 	  "MozBorderLeftWidth",
-	  "WebKitBorderLeftWidth",
+	  "WebkitBorderLeftWidth",
 	  "MSBorderLeftWidth",
 	  "OBorderLeftWidth",
 	  "borderRadius",
 	  "MozBorderRadius",
-	  "WebKitBorderRadius",
+	  "WebkitBorderRadius",
 	  "MSBorderRadius",
 	  "OBorderRadius",
 	  "borderRight",
 	  "MozBorderRight",
-	  "WebKitBorderRight",
+	  "WebkitBorderRight",
 	  "MSBorderRight",
 	  "OBorderRight",
 	  "borderRightColor",
 	  "MozBorderRightColor",
-	  "WebKitBorderRightColor",
+	  "WebkitBorderRightColor",
 	  "MSBorderRightColor",
 	  "OBorderRightColor",
 	  "borderRightStyle",
 	  "MozBorderRightStyle",
-	  "WebKitBorderRightStyle",
+	  "WebkitBorderRightStyle",
 	  "MSBorderRightStyle",
 	  "OBorderRightStyle",
 	  "borderRightWidth",
 	  "MozBorderRightWidth",
-	  "WebKitBorderRightWidth",
+	  "WebkitBorderRightWidth",
 	  "MSBorderRightWidth",
 	  "OBorderRightWidth",
 	  "borderSpacing",
 	  "MozBorderSpacing",
-	  "WebKitBorderSpacing",
+	  "WebkitBorderSpacing",
 	  "MSBorderSpacing",
 	  "OBorderSpacing",
 	  "borderStyle",
 	  "MozBorderStyle",
-	  "WebKitBorderStyle",
+	  "WebkitBorderStyle",
 	  "MSBorderStyle",
 	  "OBorderStyle",
 	  "borderTop",
 	  "MozBorderTop",
-	  "WebKitBorderTop",
+	  "WebkitBorderTop",
 	  "MSBorderTop",
 	  "OBorderTop",
 	  "borderTopColor",
 	  "MozBorderTopColor",
-	  "WebKitBorderTopColor",
+	  "WebkitBorderTopColor",
 	  "MSBorderTopColor",
 	  "OBorderTopColor",
 	  "borderTopLeftRadius",
 	  "MozBorderTopLeftRadius",
-	  "WebKitBorderTopLeftRadius",
+	  "WebkitBorderTopLeftRadius",
 	  "MSBorderTopLeftRadius",
 	  "OBorderTopLeftRadius",
 	  "borderTopRightRadius",
 	  "MozBorderTopRightRadius",
-	  "WebKitBorderTopRightRadius",
+	  "WebkitBorderTopRightRadius",
 	  "MSBorderTopRightRadius",
 	  "OBorderTopRightRadius",
 	  "borderTopStyle",
 	  "MozBorderTopStyle",
-	  "WebKitBorderTopStyle",
+	  "WebkitBorderTopStyle",
 	  "MSBorderTopStyle",
 	  "OBorderTopStyle",
 	  "borderTopWidth",
 	  "MozBorderTopWidth",
-	  "WebKitBorderTopWidth",
+	  "WebkitBorderTopWidth",
 	  "MSBorderTopWidth",
 	  "OBorderTopWidth",
 	  "borderWidth",
 	  "MozBorderWidth",
-	  "WebKitBorderWidth",
+	  "WebkitBorderWidth",
 	  "MSBorderWidth",
 	  "OBorderWidth",
 	  "bottom",
 	  "MozBottom",
-	  "WebKitBottom",
+	  "WebkitBottom",
 	  "MSBottom",
 	  "OBottom",
 	  "boxDecorationBreak",
 	  "MozBoxDecorationBreak",
-	  "WebKitBoxDecorationBreak",
+	  "WebkitBoxDecorationBreak",
 	  "MSBoxDecorationBreak",
 	  "OBoxDecorationBreak",
 	  "boxShadow",
 	  "MozBoxShadow",
-	  "WebKitBoxShadow",
+	  "WebkitBoxShadow",
 	  "MSBoxShadow",
 	  "OBoxShadow",
 	  "boxSizing",
 	  "MozBoxSizing",
-	  "WebKitBoxSizing",
+	  "WebkitBoxSizing",
 	  "MSBoxSizing",
 	  "OBoxSizing",
 	  "breakAfter",
 	  "MozBreakAfter",
-	  "WebKitBreakAfter",
+	  "WebkitBreakAfter",
 	  "MSBreakAfter",
 	  "OBreakAfter",
 	  "breakBefore",
 	  "MozBreakBefore",
-	  "WebKitBreakBefore",
+	  "WebkitBreakBefore",
 	  "MSBreakBefore",
 	  "OBreakBefore",
 	  "breakInside",
 	  "MozBreakInside",
-	  "WebKitBreakInside",
+	  "WebkitBreakInside",
 	  "MSBreakInside",
 	  "OBreakInside",
 	  "captionSide",
 	  "MozCaptionSide",
-	  "WebKitCaptionSide",
+	  "WebkitCaptionSide",
 	  "MSCaptionSide",
 	  "OCaptionSide",
+	  "caretColor",
+	  "MozCaretColor",
+	  "WebkitCaretColor",
+	  "MSCaretColor",
+	  "OCaretColor",
 	  "ch",
 	  "MozCh",
-	  "WebKitCh",
+	  "WebkitCh",
 	  "MSCh",
 	  "OCh",
 	  "clear",
 	  "MozClear",
-	  "WebKitClear",
+	  "WebkitClear",
 	  "MSClear",
 	  "OClear",
 	  "clip",
 	  "MozClip",
-	  "WebKitClip",
+	  "WebkitClip",
 	  "MSClip",
 	  "OClip",
 	  "clipPath",
 	  "MozClipPath",
-	  "WebKitClipPath",
+	  "WebkitClipPath",
 	  "MSClipPath",
 	  "OClipPath",
 	  "cm",
 	  "MozCm",
-	  "WebKitCm",
+	  "WebkitCm",
 	  "MSCm",
 	  "OCm",
 	  "color",
 	  "MozColor",
-	  "WebKitColor",
+	  "WebkitColor",
 	  "MSColor",
 	  "OColor",
 	  "columnCount",
 	  "MozColumnCount",
-	  "WebKitColumnCount",
+	  "WebkitColumnCount",
 	  "MSColumnCount",
 	  "OColumnCount",
 	  "columnFill",
 	  "MozColumnFill",
-	  "WebKitColumnFill",
+	  "WebkitColumnFill",
 	  "MSColumnFill",
 	  "OColumnFill",
 	  "columnGap",
 	  "MozColumnGap",
-	  "WebKitColumnGap",
+	  "WebkitColumnGap",
 	  "MSColumnGap",
 	  "OColumnGap",
 	  "columnRule",
 	  "MozColumnRule",
-	  "WebKitColumnRule",
+	  "WebkitColumnRule",
 	  "MSColumnRule",
 	  "OColumnRule",
 	  "columnRuleColor",
 	  "MozColumnRuleColor",
-	  "WebKitColumnRuleColor",
+	  "WebkitColumnRuleColor",
 	  "MSColumnRuleColor",
 	  "OColumnRuleColor",
 	  "columnRuleStyle",
 	  "MozColumnRuleStyle",
-	  "WebKitColumnRuleStyle",
+	  "WebkitColumnRuleStyle",
 	  "MSColumnRuleStyle",
 	  "OColumnRuleStyle",
 	  "columnRuleWidth",
 	  "MozColumnRuleWidth",
-	  "WebKitColumnRuleWidth",
+	  "WebkitColumnRuleWidth",
 	  "MSColumnRuleWidth",
 	  "OColumnRuleWidth",
 	  "columnSpan",
 	  "MozColumnSpan",
-	  "WebKitColumnSpan",
+	  "WebkitColumnSpan",
 	  "MSColumnSpan",
 	  "OColumnSpan",
 	  "columnWidth",
 	  "MozColumnWidth",
-	  "WebKitColumnWidth",
+	  "WebkitColumnWidth",
 	  "MSColumnWidth",
 	  "OColumnWidth",
 	  "columns",
 	  "MozColumns",
-	  "WebKitColumns",
+	  "WebkitColumns",
 	  "MSColumns",
 	  "OColumns",
 	  "content",
 	  "MozContent",
-	  "WebKitContent",
+	  "WebkitContent",
 	  "MSContent",
 	  "OContent",
 	  "counterIncrement",
 	  "MozCounterIncrement",
-	  "WebKitCounterIncrement",
+	  "WebkitCounterIncrement",
 	  "MSCounterIncrement",
 	  "OCounterIncrement",
 	  "counterReset",
 	  "MozCounterReset",
-	  "WebKitCounterReset",
+	  "WebkitCounterReset",
 	  "MSCounterReset",
 	  "OCounterReset",
 	  "cursor",
 	  "MozCursor",
-	  "WebKitCursor",
+	  "WebkitCursor",
 	  "MSCursor",
 	  "OCursor",
 	  "deg",
 	  "MozDeg",
-	  "WebKitDeg",
+	  "WebkitDeg",
 	  "MSDeg",
 	  "ODeg",
 	  "direction",
 	  "MozDirection",
-	  "WebKitDirection",
+	  "WebkitDirection",
 	  "MSDirection",
 	  "ODirection",
 	  "display",
 	  "MozDisplay",
-	  "WebKitDisplay",
+	  "WebkitDisplay",
 	  "MSDisplay",
 	  "ODisplay",
 	  "dpcm",
 	  "MozDpcm",
-	  "WebKitDpcm",
+	  "WebkitDpcm",
 	  "MSDpcm",
 	  "ODpcm",
 	  "dpi",
 	  "MozDpi",
-	  "WebKitDpi",
+	  "WebkitDpi",
 	  "MSDpi",
 	  "ODpi",
 	  "dppx",
 	  "MozDppx",
-	  "WebKitDppx",
+	  "WebkitDppx",
 	  "MSDppx",
 	  "ODppx",
 	  "em",
 	  "MozEm",
-	  "WebKitEm",
+	  "WebkitEm",
 	  "MSEm",
 	  "OEm",
 	  "emptyCells",
 	  "MozEmptyCells",
-	  "WebKitEmptyCells",
+	  "WebkitEmptyCells",
 	  "MSEmptyCells",
 	  "OEmptyCells",
 	  "ex",
 	  "MozEx",
-	  "WebKitEx",
+	  "WebkitEx",
 	  "MSEx",
 	  "OEx",
 	  "filter",
 	  "MozFilter",
-	  "WebKitFilter",
+	  "WebkitFilter",
 	  "MSFilter",
 	  "OFilter",
-	  "flex",
-	  "MozFlex",
-	  "WebKitFlex",
-	  "MSFlex",
-	  "OFlex",
 	  "flexBasis",
 	  "MozFlexBasis",
-	  "WebKitFlexBasis",
+	  "WebkitFlexBasis",
 	  "MSFlexBasis",
 	  "OFlexBasis",
 	  "flexDirection",
 	  "MozFlexDirection",
-	  "WebKitFlexDirection",
+	  "WebkitFlexDirection",
 	  "MSFlexDirection",
 	  "OFlexDirection",
 	  "flexFlow",
 	  "MozFlexFlow",
-	  "WebKitFlexFlow",
+	  "WebkitFlexFlow",
 	  "MSFlexFlow",
 	  "OFlexFlow",
 	  "flexGrow",
 	  "MozFlexGrow",
-	  "WebKitFlexGrow",
+	  "WebkitFlexGrow",
 	  "MSFlexGrow",
 	  "OFlexGrow",
 	  "flexShrink",
 	  "MozFlexShrink",
-	  "WebKitFlexShrink",
+	  "WebkitFlexShrink",
 	  "MSFlexShrink",
 	  "OFlexShrink",
 	  "flexWrap",
 	  "MozFlexWrap",
-	  "WebKitFlexWrap",
+	  "WebkitFlexWrap",
 	  "MSFlexWrap",
 	  "OFlexWrap",
 	  "float",
 	  "MozFloat",
-	  "WebKitFloat",
+	  "WebkitFloat",
 	  "MSFloat",
 	  "OFloat",
 	  "font",
 	  "MozFont",
-	  "WebKitFont",
+	  "WebkitFont",
 	  "MSFont",
 	  "OFont",
 	  "fontFamily",
 	  "MozFontFamily",
-	  "WebKitFontFamily",
+	  "WebkitFontFamily",
 	  "MSFontFamily",
 	  "OFontFamily",
 	  "fontFeatureSettings",
 	  "MozFontFeatureSettings",
-	  "WebKitFontFeatureSettings",
+	  "WebkitFontFeatureSettings",
 	  "MSFontFeatureSettings",
 	  "OFontFeatureSettings",
 	  "fontKerning",
 	  "MozFontKerning",
-	  "WebKitFontKerning",
+	  "WebkitFontKerning",
 	  "MSFontKerning",
 	  "OFontKerning",
 	  "fontLanguageOverride",
 	  "MozFontLanguageOverride",
-	  "WebKitFontLanguageOverride",
+	  "WebkitFontLanguageOverride",
 	  "MSFontLanguageOverride",
 	  "OFontLanguageOverride",
 	  "fontSize",
 	  "MozFontSize",
-	  "WebKitFontSize",
+	  "WebkitFontSize",
 	  "MSFontSize",
 	  "OFontSize",
 	  "fontSizeAdjust",
 	  "MozFontSizeAdjust",
-	  "WebKitFontSizeAdjust",
+	  "WebkitFontSizeAdjust",
 	  "MSFontSizeAdjust",
 	  "OFontSizeAdjust",
 	  "fontStretch",
 	  "MozFontStretch",
-	  "WebKitFontStretch",
+	  "WebkitFontStretch",
 	  "MSFontStretch",
 	  "OFontStretch",
 	  "fontStyle",
 	  "MozFontStyle",
-	  "WebKitFontStyle",
+	  "WebkitFontStyle",
 	  "MSFontStyle",
 	  "OFontStyle",
 	  "fontSynthesis",
 	  "MozFontSynthesis",
-	  "WebKitFontSynthesis",
+	  "WebkitFontSynthesis",
 	  "MSFontSynthesis",
 	  "OFontSynthesis",
 	  "fontVariant",
 	  "MozFontVariant",
-	  "WebKitFontVariant",
+	  "WebkitFontVariant",
 	  "MSFontVariant",
 	  "OFontVariant",
 	  "fontVariantAlternates",
 	  "MozFontVariantAlternates",
-	  "WebKitFontVariantAlternates",
+	  "WebkitFontVariantAlternates",
 	  "MSFontVariantAlternates",
 	  "OFontVariantAlternates",
 	  "fontVariantCaps",
 	  "MozFontVariantCaps",
-	  "WebKitFontVariantCaps",
+	  "WebkitFontVariantCaps",
 	  "MSFontVariantCaps",
 	  "OFontVariantCaps",
 	  "fontVariantEastAsian",
 	  "MozFontVariantEastAsian",
-	  "WebKitFontVariantEastAsian",
+	  "WebkitFontVariantEastAsian",
 	  "MSFontVariantEastAsian",
 	  "OFontVariantEastAsian",
 	  "fontVariantLigatures",
 	  "MozFontVariantLigatures",
-	  "WebKitFontVariantLigatures",
+	  "WebkitFontVariantLigatures",
 	  "MSFontVariantLigatures",
 	  "OFontVariantLigatures",
 	  "fontVariantNumeric",
 	  "MozFontVariantNumeric",
-	  "WebKitFontVariantNumeric",
+	  "WebkitFontVariantNumeric",
 	  "MSFontVariantNumeric",
 	  "OFontVariantNumeric",
 	  "fontVariantPosition",
 	  "MozFontVariantPosition",
-	  "WebKitFontVariantPosition",
+	  "WebkitFontVariantPosition",
 	  "MSFontVariantPosition",
 	  "OFontVariantPosition",
 	  "fontWeight",
 	  "MozFontWeight",
-	  "WebKitFontWeight",
+	  "WebkitFontWeight",
 	  "MSFontWeight",
 	  "OFontWeight",
+	  "fr",
+	  "MozFr",
+	  "WebkitFr",
+	  "MSFr",
+	  "OFr",
 	  "grad",
 	  "MozGrad",
-	  "WebKitGrad",
+	  "WebkitGrad",
 	  "MSGrad",
 	  "OGrad",
 	  "grid",
 	  "MozGrid",
-	  "WebKitGrid",
+	  "WebkitGrid",
 	  "MSGrid",
 	  "OGrid",
 	  "gridArea",
 	  "MozGridArea",
-	  "WebKitGridArea",
+	  "WebkitGridArea",
 	  "MSGridArea",
 	  "OGridArea",
 	  "gridAutoColumns",
 	  "MozGridAutoColumns",
-	  "WebKitGridAutoColumns",
+	  "WebkitGridAutoColumns",
 	  "MSGridAutoColumns",
 	  "OGridAutoColumns",
 	  "gridAutoFlow",
 	  "MozGridAutoFlow",
-	  "WebKitGridAutoFlow",
+	  "WebkitGridAutoFlow",
 	  "MSGridAutoFlow",
 	  "OGridAutoFlow",
 	  "gridAutoRows",
 	  "MozGridAutoRows",
-	  "WebKitGridAutoRows",
+	  "WebkitGridAutoRows",
 	  "MSGridAutoRows",
 	  "OGridAutoRows",
 	  "gridColumn",
 	  "MozGridColumn",
-	  "WebKitGridColumn",
+	  "WebkitGridColumn",
 	  "MSGridColumn",
 	  "OGridColumn",
 	  "gridColumnEnd",
 	  "MozGridColumnEnd",
-	  "WebKitGridColumnEnd",
+	  "WebkitGridColumnEnd",
 	  "MSGridColumnEnd",
 	  "OGridColumnEnd",
 	  "gridColumnGap",
 	  "MozGridColumnGap",
-	  "WebKitGridColumnGap",
+	  "WebkitGridColumnGap",
 	  "MSGridColumnGap",
 	  "OGridColumnGap",
 	  "gridColumnStart",
 	  "MozGridColumnStart",
-	  "WebKitGridColumnStart",
+	  "WebkitGridColumnStart",
 	  "MSGridColumnStart",
 	  "OGridColumnStart",
 	  "gridGap",
 	  "MozGridGap",
-	  "WebKitGridGap",
+	  "WebkitGridGap",
 	  "MSGridGap",
 	  "OGridGap",
 	  "gridRow",
 	  "MozGridRow",
-	  "WebKitGridRow",
+	  "WebkitGridRow",
 	  "MSGridRow",
 	  "OGridRow",
 	  "gridRowEnd",
 	  "MozGridRowEnd",
-	  "WebKitGridRowEnd",
+	  "WebkitGridRowEnd",
 	  "MSGridRowEnd",
 	  "OGridRowEnd",
 	  "gridRowGap",
 	  "MozGridRowGap",
-	  "WebKitGridRowGap",
+	  "WebkitGridRowGap",
 	  "MSGridRowGap",
 	  "OGridRowGap",
 	  "gridRowStart",
 	  "MozGridRowStart",
-	  "WebKitGridRowStart",
+	  "WebkitGridRowStart",
 	  "MSGridRowStart",
 	  "OGridRowStart",
 	  "gridTemplate",
 	  "MozGridTemplate",
-	  "WebKitGridTemplate",
+	  "WebkitGridTemplate",
 	  "MSGridTemplate",
 	  "OGridTemplate",
 	  "gridTemplateAreas",
 	  "MozGridTemplateAreas",
-	  "WebKitGridTemplateAreas",
+	  "WebkitGridTemplateAreas",
 	  "MSGridTemplateAreas",
 	  "OGridTemplateAreas",
 	  "gridTemplateColumns",
 	  "MozGridTemplateColumns",
-	  "WebKitGridTemplateColumns",
+	  "WebkitGridTemplateColumns",
 	  "MSGridTemplateColumns",
 	  "OGridTemplateColumns",
 	  "gridTemplateRows",
 	  "MozGridTemplateRows",
-	  "WebKitGridTemplateRows",
+	  "WebkitGridTemplateRows",
 	  "MSGridTemplateRows",
 	  "OGridTemplateRows",
 	  "height",
 	  "MozHeight",
-	  "WebKitHeight",
+	  "WebkitHeight",
 	  "MSHeight",
 	  "OHeight",
 	  "hyphens",
 	  "MozHyphens",
-	  "WebKitHyphens",
+	  "WebkitHyphens",
 	  "MSHyphens",
 	  "OHyphens",
 	  "hz",
 	  "MozHz",
-	  "WebKitHz",
+	  "WebkitHz",
 	  "MSHz",
 	  "OHz",
 	  "imageOrientation",
 	  "MozImageOrientation",
-	  "WebKitImageOrientation",
+	  "WebkitImageOrientation",
 	  "MSImageOrientation",
 	  "OImageOrientation",
 	  "imageRendering",
 	  "MozImageRendering",
-	  "WebKitImageRendering",
+	  "WebkitImageRendering",
 	  "MSImageRendering",
 	  "OImageRendering",
 	  "imageResolution",
 	  "MozImageResolution",
-	  "WebKitImageResolution",
+	  "WebkitImageResolution",
 	  "MSImageResolution",
 	  "OImageResolution",
 	  "imeMode",
 	  "MozImeMode",
-	  "WebKitImeMode",
+	  "WebkitImeMode",
 	  "MSImeMode",
 	  "OImeMode",
 	  "in",
 	  "MozIn",
-	  "WebKitIn",
+	  "WebkitIn",
 	  "MSIn",
 	  "OIn",
 	  "inherit",
 	  "MozInherit",
-	  "WebKitInherit",
+	  "WebkitInherit",
 	  "MSInherit",
 	  "OInherit",
 	  "initial",
 	  "MozInitial",
-	  "WebKitInitial",
+	  "WebkitInitial",
 	  "MSInitial",
 	  "OInitial",
 	  "inlineSize",
 	  "MozInlineSize",
-	  "WebKitInlineSize",
+	  "WebkitInlineSize",
 	  "MSInlineSize",
 	  "OInlineSize",
 	  "isolation",
 	  "MozIsolation",
-	  "WebKitIsolation",
+	  "WebkitIsolation",
 	  "MSIsolation",
 	  "OIsolation",
 	  "justifyContent",
 	  "MozJustifyContent",
-	  "WebKitJustifyContent",
+	  "WebkitJustifyContent",
 	  "MSJustifyContent",
 	  "OJustifyContent",
 	  "khz",
 	  "MozKhz",
-	  "WebKitKhz",
+	  "WebkitKhz",
 	  "MSKhz",
 	  "OKhz",
 	  "left",
 	  "MozLeft",
-	  "WebKitLeft",
+	  "WebkitLeft",
 	  "MSLeft",
 	  "OLeft",
 	  "letterSpacing",
 	  "MozLetterSpacing",
-	  "WebKitLetterSpacing",
+	  "WebkitLetterSpacing",
 	  "MSLetterSpacing",
 	  "OLetterSpacing",
 	  "lineBreak",
 	  "MozLineBreak",
-	  "WebKitLineBreak",
+	  "WebkitLineBreak",
 	  "MSLineBreak",
 	  "OLineBreak",
 	  "lineHeight",
 	  "MozLineHeight",
-	  "WebKitLineHeight",
+	  "WebkitLineHeight",
 	  "MSLineHeight",
 	  "OLineHeight",
 	  "listStyle",
 	  "MozListStyle",
-	  "WebKitListStyle",
+	  "WebkitListStyle",
 	  "MSListStyle",
 	  "OListStyle",
 	  "listStyleImage",
 	  "MozListStyleImage",
-	  "WebKitListStyleImage",
+	  "WebkitListStyleImage",
 	  "MSListStyleImage",
 	  "OListStyleImage",
 	  "listStylePosition",
 	  "MozListStylePosition",
-	  "WebKitListStylePosition",
+	  "WebkitListStylePosition",
 	  "MSListStylePosition",
 	  "OListStylePosition",
 	  "listStyleType",
 	  "MozListStyleType",
-	  "WebKitListStyleType",
+	  "WebkitListStyleType",
 	  "MSListStyleType",
 	  "OListStyleType",
 	  "margin",
 	  "MozMargin",
-	  "WebKitMargin",
+	  "WebkitMargin",
 	  "MSMargin",
 	  "OMargin",
 	  "marginBlockEnd",
 	  "MozMarginBlockEnd",
-	  "WebKitMarginBlockEnd",
+	  "WebkitMarginBlockEnd",
 	  "MSMarginBlockEnd",
 	  "OMarginBlockEnd",
 	  "marginBlockStart",
 	  "MozMarginBlockStart",
-	  "WebKitMarginBlockStart",
+	  "WebkitMarginBlockStart",
 	  "MSMarginBlockStart",
 	  "OMarginBlockStart",
 	  "marginBottom",
 	  "MozMarginBottom",
-	  "WebKitMarginBottom",
+	  "WebkitMarginBottom",
 	  "MSMarginBottom",
 	  "OMarginBottom",
 	  "marginInlineEnd",
 	  "MozMarginInlineEnd",
-	  "WebKitMarginInlineEnd",
+	  "WebkitMarginInlineEnd",
 	  "MSMarginInlineEnd",
 	  "OMarginInlineEnd",
 	  "marginInlineStart",
 	  "MozMarginInlineStart",
-	  "WebKitMarginInlineStart",
+	  "WebkitMarginInlineStart",
 	  "MSMarginInlineStart",
 	  "OMarginInlineStart",
 	  "marginLeft",
 	  "MozMarginLeft",
-	  "WebKitMarginLeft",
+	  "WebkitMarginLeft",
 	  "MSMarginLeft",
 	  "OMarginLeft",
 	  "marginRight",
 	  "MozMarginRight",
-	  "WebKitMarginRight",
+	  "WebkitMarginRight",
 	  "MSMarginRight",
 	  "OMarginRight",
 	  "marginTop",
 	  "MozMarginTop",
-	  "WebKitMarginTop",
+	  "WebkitMarginTop",
 	  "MSMarginTop",
 	  "OMarginTop",
 	  "mask",
 	  "MozMask",
-	  "WebKitMask",
+	  "WebkitMask",
 	  "MSMask",
 	  "OMask",
 	  "maskClip",
 	  "MozMaskClip",
-	  "WebKitMaskClip",
+	  "WebkitMaskClip",
 	  "MSMaskClip",
 	  "OMaskClip",
 	  "maskComposite",
 	  "MozMaskComposite",
-	  "WebKitMaskComposite",
+	  "WebkitMaskComposite",
 	  "MSMaskComposite",
 	  "OMaskComposite",
 	  "maskImage",
 	  "MozMaskImage",
-	  "WebKitMaskImage",
+	  "WebkitMaskImage",
 	  "MSMaskImage",
 	  "OMaskImage",
 	  "maskMode",
 	  "MozMaskMode",
-	  "WebKitMaskMode",
+	  "WebkitMaskMode",
 	  "MSMaskMode",
 	  "OMaskMode",
 	  "maskOrigin",
 	  "MozMaskOrigin",
-	  "WebKitMaskOrigin",
+	  "WebkitMaskOrigin",
 	  "MSMaskOrigin",
 	  "OMaskOrigin",
 	  "maskPosition",
 	  "MozMaskPosition",
-	  "WebKitMaskPosition",
+	  "WebkitMaskPosition",
 	  "MSMaskPosition",
 	  "OMaskPosition",
 	  "maskRepeat",
 	  "MozMaskRepeat",
-	  "WebKitMaskRepeat",
+	  "WebkitMaskRepeat",
 	  "MSMaskRepeat",
 	  "OMaskRepeat",
 	  "maskSize",
 	  "MozMaskSize",
-	  "WebKitMaskSize",
+	  "WebkitMaskSize",
 	  "MSMaskSize",
 	  "OMaskSize",
 	  "maskType",
 	  "MozMaskType",
-	  "WebKitMaskType",
+	  "WebkitMaskType",
 	  "MSMaskType",
 	  "OMaskType",
 	  "maxBlockSize",
 	  "MozMaxBlockSize",
-	  "WebKitMaxBlockSize",
+	  "WebkitMaxBlockSize",
 	  "MSMaxBlockSize",
 	  "OMaxBlockSize",
 	  "maxHeight",
 	  "MozMaxHeight",
-	  "WebKitMaxHeight",
+	  "WebkitMaxHeight",
 	  "MSMaxHeight",
 	  "OMaxHeight",
 	  "maxInlineSize",
 	  "MozMaxInlineSize",
-	  "WebKitMaxInlineSize",
+	  "WebkitMaxInlineSize",
 	  "MSMaxInlineSize",
 	  "OMaxInlineSize",
 	  "maxWidth",
 	  "MozMaxWidth",
-	  "WebKitMaxWidth",
+	  "WebkitMaxWidth",
 	  "MSMaxWidth",
 	  "OMaxWidth",
 	  "minBlockSize",
 	  "MozMinBlockSize",
-	  "WebKitMinBlockSize",
+	  "WebkitMinBlockSize",
 	  "MSMinBlockSize",
 	  "OMinBlockSize",
 	  "minHeight",
 	  "MozMinHeight",
-	  "WebKitMinHeight",
+	  "WebkitMinHeight",
 	  "MSMinHeight",
 	  "OMinHeight",
 	  "minInlineSize",
 	  "MozMinInlineSize",
-	  "WebKitMinInlineSize",
+	  "WebkitMinInlineSize",
 	  "MSMinInlineSize",
 	  "OMinInlineSize",
 	  "minWidth",
 	  "MozMinWidth",
-	  "WebKitMinWidth",
+	  "WebkitMinWidth",
 	  "MSMinWidth",
 	  "OMinWidth",
 	  "mixBlendMode",
 	  "MozMixBlendMode",
-	  "WebKitMixBlendMode",
+	  "WebkitMixBlendMode",
 	  "MSMixBlendMode",
 	  "OMixBlendMode",
 	  "mm",
 	  "MozMm",
-	  "WebKitMm",
+	  "WebkitMm",
 	  "MSMm",
 	  "OMm",
 	  "ms",
 	  "MozMs",
-	  "WebKitMs",
+	  "WebkitMs",
 	  "MSMs",
 	  "OMs",
 	  "objectFit",
 	  "MozObjectFit",
-	  "WebKitObjectFit",
+	  "WebkitObjectFit",
 	  "MSObjectFit",
 	  "OObjectFit",
 	  "objectPosition",
 	  "MozObjectPosition",
-	  "WebKitObjectPosition",
+	  "WebkitObjectPosition",
 	  "MSObjectPosition",
 	  "OObjectPosition",
 	  "offsetBlockEnd",
 	  "MozOffsetBlockEnd",
-	  "WebKitOffsetBlockEnd",
+	  "WebkitOffsetBlockEnd",
 	  "MSOffsetBlockEnd",
 	  "OOffsetBlockEnd",
 	  "offsetBlockStart",
 	  "MozOffsetBlockStart",
-	  "WebKitOffsetBlockStart",
+	  "WebkitOffsetBlockStart",
 	  "MSOffsetBlockStart",
 	  "OOffsetBlockStart",
 	  "offsetInlineEnd",
 	  "MozOffsetInlineEnd",
-	  "WebKitOffsetInlineEnd",
+	  "WebkitOffsetInlineEnd",
 	  "MSOffsetInlineEnd",
 	  "OOffsetInlineEnd",
 	  "offsetInlineStart",
 	  "MozOffsetInlineStart",
-	  "WebKitOffsetInlineStart",
+	  "WebkitOffsetInlineStart",
 	  "MSOffsetInlineStart",
 	  "OOffsetInlineStart",
 	  "opacity",
 	  "MozOpacity",
-	  "WebKitOpacity",
+	  "WebkitOpacity",
 	  "MSOpacity",
 	  "OOpacity",
 	  "order",
 	  "MozOrder",
-	  "WebKitOrder",
+	  "WebkitOrder",
 	  "MSOrder",
 	  "OOrder",
 	  "orphans",
 	  "MozOrphans",
-	  "WebKitOrphans",
+	  "WebkitOrphans",
 	  "MSOrphans",
 	  "OOrphans",
 	  "outline",
 	  "MozOutline",
-	  "WebKitOutline",
+	  "WebkitOutline",
 	  "MSOutline",
 	  "OOutline",
 	  "outlineColor",
 	  "MozOutlineColor",
-	  "WebKitOutlineColor",
+	  "WebkitOutlineColor",
 	  "MSOutlineColor",
 	  "OOutlineColor",
 	  "outlineOffset",
 	  "MozOutlineOffset",
-	  "WebKitOutlineOffset",
+	  "WebkitOutlineOffset",
 	  "MSOutlineOffset",
 	  "OOutlineOffset",
 	  "outlineStyle",
 	  "MozOutlineStyle",
-	  "WebKitOutlineStyle",
+	  "WebkitOutlineStyle",
 	  "MSOutlineStyle",
 	  "OOutlineStyle",
 	  "outlineWidth",
 	  "MozOutlineWidth",
-	  "WebKitOutlineWidth",
+	  "WebkitOutlineWidth",
 	  "MSOutlineWidth",
 	  "OOutlineWidth",
 	  "overflow",
 	  "MozOverflow",
-	  "WebKitOverflow",
+	  "WebkitOverflow",
 	  "MSOverflow",
 	  "OOverflow",
 	  "overflowWrap",
 	  "MozOverflowWrap",
-	  "WebKitOverflowWrap",
+	  "WebkitOverflowWrap",
 	  "MSOverflowWrap",
 	  "OOverflowWrap",
 	  "overflowX",
 	  "MozOverflowX",
-	  "WebKitOverflowX",
+	  "WebkitOverflowX",
 	  "MSOverflowX",
 	  "OOverflowX",
 	  "overflowY",
 	  "MozOverflowY",
-	  "WebKitOverflowY",
+	  "WebkitOverflowY",
 	  "MSOverflowY",
 	  "OOverflowY",
 	  "padding",
 	  "MozPadding",
-	  "WebKitPadding",
+	  "WebkitPadding",
 	  "MSPadding",
 	  "OPadding",
 	  "paddingBlockEnd",
 	  "MozPaddingBlockEnd",
-	  "WebKitPaddingBlockEnd",
+	  "WebkitPaddingBlockEnd",
 	  "MSPaddingBlockEnd",
 	  "OPaddingBlockEnd",
 	  "paddingBlockStart",
 	  "MozPaddingBlockStart",
-	  "WebKitPaddingBlockStart",
+	  "WebkitPaddingBlockStart",
 	  "MSPaddingBlockStart",
 	  "OPaddingBlockStart",
 	  "paddingBottom",
 	  "MozPaddingBottom",
-	  "WebKitPaddingBottom",
+	  "WebkitPaddingBottom",
 	  "MSPaddingBottom",
 	  "OPaddingBottom",
 	  "paddingInlineEnd",
 	  "MozPaddingInlineEnd",
-	  "WebKitPaddingInlineEnd",
+	  "WebkitPaddingInlineEnd",
 	  "MSPaddingInlineEnd",
 	  "OPaddingInlineEnd",
 	  "paddingInlineStart",
 	  "MozPaddingInlineStart",
-	  "WebKitPaddingInlineStart",
+	  "WebkitPaddingInlineStart",
 	  "MSPaddingInlineStart",
 	  "OPaddingInlineStart",
 	  "paddingLeft",
 	  "MozPaddingLeft",
-	  "WebKitPaddingLeft",
+	  "WebkitPaddingLeft",
 	  "MSPaddingLeft",
 	  "OPaddingLeft",
 	  "paddingRight",
 	  "MozPaddingRight",
-	  "WebKitPaddingRight",
+	  "WebkitPaddingRight",
 	  "MSPaddingRight",
 	  "OPaddingRight",
 	  "paddingTop",
 	  "MozPaddingTop",
-	  "WebKitPaddingTop",
+	  "WebkitPaddingTop",
 	  "MSPaddingTop",
 	  "OPaddingTop",
 	  "pageBreakAfter",
 	  "MozPageBreakAfter",
-	  "WebKitPageBreakAfter",
+	  "WebkitPageBreakAfter",
 	  "MSPageBreakAfter",
 	  "OPageBreakAfter",
 	  "pageBreakBefore",
 	  "MozPageBreakBefore",
-	  "WebKitPageBreakBefore",
+	  "WebkitPageBreakBefore",
 	  "MSPageBreakBefore",
 	  "OPageBreakBefore",
 	  "pageBreakInside",
 	  "MozPageBreakInside",
-	  "WebKitPageBreakInside",
+	  "WebkitPageBreakInside",
 	  "MSPageBreakInside",
 	  "OPageBreakInside",
 	  "pc",
 	  "MozPc",
-	  "WebKitPc",
+	  "WebkitPc",
 	  "MSPc",
 	  "OPc",
 	  "perspective",
 	  "MozPerspective",
-	  "WebKitPerspective",
+	  "WebkitPerspective",
 	  "MSPerspective",
 	  "OPerspective",
 	  "perspectiveOrigin",
 	  "MozPerspectiveOrigin",
-	  "WebKitPerspectiveOrigin",
+	  "WebkitPerspectiveOrigin",
 	  "MSPerspectiveOrigin",
 	  "OPerspectiveOrigin",
 	  "pointerEvents",
 	  "MozPointerEvents",
-	  "WebKitPointerEvents",
+	  "WebkitPointerEvents",
 	  "MSPointerEvents",
 	  "OPointerEvents",
 	  "position",
 	  "MozPosition",
-	  "WebKitPosition",
+	  "WebkitPosition",
 	  "MSPosition",
 	  "OPosition",
 	  "pt",
 	  "MozPt",
-	  "WebKitPt",
+	  "WebkitPt",
 	  "MSPt",
 	  "OPt",
 	  "px",
 	  "MozPx",
-	  "WebKitPx",
+	  "WebkitPx",
 	  "MSPx",
 	  "OPx",
 	  "q",
 	  "MozQ",
-	  "WebKitQ",
+	  "WebkitQ",
 	  "MSQ",
 	  "OQ",
 	  "quotes",
 	  "MozQuotes",
-	  "WebKitQuotes",
+	  "WebkitQuotes",
 	  "MSQuotes",
 	  "OQuotes",
 	  "rad",
 	  "MozRad",
-	  "WebKitRad",
+	  "WebkitRad",
 	  "MSRad",
 	  "ORad",
 	  "rem",
 	  "MozRem",
-	  "WebKitRem",
+	  "WebkitRem",
 	  "MSRem",
 	  "ORem",
 	  "resize",
 	  "MozResize",
-	  "WebKitResize",
+	  "WebkitResize",
 	  "MSResize",
 	  "OResize",
 	  "revert",
 	  "MozRevert",
-	  "WebKitRevert",
+	  "WebkitRevert",
 	  "MSRevert",
 	  "ORevert",
 	  "right",
 	  "MozRight",
-	  "WebKitRight",
+	  "WebkitRight",
 	  "MSRight",
 	  "ORight",
 	  "rubyAlign",
 	  "MozRubyAlign",
-	  "WebKitRubyAlign",
+	  "WebkitRubyAlign",
 	  "MSRubyAlign",
 	  "ORubyAlign",
 	  "rubyMerge",
 	  "MozRubyMerge",
-	  "WebKitRubyMerge",
+	  "WebkitRubyMerge",
 	  "MSRubyMerge",
 	  "ORubyMerge",
 	  "rubyPosition",
 	  "MozRubyPosition",
-	  "WebKitRubyPosition",
+	  "WebkitRubyPosition",
 	  "MSRubyPosition",
 	  "ORubyPosition",
 	  "s",
 	  "MozS",
-	  "WebKitS",
+	  "WebkitS",
 	  "MSS",
 	  "OS",
 	  "scrollBehavior",
 	  "MozScrollBehavior",
-	  "WebKitScrollBehavior",
+	  "WebkitScrollBehavior",
 	  "MSScrollBehavior",
 	  "OScrollBehavior",
 	  "scrollSnapCoordinate",
 	  "MozScrollSnapCoordinate",
-	  "WebKitScrollSnapCoordinate",
+	  "WebkitScrollSnapCoordinate",
 	  "MSScrollSnapCoordinate",
 	  "OScrollSnapCoordinate",
 	  "scrollSnapDestination",
 	  "MozScrollSnapDestination",
-	  "WebKitScrollSnapDestination",
+	  "WebkitScrollSnapDestination",
 	  "MSScrollSnapDestination",
 	  "OScrollSnapDestination",
 	  "scrollSnapType",
 	  "MozScrollSnapType",
-	  "WebKitScrollSnapType",
+	  "WebkitScrollSnapType",
 	  "MSScrollSnapType",
 	  "OScrollSnapType",
 	  "shapeImageThreshold",
 	  "MozShapeImageThreshold",
-	  "WebKitShapeImageThreshold",
+	  "WebkitShapeImageThreshold",
 	  "MSShapeImageThreshold",
 	  "OShapeImageThreshold",
 	  "shapeMargin",
 	  "MozShapeMargin",
-	  "WebKitShapeMargin",
+	  "WebkitShapeMargin",
 	  "MSShapeMargin",
 	  "OShapeMargin",
 	  "shapeOutside",
 	  "MozShapeOutside",
-	  "WebKitShapeOutside",
+	  "WebkitShapeOutside",
 	  "MSShapeOutside",
 	  "OShapeOutside",
 	  "tabSize",
 	  "MozTabSize",
-	  "WebKitTabSize",
+	  "WebkitTabSize",
 	  "MSTabSize",
 	  "OTabSize",
 	  "tableLayout",
 	  "MozTableLayout",
-	  "WebKitTableLayout",
+	  "WebkitTableLayout",
 	  "MSTableLayout",
 	  "OTableLayout",
 	  "textAlign",
 	  "MozTextAlign",
-	  "WebKitTextAlign",
+	  "WebkitTextAlign",
 	  "MSTextAlign",
 	  "OTextAlign",
 	  "textAlignLast",
 	  "MozTextAlignLast",
-	  "WebKitTextAlignLast",
+	  "WebkitTextAlignLast",
 	  "MSTextAlignLast",
 	  "OTextAlignLast",
 	  "textCombineUpright",
 	  "MozTextCombineUpright",
-	  "WebKitTextCombineUpright",
+	  "WebkitTextCombineUpright",
 	  "MSTextCombineUpright",
 	  "OTextCombineUpright",
 	  "textDecoration",
 	  "MozTextDecoration",
-	  "WebKitTextDecoration",
+	  "WebkitTextDecoration",
 	  "MSTextDecoration",
 	  "OTextDecoration",
 	  "textDecorationColor",
 	  "MozTextDecorationColor",
-	  "WebKitTextDecorationColor",
+	  "WebkitTextDecorationColor",
 	  "MSTextDecorationColor",
 	  "OTextDecorationColor",
 	  "textDecorationLine",
 	  "MozTextDecorationLine",
-	  "WebKitTextDecorationLine",
+	  "WebkitTextDecorationLine",
 	  "MSTextDecorationLine",
 	  "OTextDecorationLine",
 	  "textDecorationStyle",
 	  "MozTextDecorationStyle",
-	  "WebKitTextDecorationStyle",
+	  "WebkitTextDecorationStyle",
 	  "MSTextDecorationStyle",
 	  "OTextDecorationStyle",
 	  "textEmphasis",
 	  "MozTextEmphasis",
-	  "WebKitTextEmphasis",
+	  "WebkitTextEmphasis",
 	  "MSTextEmphasis",
 	  "OTextEmphasis",
 	  "textEmphasisColor",
 	  "MozTextEmphasisColor",
-	  "WebKitTextEmphasisColor",
+	  "WebkitTextEmphasisColor",
 	  "MSTextEmphasisColor",
 	  "OTextEmphasisColor",
 	  "textEmphasisPosition",
 	  "MozTextEmphasisPosition",
-	  "WebKitTextEmphasisPosition",
+	  "WebkitTextEmphasisPosition",
 	  "MSTextEmphasisPosition",
 	  "OTextEmphasisPosition",
 	  "textEmphasisStyle",
 	  "MozTextEmphasisStyle",
-	  "WebKitTextEmphasisStyle",
+	  "WebkitTextEmphasisStyle",
 	  "MSTextEmphasisStyle",
 	  "OTextEmphasisStyle",
 	  "textIndent",
 	  "MozTextIndent",
-	  "WebKitTextIndent",
+	  "WebkitTextIndent",
 	  "MSTextIndent",
 	  "OTextIndent",
 	  "textOrientation",
 	  "MozTextOrientation",
-	  "WebKitTextOrientation",
+	  "WebkitTextOrientation",
 	  "MSTextOrientation",
 	  "OTextOrientation",
 	  "textOverflow",
 	  "MozTextOverflow",
-	  "WebKitTextOverflow",
+	  "WebkitTextOverflow",
 	  "MSTextOverflow",
 	  "OTextOverflow",
 	  "textRendering",
 	  "MozTextRendering",
-	  "WebKitTextRendering",
+	  "WebkitTextRendering",
 	  "MSTextRendering",
 	  "OTextRendering",
 	  "textShadow",
 	  "MozTextShadow",
-	  "WebKitTextShadow",
+	  "WebkitTextShadow",
 	  "MSTextShadow",
 	  "OTextShadow",
 	  "textTransform",
 	  "MozTextTransform",
-	  "WebKitTextTransform",
+	  "WebkitTextTransform",
 	  "MSTextTransform",
 	  "OTextTransform",
 	  "textUnderlinePosition",
 	  "MozTextUnderlinePosition",
-	  "WebKitTextUnderlinePosition",
+	  "WebkitTextUnderlinePosition",
 	  "MSTextUnderlinePosition",
 	  "OTextUnderlinePosition",
 	  "top",
 	  "MozTop",
-	  "WebKitTop",
+	  "WebkitTop",
 	  "MSTop",
 	  "OTop",
 	  "touchAction",
 	  "MozTouchAction",
-	  "WebKitTouchAction",
+	  "WebkitTouchAction",
 	  "MSTouchAction",
 	  "OTouchAction",
 	  "transform",
 	  "MozTransform",
-	  "WebKitTransform",
-	  "MSTransform",
+	  "WebkitTransform",
+	  "msTransform",
 	  "OTransform",
 	  "transformBox",
 	  "MozTransformBox",
-	  "WebKitTransformBox",
+	  "WebkitTransformBox",
 	  "MSTransformBox",
 	  "OTransformBox",
 	  "transformOrigin",
 	  "MozTransformOrigin",
-	  "WebKitTransformOrigin",
+	  "WebkitTransformOrigin",
 	  "MSTransformOrigin",
 	  "OTransformOrigin",
 	  "transformStyle",
 	  "MozTransformStyle",
-	  "WebKitTransformStyle",
+	  "WebkitTransformStyle",
 	  "MSTransformStyle",
 	  "OTransformStyle",
 	  "transition",
 	  "MozTransition",
-	  "WebKitTransition",
+	  "WebkitTransition",
 	  "MSTransition",
 	  "OTransition",
 	  "transitionDelay",
 	  "MozTransitionDelay",
-	  "WebKitTransitionDelay",
+	  "WebkitTransitionDelay",
 	  "MSTransitionDelay",
 	  "OTransitionDelay",
 	  "transitionDuration",
 	  "MozTransitionDuration",
-	  "WebKitTransitionDuration",
+	  "WebkitTransitionDuration",
 	  "MSTransitionDuration",
 	  "OTransitionDuration",
 	  "transitionProperty",
 	  "MozTransitionProperty",
-	  "WebKitTransitionProperty",
+	  "WebkitTransitionProperty",
 	  "MSTransitionProperty",
 	  "OTransitionProperty",
 	  "transitionTimingFunction",
 	  "MozTransitionTimingFunction",
-	  "WebKitTransitionTimingFunction",
+	  "WebkitTransitionTimingFunction",
 	  "MSTransitionTimingFunction",
 	  "OTransitionTimingFunction",
 	  "turn",
 	  "MozTurn",
-	  "WebKitTurn",
+	  "WebkitTurn",
 	  "MSTurn",
 	  "OTurn",
 	  "unicodeBidi",
 	  "MozUnicodeBidi",
-	  "WebKitUnicodeBidi",
+	  "WebkitUnicodeBidi",
 	  "MSUnicodeBidi",
 	  "OUnicodeBidi",
 	  "unset",
 	  "MozUnset",
-	  "WebKitUnset",
+	  "WebkitUnset",
 	  "MSUnset",
 	  "OUnset",
 	  "verticalAlign",
 	  "MozVerticalAlign",
-	  "WebKitVerticalAlign",
+	  "WebkitVerticalAlign",
 	  "MSVerticalAlign",
 	  "OVerticalAlign",
 	  "vh",
 	  "MozVh",
-	  "WebKitVh",
+	  "WebkitVh",
 	  "MSVh",
 	  "OVh",
 	  "visibility",
 	  "MozVisibility",
-	  "WebKitVisibility",
+	  "WebkitVisibility",
 	  "MSVisibility",
 	  "OVisibility",
 	  "vmax",
 	  "MozVmax",
-	  "WebKitVmax",
+	  "WebkitVmax",
 	  "MSVmax",
 	  "OVmax",
 	  "vmin",
 	  "MozVmin",
-	  "WebKitVmin",
+	  "WebkitVmin",
 	  "MSVmin",
 	  "OVmin",
 	  "vw",
 	  "MozVw",
-	  "WebKitVw",
+	  "WebkitVw",
 	  "MSVw",
 	  "OVw",
 	  "whiteSpace",
 	  "MozWhiteSpace",
-	  "WebKitWhiteSpace",
+	  "WebkitWhiteSpace",
 	  "MSWhiteSpace",
 	  "OWhiteSpace",
 	  "widows",
 	  "MozWidows",
-	  "WebKitWidows",
+	  "WebkitWidows",
 	  "MSWidows",
 	  "OWidows",
 	  "width",
 	  "MozWidth",
-	  "WebKitWidth",
+	  "WebkitWidth",
 	  "MSWidth",
 	  "OWidth",
 	  "willChange",
 	  "MozWillChange",
-	  "WebKitWillChange",
+	  "WebkitWillChange",
 	  "MSWillChange",
 	  "OWillChange",
 	  "wordBreak",
 	  "MozWordBreak",
-	  "WebKitWordBreak",
+	  "WebkitWordBreak",
 	  "MSWordBreak",
 	  "OWordBreak",
 	  "wordSpacing",
 	  "MozWordSpacing",
-	  "WebKitWordSpacing",
+	  "WebkitWordSpacing",
 	  "MSWordSpacing",
 	  "OWordSpacing",
 	  "wordWrap",
 	  "MozWordWrap",
-	  "WebKitWordWrap",
+	  "WebkitWordWrap",
 	  "MSWordWrap",
 	  "OWordWrap",
 	  "writingMode",
 	  "MozWritingMode",
-	  "WebKitWritingMode",
+	  "WebkitWritingMode",
 	  "MSWritingMode",
 	  "OWritingMode",
 	  "zIndex",
 	  "MozZIndex",
-	  "WebKitZIndex",
+	  "WebkitZIndex",
 	  "MSZIndex",
 	  "OZIndex",
 	  "fontSize",
 	  "MozFontSize",
-	  "WebKitFontSize",
+	  "WebkitFontSize",
 	  "MSFontSize",
-	  "OFontSize"
+	  "OFontSize",
+	  "flex",
+	  "MozFlex",
+	  "WebkitFlex",
+	  "MSFlex",
+	  "OFlex",
+	  "fr",
+	  "MozFr",
+	  "WebkitFr",
+	  "MSFr",
+	  "OFr"
 	]
 
 
 /***/ },
-/* 220 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25917,7 +26004,7 @@
 	
 	var _inlineStylePrefixer2 = _interopRequireDefault(_inlineStylePrefixer);
 	
-	var _reactStyleProptype = __webpack_require__(218);
+	var _reactStyleProptype = __webpack_require__(222);
 	
 	var _reactStyleProptype2 = _interopRequireDefault(_reactStyleProptype);
 	
@@ -25999,7 +26086,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 221 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26018,7 +26105,7 @@
 	
 	var _inlineStylePrefixer2 = _interopRequireDefault(_inlineStylePrefixer);
 	
-	var _reactStyleProptype = __webpack_require__(218);
+	var _reactStyleProptype = __webpack_require__(222);
 	
 	var _reactStyleProptype2 = _interopRequireDefault(_reactStyleProptype);
 	
@@ -26093,7 +26180,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 222 */
+/* 226 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -26133,7 +26220,7 @@
 	}
 
 /***/ },
-/* 223 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26148,15 +26235,15 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _TreeView = __webpack_require__(224);
+	var _TreeView = __webpack_require__(228);
 	
-	var _api = __webpack_require__(235);
+	var _api = __webpack_require__(239);
 	
 	var Api = _interopRequireWildcard(_api);
 	
-	var _reactContextmenu = __webpack_require__(226);
+	var _reactContextmenu = __webpack_require__(230);
 	
-	var _SmallToolBar = __webpack_require__(236);
+	var _SmallToolBar = __webpack_require__(240);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -26205,7 +26292,6 @@
 	        value: function clickItem(id, label) {
 	            var currTime = new Date().getTime();
 	            if (currTime - this.state.lastClick < 500 && this.state.selected == id) {
-	                //double click
 	                this.props.onOpen(id, "file", label);
 	            }
 	            this.setState({ lastClick: currTime, selected: id });
@@ -26219,13 +26305,15 @@
 	                alert("No item selected");
 	                return;
 	            }
-	            var docid = this.state.selected;
-	            this.setState({ working: true, deleting: docid });
-	            Api.deleteDocument(docid).then(function (x) {
-	                _this4.updateData().then(function (y) {
-	                    _this4.props.onDelete(docid, "file");
+	            if (confirm("Do you really want to delete this page? (This cannot be undone).")) {
+	                var docid = this.state.selected;
+	                this.setState({ working: true, deleting: docid });
+	                Api.deleteDocument(docid).then(function (x) {
+	                    _this4.updateData().then(function (y) {
+	                        _this4.props.onDelete(docid, "file");
+	                    });
 	                });
-	            });
+	            }
 	        }
 	    }, {
 	        key: 'renameItem',
@@ -26274,7 +26362,7 @@
 	
 	            return _react2.default.createElement(
 	                _reactContextmenu.ContextMenu,
-	                { id: String(id) },
+	                { id: String(id) + label },
 	                _react2.default.createElement(
 	                    _reactContextmenu.SubMenu,
 	                    { hoverDelay: 0, title: 'Add Page' },
@@ -26451,7 +26539,7 @@
 	exports.default = PagesPanel;
 
 /***/ },
-/* 224 */
+/* 228 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26467,11 +26555,17 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Icon = __webpack_require__(225);
+	var _Icon = __webpack_require__(229);
 	
 	var _Icon2 = _interopRequireDefault(_Icon);
 	
-	var _reactContextmenu = __webpack_require__(226);
+	var _reactContextmenu = __webpack_require__(230);
+	
+	var _api = __webpack_require__(239);
+	
+	var Api = _interopRequireWildcard(_api);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -26574,6 +26668,7 @@
 	    _createClass(TreeViewItem, [{
 	        key: 'collapse',
 	        value: function collapse() {
+	            Api.collapseDocument(this.props.id, !this.state.collapsed);
 	            this.setState({ collapsed: !this.state.collapsed });
 	        }
 	    }, {
@@ -26639,7 +26734,7 @@
 	                { className: this.props.deleted ? "deleted" : "" },
 	                _react2.default.createElement(
 	                    _reactContextmenu.ContextMenuTrigger,
-	                    { holdToDisplay: -1, id: String(this.props.id) },
+	                    { holdToDisplay: -1, id: String(this.props.id) + this.props.label },
 	                    _react2.default.createElement(
 	                        TreeViewItemLabel,
 	                        {
@@ -26692,7 +26787,7 @@
 	}(_react2.default.Component);
 
 /***/ },
-/* 225 */
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26734,7 +26829,7 @@
 	}
 
 /***/ },
-/* 226 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26743,7 +26838,7 @@
 	  value: true
 	});
 	
-	var _ContextMenu = __webpack_require__(227);
+	var _ContextMenu = __webpack_require__(231);
 	
 	Object.defineProperty(exports, 'ContextMenu', {
 	  enumerable: true,
@@ -26752,7 +26847,7 @@
 	  }
 	});
 	
-	var _ContextMenuTrigger = __webpack_require__(232);
+	var _ContextMenuTrigger = __webpack_require__(236);
 	
 	Object.defineProperty(exports, 'ContextMenuTrigger', {
 	  enumerable: true,
@@ -26761,7 +26856,7 @@
 	  }
 	});
 	
-	var _MenuItem = __webpack_require__(233);
+	var _MenuItem = __webpack_require__(237);
 	
 	Object.defineProperty(exports, 'MenuItem', {
 	  enumerable: true,
@@ -26770,7 +26865,7 @@
 	  }
 	});
 	
-	var _SubMenu = __webpack_require__(234);
+	var _SubMenu = __webpack_require__(238);
 	
 	Object.defineProperty(exports, 'SubMenu', {
 	  enumerable: true,
@@ -26782,7 +26877,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ },
-/* 227 */
+/* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26797,7 +26892,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _classnames = __webpack_require__(228);
+	var _classnames = __webpack_require__(232);
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
@@ -26805,13 +26900,13 @@
 	
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 	
-	var _globalEventListener = __webpack_require__(229);
+	var _globalEventListener = __webpack_require__(233);
 	
 	var _globalEventListener2 = _interopRequireDefault(_globalEventListener);
 	
-	var _actions = __webpack_require__(230);
+	var _actions = __webpack_require__(234);
 	
-	var _helpers = __webpack_require__(231);
+	var _helpers = __webpack_require__(235);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -27007,7 +27102,7 @@
 	exports.default = ContextMenu;
 
 /***/ },
-/* 228 */
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -27061,7 +27156,7 @@
 
 
 /***/ },
-/* 229 */
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27070,9 +27165,9 @@
 	    value: true
 	});
 	
-	var _actions = __webpack_require__(230);
+	var _actions = __webpack_require__(234);
 	
-	var _helpers = __webpack_require__(231);
+	var _helpers = __webpack_require__(235);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -27121,7 +27216,7 @@
 	exports.default = new GlobalEventListener();
 
 /***/ },
-/* 230 */
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27138,7 +27233,7 @@
 	
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 	
-	var _helpers = __webpack_require__(231);
+	var _helpers = __webpack_require__(235);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -27180,7 +27275,7 @@
 	}
 
 /***/ },
-/* 231 */
+/* 235 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -27223,7 +27318,7 @@
 	var canUseDOM = exports.canUseDOM = Boolean(typeof window !== 'undefined' && window.document && window.document.createElement);
 
 /***/ },
-/* 232 */
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27238,7 +27333,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _classnames = __webpack_require__(228);
+	var _classnames = __webpack_require__(232);
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
@@ -27246,9 +27341,9 @@
 	
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 	
-	var _actions = __webpack_require__(230);
+	var _actions = __webpack_require__(234);
 	
-	var _helpers = __webpack_require__(231);
+	var _helpers = __webpack_require__(235);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -27360,7 +27455,7 @@
 	exports.default = ContextMenuTrigger;
 
 /***/ },
-/* 233 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27377,7 +27472,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _classnames = __webpack_require__(228);
+	var _classnames = __webpack_require__(232);
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
@@ -27385,9 +27480,9 @@
 	
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 	
-	var _actions = __webpack_require__(230);
+	var _actions = __webpack_require__(234);
 	
-	var _helpers = __webpack_require__(231);
+	var _helpers = __webpack_require__(235);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -27466,7 +27561,7 @@
 	exports.default = MenuItem;
 
 /***/ },
-/* 234 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27481,11 +27576,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _classnames = __webpack_require__(228);
+	var _classnames = __webpack_require__(232);
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _helpers = __webpack_require__(231);
+	var _helpers = __webpack_require__(235);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -27698,7 +27793,7 @@
 	exports.default = SubMenu;
 
 /***/ },
-/* 235 */
+/* 239 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -27715,6 +27810,9 @@
 	exports.renameDocument = renameDocument;
 	exports.updateParentDocument = updateParentDocument;
 	exports.SaveEditables = SaveEditables;
+	exports.getAssets = getAssets;
+	exports.addAsset = addAsset;
+	exports.uploadAsset = uploadAsset;
 	function getPageTypes() {
 	    return fetch("/api/v1/pagetypes", { credentials: 'include' }).then(function (r) {
 	        return r.json();
@@ -27819,9 +27917,45 @@
 	        return r.json();
 	    });
 	}
+	
+	function getAssets() {
+	    return fetch("/api/v1/assets", { credentials: 'include' }).then(function (r) {
+	        return r.json();
+	    });
+	}
+	
+	function addAsset(parent_id, name, path, mimetype) {
+	    return fetch("/api/v1/assets", {
+	        method: "POST",
+	        credentials: 'include',
+	        headers: {
+	            'content-type': 'application/json'
+	        },
+	        body: JSON.stringify({
+	            'parent_id': parent_id,
+	            'name': name,
+	            'path': path,
+	            'mimetype': mimetype
+	        })
+	    }).then(function (r) {
+	        return r.json();
+	    });
+	}
+	
+	function uploadAsset(file) {
+	    var data = new FormData();
+	    data.append("asset", file);
+	    return fetch("/api/v1/assets/upload", {
+	        method: "POST",
+	        credentials: 'include',
+	        body: data
+	    }).then(function (r) {
+	        return r.json();
+	    });
+	}
 
 /***/ },
-/* 236 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -27879,7 +28013,7 @@
 	}(_react2.default.Component);
 
 /***/ },
-/* 237 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27895,7 +28029,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Icon = __webpack_require__(225);
+	var _Icon = __webpack_require__(229);
 	
 	var _Icon2 = _interopRequireDefault(_Icon);
 	
@@ -27943,7 +28077,229 @@
 	}
 
 /***/ },
-/* 238 */
+/* 242 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _LargeToolBar = __webpack_require__(243);
+	
+	var _api = __webpack_require__(239);
+	
+	var Api = _interopRequireWildcard(_api);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var TestEditor = function (_React$Component) {
+	    _inherits(TestEditor, _React$Component);
+	
+	    function TestEditor(props) {
+	        _classCallCheck(this, TestEditor);
+	
+	        var _this = _possibleConstructorReturn(this, (TestEditor.__proto__ || Object.getPrototypeOf(TestEditor)).call(this, props));
+	
+	        _this.state = { document: null, iframeloaded: false };
+	        return _this;
+	    }
+	
+	    _createClass(TestEditor, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+	
+	            Api.getDocument(this.props.id).then(function (doc) {
+	                _this2.setState({ document: doc });
+	            });
+	        }
+	    }, {
+	        key: 'publish',
+	        value: function publish() {
+	            console.log("publishing");
+	        }
+	    }, {
+	        key: 'saveItem',
+	        value: function saveItem() {
+	            var _this3 = this;
+	
+	            this.setState({ iframeloaded: false });
+	            var test = this.refs.docpage.contentDocument.getElementsByClassName("editable");
+	            var editables = [];
+	            [].forEach.call(test, function (elem) {
+	                if (elem.nodeName != "INPUT") {
+	                    editables.push({ id: 0, document_id: this.props.id, name: elem.id, value: elem.innerHTML });
+	                } else {
+	                    editables.push({ id: 0, document_id: this.props.id, name: elem.name, value: elem.value });
+	                }
+	            }.bind(this));
+	            Api.SaveEditables(this.props.id, editables).then(function (r) {
+	                console.log("saved !");
+	                setTimeout(function () {
+	                    this.setState({ iframeloaded: true });
+	                }.bind(_this3), 500);
+	            });
+	        }
+	    }, {
+	        key: 'settings',
+	        value: function settings() {
+	            console.log("Open settings");
+	        }
+	    }, {
+	        key: 'preview',
+	        value: function preview() {
+	            console.log("Previewing");
+	        }
+	    }, {
+	        key: 'delete',
+	        value: function _delete() {
+	            console.log("Deleting");
+	        }
+	    }, {
+	        key: 'renderToolbar',
+	        value: function renderToolbar() {
+	            return _react2.default.createElement(
+	                _LargeToolBar.LargeToolBar,
+	                null,
+	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.publish.bind(this), icon: 'life-ring', label: 'Publish' }),
+	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.publish.bind(this), icon: 'chevron-down', label: '' }),
+	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.saveItem.bind(this), icon: 'floppy-o', label: 'Save' }),
+	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.settings.bind(this), icon: 'gears', label: 'Settings' }),
+	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.preview.bind(this), icon: 'eye', label: 'Preview' }),
+	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.delete.bind(this), icon: 'trash', label: '', classes: 'button-right redbtn' })
+	            );
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this4 = this;
+	
+	            console.log(this.state.iframeloaded);
+	            if (this.state.document == null) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    { id: 'wrapper' },
+	                    this.renderToolbar(),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'loading' },
+	                        _react2.default.createElement('img', { src: '/assets/images/rolling.svg' })
+	                    )
+	                );
+	            }
+	            return _react2.default.createElement(
+	                'div',
+	                { id: 'wrapper' },
+	                this.renderToolbar(),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'iframe-wrapper' },
+	                    _react2.default.createElement('iframe', { onLoad: function onLoad() {
+	                            return _this4.setState({ iframeloaded: true });
+	                        }, ref: 'docpage', src: this.state.document.path + "?editmode=editing" })
+	                ),
+	                this.state.iframeloaded ? null : _react2.default.createElement(
+	                    'div',
+	                    { className: 'loadingiframe' },
+	                    ' ',
+	                    _react2.default.createElement('img', { src: '/assets/images/rolling.svg' }),
+	                    ' '
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return TestEditor;
+	}(_react2.default.Component);
+	
+	exports.default = TestEditor;
+
+/***/ },
+/* 243 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.LargeToolBar = undefined;
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	exports.ToolbarItemLarge = ToolbarItemLarge;
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var LargeToolBar = exports.LargeToolBar = function (_React$Component) {
+	    _inherits(LargeToolBar, _React$Component);
+	
+	    function LargeToolBar(props) {
+	        _classCallCheck(this, LargeToolBar);
+	
+	        return _possibleConstructorReturn(this, (LargeToolBar.__proto__ || Object.getPrototypeOf(LargeToolBar)).call(this, props));
+	    }
+	
+	    _createClass(LargeToolBar, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(
+	                "div",
+	                { className: "content-toolbar" },
+	                _react2.default.createElement(
+	                    "ul",
+	                    { className: "large-toolbar" },
+	                    this.props.children
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return LargeToolBar;
+	}(_react2.default.Component);
+	
+	function ToolbarItemLarge(props) {
+	    return _react2.default.createElement(
+	        "li",
+	        { className: props.classes ? props.classes : "" },
+	        _react2.default.createElement(
+	            "a",
+	            { onClick: props.clicked, href: "#" },
+	            _react2.default.createElement("i", { className: "fa fa-" + props.icon, "aria-hidden": "true" }),
+	            " ",
+	            props.label
+	        )
+	    );
+	}
+
+/***/ },
+/* 244 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -27981,32 +28337,15 @@
 	}
 
 /***/ },
-/* 239 */,
-/* 240 */
-/***/ function(module, exports) {
-
-	module.exports = function(module) {
-		if(!module.webpackPolyfill) {
-			module.deprecate = function() {};
-			module.paths = [];
-			// module.parent = undefined by default
-			module.children = [];
-			module.webpackPolyfill = 1;
-		}
-		return module;
-	}
-
-
-/***/ },
-/* 241 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var _ = __webpack_require__(242).runInContext();
-	module.exports = __webpack_require__(243)(_, _);
+	var _ = __webpack_require__(246).runInContext();
+	module.exports = __webpack_require__(248)(_, _);
 
 
 /***/ },
-/* 242 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {/**
@@ -28145,14 +28484,30 @@
 	o=u?f:o-1,f=this.__iteratees__,c=f.length,a=0,l=Mi(n,this.__takeCount__),!e||!u&&i==n&&l==n)return kr(t,this.__actions__);e=[];n:for(;n--&&a<l;){for(o+=r,u=-1,i=t[o];++u<c;){var h=f[u],s=h.type,h=(0,h.iteratee)(i);if(2==s)i=h;else if(!h){if(1==s)continue n;break n}}e[a++]=i}return e},On.prototype.at=Fo,On.prototype.chain=function(){return Xe(this)},On.prototype.commit=function(){return new zn(this.value(),this.__chain__)},On.prototype.next=function(){this.__values__===F&&(this.__values__=ku(this.value()));
 	var n=this.__index__>=this.__values__.length;return{done:n,value:n?F:this.__values__[this.__index__++]}},On.prototype.plant=function(n){for(var t,r=this;r instanceof Sn;){var e=Pe(r);e.__index__=0,e.__values__=F,t?u.__wrapped__=e:t=e;var u=e,r=r.__wrapped__}return u.__wrapped__=n,t},On.prototype.reverse=function(){var n=this.__wrapped__;return n instanceof Mn?(this.__actions__.length&&(n=new Mn(this)),n=n.reverse(),n.__actions__.push({func:nu,args:[Je],thisArg:F}),new zn(n,this.__chain__)):this.thru(Je);
 	},On.prototype.toJSON=On.prototype.valueOf=On.prototype.value=function(){return kr(this.__wrapped__,this.__actions__)},On.prototype.first=On.prototype.head,Ai&&(On.prototype[Ai]=tu),On}(); true?(Zn._=it, !(__WEBPACK_AMD_DEFINE_RESULT__ = function(){return it}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__))):Vn?((Vn.exports=it)._=it,qn._=it):Zn._=it}).call(this);
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(240)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(247)(module)))
 
 /***/ },
-/* 243 */
+/* 247 */
+/***/ function(module, exports) {
+
+	module.exports = function(module) {
+		if(!module.webpackPolyfill) {
+			module.deprecate = function() {};
+			module.paths = [];
+			// module.parent = undefined by default
+			module.children = [];
+			module.webpackPolyfill = 1;
+		}
+		return module;
+	}
+
+
+/***/ },
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var mapping = __webpack_require__(244),
-	    fallbackHolder = __webpack_require__(245);
+	var mapping = __webpack_require__(249),
+	    fallbackHolder = __webpack_require__(250);
 	
 	/** Built-in value reference. */
 	var push = Array.prototype.push;
@@ -28722,7 +29077,7 @@
 
 
 /***/ },
-/* 244 */
+/* 249 */
 /***/ function(module, exports) {
 
 	/** Used to map aliases to their real names. */
@@ -29096,7 +29451,7 @@
 
 
 /***/ },
-/* 245 */
+/* 250 */
 /***/ function(module, exports) {
 
 	/**
@@ -29108,7 +29463,7 @@
 
 
 /***/ },
-/* 246 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29123,9 +29478,291 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _LargeToolBar = __webpack_require__(247);
+	var _TreeView = __webpack_require__(228);
 	
-	var _api = __webpack_require__(235);
+	var _api = __webpack_require__(239);
+	
+	var Api = _interopRequireWildcard(_api);
+	
+	var _reactContextmenu = __webpack_require__(230);
+	
+	var _SmallToolBar = __webpack_require__(240);
+	
+	var _UploadDialog = __webpack_require__(252);
+	
+	var _UploadDialog2 = _interopRequireDefault(_UploadDialog);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var AssetsPanel = function (_React$Component) {
+	    _inherits(AssetsPanel, _React$Component);
+	
+	    function AssetsPanel(props, context) {
+	        _classCallCheck(this, AssetsPanel);
+	
+	        var _this = _possibleConstructorReturn(this, (AssetsPanel.__proto__ || Object.getPrototypeOf(AssetsPanel)).call(this, props, context));
+	
+	        _this.state = { showUpload: false, lastClick: 0, working: false, deleting: -1, adding: -1, newtype: "", renaming: -1, assets: [], selected: -1 };
+	        return _this;
+	    }
+	
+	    _createClass(AssetsPanel, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+	
+	            Api.getAssets().then(function (assets) {
+	                _this2.setState({ assets: assets });
+	            });
+	        }
+	    }, {
+	        key: 'updateData',
+	        value: function updateData() {
+	            var _this3 = this;
+	
+	            return Api.getAssets().then(function (assets) {
+	                _this3.setState({ assets: assets, deleting: -1, adding: -1, renaming: -1, working: false });
+	            });
+	        }
+	    }, {
+	        key: 'clickItem',
+	        value: function clickItem(id, label) {
+	            var currTime = new Date().getTime();
+	            if (currTime - this.state.lastClick < 500 && this.state.selected == id) {
+	                this.props.onOpen(id, "asset", label);
+	            }
+	            this.setState({ lastClick: currTime, selected: id });
+	        }
+	    }, {
+	        key: 'deleteItem',
+	        value: function deleteItem() {
+	            if (this.state.selected == -1) {
+	                alert("No item selected");
+	                return;
+	            }
+	            var assetid = this.state.selected;
+	            this.setState({ working: true, deleting: assetid });
+	            /*Api.deleteDocument(assetid).then(x => {
+	                this.updateData().then(y => {
+	                    this.props.onDelete(docid, "asset");
+	                })
+	            });*/
+	        }
+	    }, {
+	        key: 'renameItem',
+	        value: function renameItem(name) {
+	            var docid = this.state.selected;
+	            this.setState({ working: true });
+	            /*Api.renameDocument(docid, name).then(x => {
+	                this.updateData().then(x => this.props.onRename(docid, "asset", name) );
+	            })*/
+	        }
+	    }, {
+	        key: 'addItem',
+	        value: function addItem(name, parent_id) {
+	            this.setState({ working: true });
+	            /*Api.addDocument(parent_id, name, this.state.newtype).then(x => {
+	                this.updateData().then(y => {
+	                    this.setState({selected: x.id});
+	                });
+	            })*/
+	        }
+	    }, {
+	        key: 'onBlur',
+	        value: function onBlur() {
+	            this.setState({ renaming: -1, adding: -1 });
+	        }
+	    }, {
+	        key: 'parentChanged',
+	        value: function parentChanged(id, parent_id) {
+	            this.setState({ working: true });
+	            //Api.updateParentDocument(id, parent_id).then(x => this.updateData());
+	        }
+	    }, {
+	        key: 'contextMenu',
+	        value: function contextMenu(id, label) {
+	            var _this4 = this;
+	
+	            return _react2.default.createElement(
+	                _reactContextmenu.ContextMenu,
+	                { id: String(id) + label },
+	                _react2.default.createElement(
+	                    _reactContextmenu.MenuItem,
+	                    { onClick: function onClick() {
+	                            return _this4.setState({ showUpload: true });
+	                        }, data: { item: 'open' } },
+	                    'Upload file'
+	                ),
+	                _react2.default.createElement(
+	                    _reactContextmenu.MenuItem,
+	                    { onClick: function onClick() {
+	                            return _this4.props.onOpen(id, "asset", label);
+	                        }, data: { item: 'open' } },
+	                    'Open'
+	                ),
+	                _react2.default.createElement(
+	                    _reactContextmenu.MenuItem,
+	                    { onClick: function onClick() {
+	                            return _this4.setState({ renaming: id });
+	                        }, data: { item: 'rename' } },
+	                    'Rename'
+	                ),
+	                _react2.default.createElement(
+	                    _reactContextmenu.MenuItem,
+	                    { onClick: function onClick() {
+	                            return _this4.props.callback(_this4.props, "dblclick");
+	                        }, data: { item: 'open' } },
+	                    'Dublicate'
+	                ),
+	                _react2.default.createElement(
+	                    _reactContextmenu.MenuItem,
+	                    { onClick: this.deleteItem.bind(this), data: { item: 'delete' } },
+	                    'Delete'
+	                ),
+	                _react2.default.createElement(
+	                    _reactContextmenu.MenuItem,
+	                    { onClick: function onClick() {
+	                            return _this4.props.callback(_this4.props, "dblclick");
+	                        }, data: { item: 'open' } },
+	                    'Properties'
+	                )
+	            );
+	        }
+	    }, {
+	        key: 'renderTreeView',
+	        value: function renderTreeView(items) {
+	            var _this5 = this;
+	
+	            if (items.length <= 0) return null;
+	            return _react2.default.createElement(
+	                _TreeView.TreeView,
+	                null,
+	                items.map(function (x) {
+	                    return _react2.default.createElement(
+	                        _TreeView.TreeViewItem,
+	                        {
+	                            id: x.id,
+	                            type: x.mimetype,
+	                            deleted: _this5.state.deleting == x.id,
+	                            renaming: _this5.state.renaming == x.id,
+	                            adding: _this5.state.adding == x.id,
+	                            onBlur: _this5.onBlur.bind(_this5),
+	                            onClick: function onClick() {
+	                                return _this5.clickItem(x.id, x.label);
+	                            },
+	                            onRename: _this5.renameItem.bind(_this5),
+	                            onAdd: _this5.addItem.bind(_this5),
+	                            parentChanged: _this5.parentChanged.bind(_this5),
+	                            selected: _this5.state.selected == x.id,
+	                            key: x.id,
+	                            collapsed: x.collapsed,
+	                            contextMenu: _this5.contextMenu.bind(_this5),
+	                            label: x.label },
+	                        _this5.renderTreeView(x.children)
+	                    );
+	                })
+	            );
+	        }
+	    }, {
+	        key: 'uploaded',
+	        value: function uploaded(uploading) {
+	            var _this6 = this;
+	
+	            this.setState({ showUpload: false, working: true });
+	            uploading.then(function (x) {
+	                Api.addAsset(_this6.state.selected, x.name, x.path, 'picture').then(function (x) {
+	                    _this6.updateData();
+	                });
+	            });
+	        }
+	    }, {
+	        key: 'renderToolbar',
+	        value: function renderToolbar() {
+	            var _this7 = this;
+	
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'toolbar' },
+	                _react2.default.createElement(
+	                    _SmallToolBar.SmallToolBar,
+	                    null,
+	                    _react2.default.createElement(_SmallToolBar.SmallToolBarItem, { icon: 'plus', onClick: function onClick() {
+	                            return console.log("not implemented yet");
+	                        } }),
+	                    _react2.default.createElement(_SmallToolBar.SmallToolBarItem, { icon: 'trash', onClick: this.deleteItem.bind(this) }),
+	                    _react2.default.createElement(_SmallToolBar.SmallToolBarItem, { alignright: true, icon: 'refresh', onClick: function onClick() {
+	                            _this7.setState({ working: true });
+	                            _this7.updateData();
+	                        } })
+	                )
+	            );
+	        }
+	    }, {
+	        key: 'renderLoading',
+	        value: function renderLoading() {
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'loading' },
+	                _react2.default.createElement('img', { src: '/assets/images/rolling.svg', alt: '' }),
+	                ' '
+	            );
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            if (this.state.assets.length <= 0) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    this.renderToolbar(),
+	                    this.renderLoading()
+	                );
+	            }
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                this.renderToolbar(),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: this.state.working ? "working treeviewcontainer" : "treeviewcontainer" },
+	                    this.renderTreeView(this.state.assets)
+	                ),
+	                this.state.working ? this.renderLoading() : null,
+	                this.state.showUpload ? _react2.default.createElement(_UploadDialog2.default, { onUploaded: this.uploaded.bind(this) }) : null
+	            );
+	        }
+	    }]);
+	
+	    return AssetsPanel;
+	}(_react2.default.Component);
+	
+	exports.default = AssetsPanel;
+
+/***/ },
+/* 252 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _api = __webpack_require__(239);
 	
 	var Api = _interopRequireWildcard(_api);
 	
@@ -29139,195 +29776,51 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var TestEditor = function (_React$Component) {
-	    _inherits(TestEditor, _React$Component);
+	var UploadDialog = function (_React$Component) {
+	    _inherits(UploadDialog, _React$Component);
 	
-	    function TestEditor(props) {
-	        _classCallCheck(this, TestEditor);
+	    function UploadDialog(props, context) {
+	        _classCallCheck(this, UploadDialog);
 	
-	        var _this = _possibleConstructorReturn(this, (TestEditor.__proto__ || Object.getPrototypeOf(TestEditor)).call(this, props));
-	
-	        _this.state = { document: null, iframeloaded: false };
-	        return _this;
+	        return _possibleConstructorReturn(this, (UploadDialog.__proto__ || Object.getPrototypeOf(UploadDialog)).call(this, props, context));
 	    }
 	
-	    _createClass(TestEditor, [{
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            var _this2 = this;
-	
-	            Api.getDocument(this.props.id).then(function (doc) {
-	                _this2.setState({ document: doc });
-	            });
-	        }
-	    }, {
-	        key: 'publish',
-	        value: function publish() {
-	            console.log("publishing");
-	        }
-	    }, {
-	        key: 'saveItem',
-	        value: function saveItem() {
-	            var _this3 = this;
-	
-	            this.setState({ iframeloaded: false });
-	            var test = this.refs.docpage.contentDocument.getElementsByClassName("editable");
-	            var editables = [];
-	            [].forEach.call(test, function (elem) {
-	                if (elem.nodeName != "INPUT") {
-	                    editables.push({ id: 0, document_id: this.props.id, name: elem.id, value: elem.innerHTML });
-	                } else {
-	                    editables.push({ id: 0, document_id: this.props.id, name: elem.name, value: elem.value });
-	                }
-	            }.bind(this));
-	            Api.SaveEditables(this.props.id, editables).then(function (r) {
-	                console.log("saved !");
-	                setTimeout(function () {
-	                    this.setState({ iframeloaded: true });
-	                }.bind(_this3), 500);
-	            });
-	        }
-	    }, {
-	        key: 'settings',
-	        value: function settings() {
-	            console.log("Open settings");
-	        }
-	    }, {
-	        key: 'preview',
-	        value: function preview() {
-	            console.log("Previewing");
-	        }
-	    }, {
-	        key: 'delete',
-	        value: function _delete() {
-	            console.log("Deleting");
-	        }
-	    }, {
-	        key: 'renderToolbar',
-	        value: function renderToolbar() {
-	            return _react2.default.createElement(
-	                _LargeToolBar.LargeToolBar,
-	                null,
-	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.publish.bind(this), icon: 'life-ring', label: 'Publish' }),
-	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.publish.bind(this), icon: 'chevron-down', label: '' }),
-	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.saveItem.bind(this), icon: 'floppy-o', label: 'Save' }),
-	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.settings.bind(this), icon: 'gears', label: 'Settings' }),
-	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.preview.bind(this), icon: 'eye', label: 'Preview' }),
-	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.delete.bind(this), icon: 'trash', label: '', classes: 'button-right redbtn' })
-	            );
-	        }
-	    }, {
+	    _createClass(UploadDialog, [{
 	        key: 'render',
 	        value: function render() {
-	            var _this4 = this;
+	            var _this2 = this;
 	
-	            console.log(this.state.iframeloaded);
-	            if (this.state.document == null) {
-	                return _react2.default.createElement(
-	                    'div',
-	                    { id: 'wrapper' },
-	                    this.renderToolbar(),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'loading' },
-	                        _react2.default.createElement('img', { src: '/assets/images/rolling.svg' })
-	                    )
-	                );
-	            }
 	            return _react2.default.createElement(
 	                'div',
-	                { id: 'wrapper' },
-	                this.renderToolbar(),
+	                null,
+	                _react2.default.createElement('div', { className: 'overlay' }),
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'iframe-wrapper' },
-	                    _react2.default.createElement('iframe', { onLoad: function onLoad() {
-	                            return _this4.setState({ iframeloaded: true });
-	                        }, ref: 'docpage', src: this.state.document.path + "?editmode=editing" })
-	                ),
-	                this.state.iframeloaded ? null : _react2.default.createElement(
-	                    'div',
-	                    { className: 'loadingiframe' },
-	                    ' ',
-	                    _react2.default.createElement('img', { src: '/assets/images/rolling.svg' }),
-	                    ' '
+	                    { className: 'uploadDialog' },
+	                    _react2.default.createElement(
+	                        'h3',
+	                        null,
+	                        'Upload file'
+	                    ),
+	                    _react2.default.createElement('input', { ref: 'fileselect', type: 'file', id: 'file-select', name: 'asset' }),
+	                    _react2.default.createElement(
+	                        'button',
+	                        { type: 'submit', id: 'upload-button', onClick: function onClick() {
+	                                var file = _this2.refs.fileselect.files[0];
+	                                var uploadPromise = Api.uploadAsset(file);
+	                                _this2.props.onUploaded(uploadPromise);
+	                            } },
+	                        'Upload'
+	                    )
 	                )
 	            );
 	        }
 	    }]);
 	
-	    return TestEditor;
+	    return UploadDialog;
 	}(_react2.default.Component);
 	
-	exports.default = TestEditor;
-
-/***/ },
-/* 247 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.LargeToolBar = undefined;
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	exports.ToolbarItemLarge = ToolbarItemLarge;
-	
-	var _react = __webpack_require__(2);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var LargeToolBar = exports.LargeToolBar = function (_React$Component) {
-	    _inherits(LargeToolBar, _React$Component);
-	
-	    function LargeToolBar(props) {
-	        _classCallCheck(this, LargeToolBar);
-	
-	        return _possibleConstructorReturn(this, (LargeToolBar.__proto__ || Object.getPrototypeOf(LargeToolBar)).call(this, props));
-	    }
-	
-	    _createClass(LargeToolBar, [{
-	        key: "render",
-	        value: function render() {
-	            return _react2.default.createElement(
-	                "div",
-	                { className: "content-toolbar" },
-	                _react2.default.createElement(
-	                    "ul",
-	                    { className: "large-toolbar" },
-	                    this.props.children
-	                )
-	            );
-	        }
-	    }]);
-	
-	    return LargeToolBar;
-	}(_react2.default.Component);
-	
-	function ToolbarItemLarge(props) {
-	    return _react2.default.createElement(
-	        "li",
-	        { className: props.classes ? props.classes : "" },
-	        _react2.default.createElement(
-	            "a",
-	            { onClick: props.clicked, href: "#" },
-	            _react2.default.createElement("i", { className: "fa fa-" + props.icon, "aria-hidden": "true" }),
-	            " ",
-	            props.label
-	        )
-	    );
-	}
+	exports.default = UploadDialog;
 
 /***/ }
 /******/ ]);

@@ -87,3 +87,35 @@ export function SaveEditables(id, editables) {
         }) 
     }).then(r => r.json());
 }
+
+
+
+export function getAssets() {
+    return fetch("/api/v1/assets", {credentials: 'include' }).then(r => r.json())
+}
+
+export function addAsset(parent_id, name, path, mimetype) {
+    return fetch("/api/v1/assets", {
+        method: "POST",
+        credentials: 'include',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            'parent_id': parent_id,
+            'name': name,
+            'path': path,
+            'mimetype': mimetype
+        })
+    }).then(r => r.json());
+}
+
+export function uploadAsset(file) {
+    var data  = new FormData();
+    data.append("asset", file);
+    return fetch("/api/v1/assets/upload", {
+        method: "POST",
+        credentials: 'include',
+        body: data
+}).then(r => r.json())
+}

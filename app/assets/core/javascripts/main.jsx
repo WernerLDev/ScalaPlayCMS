@@ -7,6 +7,7 @@ import {TabPanel, Tab, TabsList, TabContent} from './ui/panels/TabPanel.jsx';
 import PageEditPanel from './ui/panels/PageEditPanel.jsx';
 import * as TabsAction from './actions/TabViewActions.js';
 import _ from 'lodash/fp';
+import AssetsPanel from './ui/panels/AssetsPanel.jsx';
 
 export default class Main extends React.Component {
 
@@ -17,6 +18,8 @@ export default class Main extends React.Component {
     }
 
     switchSection(section) {
+        
+        
         if(this.state.section == section) SplitPaneActions.hideLeftPanel(this.refs.leftpane);
         if(this.state.section == "") SplitPaneActions.showLeftPanel(this.refs.leftpane); 
         this.setState({section: section == this.state.section ? "" : section});
@@ -105,8 +108,11 @@ export default class Main extends React.Component {
                             <div className={this.state.section == "entities" ? "visible" : "hidden"}>
                                 Entities
                             </div>
-                            <div className={this.state.section == "assets" ? "visible" : "hidden"}>
-                                Assets
+                            <div className={this.state.section == "assets" ? "visible tree" : "hidden"}>
+                                <AssetsPanel 
+                                    onOpen={this.openTab.bind(this)}
+                                    onRename={this.renameTab.bind(this)}
+                                    onDelete={(id, type) => this.closeTab(id + type)} />
                             </div>
                             <div className={this.state.section == "settings" ? "visible" : "hidden"}>
                                 Settings
