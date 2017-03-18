@@ -8,7 +8,7 @@ export default class PagesPanel extends React.Component {
 
     constructor(props, context) {
         super(props, context);
-        this.state = { working: false, deleting: -1, adding: -1, newtype: "", renaming: -1, pages: [], pagetypes: [], selected: -1 };
+        this.state = { lastClick: 0, working: false, deleting: -1, adding: -1, newtype: "", renaming: -1, pages: [], pagetypes: [], selected: -1 };
     }
 
     componentDidMount() {
@@ -25,8 +25,13 @@ export default class PagesPanel extends React.Component {
         });
     }
 
-    clickItem(id) {
-        this.setState({ pages: this.state.pages, selected: id })
+    clickItem(id, label) {
+        var currTime = (new Date()).getTime();
+        if(currTime - this.state.lastClick < 500 && this.state.selected == id) {
+            //double click
+            this.props.onOpen(id, "file", label);
+        }
+        this.setState({ lastClick: currTime, selected: id })
     }
 
     deleteItem() {
@@ -96,7 +101,7 @@ export default class PagesPanel extends React.Component {
                         renaming={this.state.renaming == x.id}
                         adding={this.state.adding == x.id}
                         onBlur={this.onBlur.bind(this)}
-                        onClick={() => this.clickItem(x.id)}
+                        onClick={() => this.clickItem(x.id, x.label)}
                         onRename={this.renameItem.bind(this)}
                         onAdd={this.addItem.bind(this)}
                         parentChanged={this.parentChanged.bind(this)}

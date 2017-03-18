@@ -26176,7 +26176,7 @@
 	
 	        var _this = _possibleConstructorReturn(this, (PagesPanel.__proto__ || Object.getPrototypeOf(PagesPanel)).call(this, props, context));
 	
-	        _this.state = { working: false, deleting: -1, adding: -1, newtype: "", renaming: -1, pages: [], pagetypes: [], selected: -1 };
+	        _this.state = { lastClick: 0, working: false, deleting: -1, adding: -1, newtype: "", renaming: -1, pages: [], pagetypes: [], selected: -1 };
 	        return _this;
 	    }
 	
@@ -26202,8 +26202,13 @@
 	        }
 	    }, {
 	        key: 'clickItem',
-	        value: function clickItem(id) {
-	            this.setState({ pages: this.state.pages, selected: id });
+	        value: function clickItem(id, label) {
+	            var currTime = new Date().getTime();
+	            if (currTime - this.state.lastClick < 500 && this.state.selected == id) {
+	                //double click
+	                this.props.onOpen(id, "file", label);
+	            }
+	            this.setState({ lastClick: currTime, selected: id });
 	        }
 	    }, {
 	        key: 'deleteItem',
@@ -26344,7 +26349,7 @@
 	                            adding: _this9.state.adding == x.id,
 	                            onBlur: _this9.onBlur.bind(_this9),
 	                            onClick: function onClick() {
-	                                return _this9.clickItem(x.id);
+	                                return _this9.clickItem(x.id, x.label);
 	                            },
 	                            onRename: _this9.renameItem.bind(_this9),
 	                            onAdd: _this9.addItem.bind(_this9),
