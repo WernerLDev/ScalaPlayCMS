@@ -86,6 +86,14 @@ class AssetsController @Inject()(assets:Assets, WithAuthAction:AuthAction, PageA
         }).getOrElse(Future(BadRequest("Missing parameter [name]")) )
     }
 
+    def updateParent(id:Long) = WithAuthAction.async(parse.json) { request =>
+        ((request.body \ "parent_id").asOpt[Long].map{ parent_id =>
+        assets.updateParent(id, parent_id) map { x =>
+            Ok(Json.toJson(Map("success" -> JsNumber(x))))
+        }
+        }).getOrElse( Future(BadRequest("Error: missing parameter [parent_id]")) )
+    }
+
     def getUpload(filename:String) = PageAction.async { implicit request =>
         val assetdir = conf.getString("elestic.uploadroot").getOrElse("")
         assets.getByName(filename).map(assetOpt => {

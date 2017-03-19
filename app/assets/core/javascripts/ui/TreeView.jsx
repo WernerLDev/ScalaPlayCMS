@@ -128,7 +128,7 @@ export class TreeViewItem extends React.Component {
                     onContextMenu={this.props.onClick}
                     selected={this.props.selected}>
                     {icon} <Icon type={this.props.type} /> {this.renderLabel()}
-                    <div onClick={this.props.onClick} className="treeitemclickarea"></div>
+                    {this.props.renaming ? null : <div onClick={this.props.onClick} className="treeitemclickarea"></div>}
                 </TreeViewItemLabel>
 
                 </ContextMenuTrigger>

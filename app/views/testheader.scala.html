@@ -1,12 +1,14 @@
-@(head:String)
+@import core.utils._
+@import core.views.html.editables._
+@(head:String)(implicit request:PageRequest[AnyContent])
 <div class="jumbotron darkheader" style="background: url(/assets/images/headerpattern_old.png); color: #FFF">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12">
 					<!--<div class="jtoverlay"></div>-->
 					<h2>@head</h2>
-					
-					<p>Here comes some text</p>
+
+                    @inlineeditable("headtext", "p", false)
 				</div>
 			</div>
 		</div>

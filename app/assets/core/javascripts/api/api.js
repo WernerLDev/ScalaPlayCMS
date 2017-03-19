@@ -148,3 +148,16 @@ export function getAsset(id) {
         credentials: "include"
     }).then(r => r.json())
 }
+
+export function updateParentAsset(id, parent_id) {
+    return fetch("/api/v1/assets/" + id + "/updateparent", {
+        method: "PUT",
+        credentials: 'include' ,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "parent_id": parent_id
+        })
+    }).then(r => r.json());
+}

@@ -32,7 +32,7 @@ export default class AssetsPanel extends React.Component {
         this.setState({ lastClick: currTime, selected: id })
     }
 
-    deleteItem() {
+    deleteItem(type) {
         if(this.state.selected == -1) {
             alert("No item selected");
             return;
@@ -40,15 +40,20 @@ export default class AssetsPanel extends React.Component {
         var assetid = this.state.selected;
         this.setState({ working: true, deleting: assetid});
         Api.deleteAsset(assetid).then(x => {
-            this.updateData();
+            this.updateData().then(x => {
+                this.props.onDelete(assetid, type);
+            });
         })
     }
 
     renameItem(name) {
         var assetid = this.state.selected;
+        var type = this.state.newtype;
         this.setState({working: true});
         Api.renameAsset(assetid, name).then(x => {
-            this.updateData();
+            this.updateData().then(x => {
+                this.props.onRename(assetid, type, name);
+            });
         })        
     }
 
@@ -75,7 +80,9 @@ export default class AssetsPanel extends React.Component {
 
     parentChanged(id, parent_id) {
         this.setState({working: true});
-        //Api.updateParentDocument(id, parent_id).then(x => this.updateData());
+        Api.updateParentAsset(id, parent_id).then(x => {
+            this.updateData();
+        })
     }
 
     canCreateFolder(type) {
@@ -88,9 +95,9 @@ export default class AssetsPanel extends React.Component {
                 <MenuItem onClick={() => this.setState({showUpload: true})} data={{item: 'open'}}>Upload file</MenuItem>
                 {this.canCreateFolder(type) ? <MenuItem onClick={() => this.setState({adding: id, newtype: 'folder'})} data={{item: 'open'}}>Create folder</MenuItem> : null}
                 <MenuItem onClick={() => this.props.onOpen(id, type, label)} data={{item: 'open'}}>Open</MenuItem>
-                <MenuItem onClick={() => this.setState({ renaming: id })} data={{item: 'rename'}}>Rename</MenuItem>
+                <MenuItem onClick={() => this.setState({ renaming: id, newtype: type })} data={{item: 'rename'}}>Rename</MenuItem>
                 <MenuItem onClick={() => this.props.callback(this.props, "dblclick")} data={{item: 'open'}}>Dublicate</MenuItem>
-                <MenuItem onClick={this.deleteItem.bind(this)} data={{item: 'delete'}}>Delete</MenuItem>
+                <MenuItem onClick={() => this.deleteItem(type)} data={{item: 'delete'}}>Delete</MenuItem>
                 <MenuItem onClick={() => this.props.callback(this.props, "dblclick")} data={{item: 'open'}}>Properties</MenuItem>
             </ContextMenu>
         )

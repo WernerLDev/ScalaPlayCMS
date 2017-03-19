@@ -28,8 +28,6 @@ class HomeController @Inject()(PageAction:PageAction, editables:Editables) exten
   }
 
   def test(p:Document) = PageAction { implicit request =>
-    //println(request.editmode)
-    //println(request.user)
     Ok(views.html.test(p))
   }
 

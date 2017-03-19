@@ -26752,7 +26752,7 @@
 	                        _react2.default.createElement(_Icon2.default, { type: this.props.type }),
 	                        ' ',
 	                        this.renderLabel(),
-	                        _react2.default.createElement('div', { onClick: this.props.onClick, className: 'treeitemclickarea' })
+	                        this.props.renaming ? null : _react2.default.createElement('div', { onClick: this.props.onClick, className: 'treeitemclickarea' })
 	                    )
 	                ),
 	                this.props.adding ? this.renderNewForm() : null,
@@ -27822,6 +27822,7 @@
 	exports.deleteAsset = deleteAsset;
 	exports.renameAsset = renameAsset;
 	exports.getAsset = getAsset;
+	exports.updateParentAsset = updateParentAsset;
 	function getPageTypes() {
 	    return fetch("/api/v1/pagetypes", { credentials: 'include' }).then(function (r) {
 	        return r.json();
@@ -27991,6 +27992,21 @@
 	    return fetch("/api/v1/assets/" + id, {
 	        method: "GET",
 	        credentials: "include"
+	    }).then(function (r) {
+	        return r.json();
+	    });
+	}
+	
+	function updateParentAsset(id, parent_id) {
+	    return fetch("/api/v1/assets/" + id + "/updateparent", {
+	        method: "PUT",
+	        credentials: 'include',
+	        headers: {
+	            'Content-Type': 'application/json'
+	        },
+	        body: JSON.stringify({
+	            "parent_id": parent_id
+	        })
 	    }).then(function (r) {
 	        return r.json();
 	    });
@@ -29584,7 +29600,7 @@
 	        }
 	    }, {
 	        key: 'deleteItem',
-	        value: function deleteItem() {
+	        value: function deleteItem(type) {
 	            var _this4 = this;
 	
 	            if (this.state.selected == -1) {
@@ -29594,7 +29610,9 @@
 	            var assetid = this.state.selected;
 	            this.setState({ working: true, deleting: assetid });
 	            Api.deleteAsset(assetid).then(function (x) {
-	                _this4.updateData();
+	                _this4.updateData().then(function (x) {
+	                    _this4.props.onDelete(assetid, type);
+	                });
 	            });
 	        }
 	    }, {
@@ -29603,9 +29621,12 @@
 	            var _this5 = this;
 	
 	            var assetid = this.state.selected;
+	            var type = this.state.newtype;
 	            this.setState({ working: true });
 	            Api.renameAsset(assetid, name).then(function (x) {
-	                _this5.updateData();
+	                _this5.updateData().then(function (x) {
+	                    _this5.props.onRename(assetid, type, name);
+	                });
 	            });
 	        }
 	    }, {
@@ -29639,8 +29660,12 @@
 	    }, {
 	        key: 'parentChanged',
 	        value: function parentChanged(id, parent_id) {
+	            var _this8 = this;
+	
 	            this.setState({ working: true });
-	            //Api.updateParentDocument(id, parent_id).then(x => this.updateData());
+	            Api.updateParentAsset(id, parent_id).then(function (x) {
+	                _this8.updateData();
+	            });
 	        }
 	    }, {
 	        key: 'canCreateFolder',
@@ -29650,7 +29675,7 @@
 	    }, {
 	        key: 'contextMenu',
 	        value: function contextMenu(id, label, type) {
-	            var _this8 = this;
+	            var _this9 = this;
 	
 	            return _react2.default.createElement(
 	                _reactContextmenu.ContextMenu,
@@ -29658,47 +29683,49 @@
 	                _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
 	                    { onClick: function onClick() {
-	                            return _this8.setState({ showUpload: true });
+	                            return _this9.setState({ showUpload: true });
 	                        }, data: { item: 'open' } },
 	                    'Upload file'
 	                ),
 	                this.canCreateFolder(type) ? _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
 	                    { onClick: function onClick() {
-	                            return _this8.setState({ adding: id, newtype: 'folder' });
+	                            return _this9.setState({ adding: id, newtype: 'folder' });
 	                        }, data: { item: 'open' } },
 	                    'Create folder'
 	                ) : null,
 	                _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
 	                    { onClick: function onClick() {
-	                            return _this8.props.onOpen(id, type, label);
+	                            return _this9.props.onOpen(id, type, label);
 	                        }, data: { item: 'open' } },
 	                    'Open'
 	                ),
 	                _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
 	                    { onClick: function onClick() {
-	                            return _this8.setState({ renaming: id });
+	                            return _this9.setState({ renaming: id, newtype: type });
 	                        }, data: { item: 'rename' } },
 	                    'Rename'
 	                ),
 	                _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
 	                    { onClick: function onClick() {
-	                            return _this8.props.callback(_this8.props, "dblclick");
+	                            return _this9.props.callback(_this9.props, "dblclick");
 	                        }, data: { item: 'open' } },
 	                    'Dublicate'
 	                ),
 	                _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
-	                    { onClick: this.deleteItem.bind(this), data: { item: 'delete' } },
+	                    { onClick: function onClick() {
+	                            return _this9.deleteItem(type);
+	                        }, data: { item: 'delete' } },
 	                    'Delete'
 	                ),
 	                _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
 	                    { onClick: function onClick() {
-	                            return _this8.props.callback(_this8.props, "dblclick");
+	                            return _this9.props.callback(_this9.props, "dblclick");
 	                        }, data: { item: 'open' } },
 	                    'Properties'
 	                )
@@ -29707,7 +29734,7 @@
 	    }, {
 	        key: 'renderTreeView',
 	        value: function renderTreeView(items) {
-	            var _this9 = this;
+	            var _this10 = this;
 	
 	            if (items.length <= 0) return null;
 	            return _react2.default.createElement(
@@ -29719,22 +29746,22 @@
 	                        {
 	                            id: x.id,
 	                            type: x.mimetype,
-	                            deleted: _this9.state.deleting == x.id,
-	                            renaming: _this9.state.renaming == x.id,
-	                            adding: _this9.state.adding == x.id,
-	                            onBlur: _this9.onBlur.bind(_this9),
+	                            deleted: _this10.state.deleting == x.id,
+	                            renaming: _this10.state.renaming == x.id,
+	                            adding: _this10.state.adding == x.id,
+	                            onBlur: _this10.onBlur.bind(_this10),
 	                            onClick: function onClick() {
-	                                return _this9.clickItem(x.id, x.label, x.mimetype);
+	                                return _this10.clickItem(x.id, x.label, x.mimetype);
 	                            },
-	                            onRename: _this9.renameItem.bind(_this9),
-	                            onAdd: _this9.addItem.bind(_this9),
-	                            parentChanged: _this9.parentChanged.bind(_this9),
-	                            selected: _this9.state.selected == x.id,
+	                            onRename: _this10.renameItem.bind(_this10),
+	                            onAdd: _this10.addItem.bind(_this10),
+	                            parentChanged: _this10.parentChanged.bind(_this10),
+	                            selected: _this10.state.selected == x.id,
 	                            key: x.id,
 	                            collapsed: x.collapsed,
-	                            contextMenu: _this9.contextMenu.bind(_this9),
+	                            contextMenu: _this10.contextMenu.bind(_this10),
 	                            label: x.label },
-	                        _this9.renderTreeView(x.children)
+	                        _this10.renderTreeView(x.children)
 	                    );
 	                })
 	            );
@@ -29742,7 +29769,7 @@
 	    }, {
 	        key: 'renderToolbar',
 	        value: function renderToolbar() {
-	            var _this10 = this;
+	            var _this11 = this;
 	
 	            return _react2.default.createElement(
 	                'div',
@@ -29755,8 +29782,8 @@
 	                        } }),
 	                    _react2.default.createElement(_SmallToolBar.SmallToolBarItem, { icon: 'trash', onClick: this.deleteItem.bind(this) }),
 	                    _react2.default.createElement(_SmallToolBar.SmallToolBarItem, { alignright: true, icon: 'refresh', onClick: function onClick() {
-	                            _this10.setState({ working: true });
-	                            _this10.updateData();
+	                            _this11.setState({ working: true });
+	                            _this11.updateData();
 	                        } })
 	                )
 	            );
@@ -29774,7 +29801,7 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var _this11 = this;
+	            var _this12 = this;
 	
 	            if (this.state.assets.length <= 0) {
 	                return _react2.default.createElement(
@@ -29795,7 +29822,7 @@
 	                ),
 	                this.state.working ? this.renderLoading() : null,
 	                this.state.showUpload ? _react2.default.createElement(_UploadDialog2.default, { onHide: function onHide() {
-	                        return _this11.setState({ showUpload: false });
+	                        return _this12.setState({ showUpload: false });
 	                    }, onUploaded: this.uploaded.bind(this) }) : null
 	            );
 	        }
@@ -29912,6 +29939,8 @@
 	
 	var Api = _interopRequireWildcard(_api);
 	
+	var _LargeToolBar = __webpack_require__(243);
+	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -29944,12 +29973,29 @@
 	            });
 	        }
 	    }, {
+	        key: 'settings',
+	        value: function settings() {}
+	    }, {
+	        key: 'delete',
+	        value: function _delete() {}
+	    }, {
+	        key: 'renderToolbar',
+	        value: function renderToolbar() {
+	            return _react2.default.createElement(
+	                _LargeToolBar.LargeToolBar,
+	                null,
+	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.settings.bind(this), icon: 'gears', label: 'Properties' }),
+	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.delete.bind(this), icon: 'trash', label: '', classes: 'button-right redbtn' })
+	            );
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            if (this.state.asset == null) {
 	                return _react2.default.createElement(
 	                    'div',
 	                    { id: 'wrapper' },
+	                    this.renderToolbar(),
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'loading' },
@@ -29959,8 +30005,13 @@
 	            }
 	            return _react2.default.createElement(
 	                'div',
-	                { className: 'imageviewer' },
-	                _react2.default.createElement('img', { src: "/uploads/" + this.state.asset.name })
+	                { className: 'imageviewerback' },
+	                this.renderToolbar(),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'imageviewer' },
+	                    _react2.default.createElement('img', { src: "/uploads/" + this.state.asset.name })
+	                )
 	            );
 	        }
 	    }]);
