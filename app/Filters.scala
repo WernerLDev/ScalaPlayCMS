@@ -2,8 +2,10 @@ import javax.inject._
 import play.api._
 import play.api.http.HttpFilters
 import play.api.mvc._
+import play.api.http.DefaultHttpFilters
+import play.filters.csrf.CSRFFilter
+import javax.inject.Inject
 
-import filters.ExampleFilter
 
 /**
  * This class configures filters that run on every request. This
@@ -21,13 +23,13 @@ import filters.ExampleFilter
 @Singleton
 class Filters @Inject() (
   env: Environment,
-  exampleFilter: ExampleFilter) extends HttpFilters {
+  csrfFilter:CSRFFilter) extends DefaultHttpFilters(csrfFilter) {
 
-  override val filters = {
+  //override val filters = {
     // Use the example filter if we're running development mode. If
     // we're running in production or test mode then don't use any
     // filters at all.
-    if (env.mode == Mode.Dev) Seq(exampleFilter) else Seq.empty
-  }
+    //if (env.mode == Mode.Dev) Seq(exampleFilter) else Seq.empty
+  //}
 
 }

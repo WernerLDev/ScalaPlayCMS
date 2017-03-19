@@ -1,6 +1,8 @@
-@(message: String)
+@(message: String, token:String)(implicit request:RequestHeader)
 
 @core.views.html.main(message){
+    <div style="display: none" id="csrftoken">@token</div>
     <div id="reactapp"></div>
     <script type='text/javascript' src='@routes.Assets.versioned("javascripts/bundle.js")'></script>
+
 }

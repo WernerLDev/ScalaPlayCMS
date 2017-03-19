@@ -27823,7 +27823,11 @@
 	exports.renameAsset = renameAsset;
 	exports.getAsset = getAsset;
 	exports.updateParentAsset = updateParentAsset;
+	
+	var csrf = document.getElementById("csrftoken").innerText;
+	
 	function getPageTypes() {
+	    console.log(csrf);
 	    return fetch("/api/v1/pagetypes", { credentials: 'include' }).then(function (r) {
 	        return r.json();
 	    });
@@ -27844,7 +27848,10 @@
 	function deleteDocument(id) {
 	    return fetch("/documents/" + id, {
 	        method: "delete",
-	        credentials: 'include'
+	        credentials: 'include',
+	        headers: {
+	            "Csrf-Token": csrf
+	        }
 	    }).then(function (r) {
 	        return r.json();
 	    });
@@ -27860,7 +27867,8 @@
 	        method: "POST",
 	        credentials: 'include',
 	        headers: {
-	            'Content-Type': 'application/json'
+	            'Content-Type': 'application/json',
+	            "Csrf-Token": csrf
 	        },
 	        body: body
 	    }).then(function (r) {
@@ -27873,7 +27881,8 @@
 	        method: "PUT",
 	        credentials: 'include',
 	        headers: {
-	            'Content-Type': 'application/json'
+	            'Content-Type': 'application/json',
+	            "Csrf-Token": csrf
 	        },
 	        body: JSON.stringify({
 	            "collapsed": collapsed
@@ -27888,7 +27897,8 @@
 	        method: "PUT",
 	        credentials: 'include',
 	        headers: {
-	            'Content-Type': 'application/json'
+	            'Content-Type': 'application/json',
+	            "Csrf-Token": csrf
 	        },
 	        body: JSON.stringify({
 	            "name": name
@@ -27903,7 +27913,8 @@
 	        method: "PUT",
 	        credentials: 'include',
 	        headers: {
-	            'Content-Type': 'application/json'
+	            'Content-Type': 'application/json',
+	            "Csrf-Token": csrf
 	        },
 	        body: JSON.stringify({
 	            "parent_id": parent_id
@@ -27918,7 +27929,8 @@
 	        method: "PUT",
 	        credentials: 'include',
 	        headers: {
-	            'Content-Type': 'application/json'
+	            'Content-Type': 'application/json',
+	            "Csrf-Token": csrf
 	        },
 	        body: JSON.stringify({
 	            "editables": editables
@@ -27939,7 +27951,8 @@
 	        method: "POST",
 	        credentials: 'include',
 	        headers: {
-	            'content-type': 'application/json'
+	            'content-type': 'application/json',
+	            "Csrf-Token": csrf
 	        },
 	        body: JSON.stringify({
 	            'parent_id': parent_id,
@@ -27958,6 +27971,9 @@
 	    return fetch("/api/v1/assets/upload", {
 	        method: "POST",
 	        credentials: 'include',
+	        headers: {
+	            "Csrf-Token": csrf
+	        },
 	        body: data
 	    }).then(function (r) {
 	        return r.json();
@@ -27967,7 +27983,13 @@
 	function deleteAsset(id) {
 	    return fetch("/api/v1/assets/" + id, {
 	        method: "delete",
-	        credentials: 'include'
+	        credentials: 'include',
+	        headers: {
+	            "Csrf-Token": csrf
+	        },
+	        body: JSON.stringify({
+	            "csrfToken": csrf
+	        })
 	    }).then(function (r) {
 	        return r.json();
 	    });
@@ -27978,10 +28000,12 @@
 	        method: "PUT",
 	        credentials: 'include',
 	        headers: {
-	            'Content-Type': 'application/json'
+	            'Content-Type': 'application/json',
+	            "Csrf-Token": csrf
 	        },
 	        body: JSON.stringify({
-	            "name": name
+	            "name": name,
+	            "csrfToken": csrf
 	        })
 	    }).then(function (r) {
 	        return r.json();
@@ -28002,10 +28026,12 @@
 	        method: "PUT",
 	        credentials: 'include',
 	        headers: {
-	            'Content-Type': 'application/json'
+	            'Content-Type': 'application/json',
+	            "Csrf-Token": csrf
 	        },
 	        body: JSON.stringify({
-	            "parent_id": parent_id
+	            "parent_id": parent_id,
+	            "csrfToken": csrf
 	        })
 	    }).then(function (r) {
 	        return r.json();

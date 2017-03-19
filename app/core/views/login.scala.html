@@ -1,6 +1,6 @@
 @import core.controllers.UserData
 @import helper._
-@(loginForm: Form[UserData])(implicit messages: Messages)
+@(loginForm: Form[UserData])(implicit messages: Messages, request:Request[AnyContent])
 
 @core.views.html.main("Login"){
 
@@ -23,6 +23,7 @@
             <input type="password" name="password" placeholder="password"/>
             <button>login</button>
             <p class="message">Forgot password? <a href="#">Retrieve password</a></p>
+            @CSRF.formField
         }
     </div>
     </div>

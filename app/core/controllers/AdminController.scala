@@ -30,7 +30,7 @@ class AdminController @Inject()(users:Users, sessions:UserSessions) extends Cont
         })
     )
 
-    def login = Action {
+    def login = Action { implicit request =>
         //users.insert( User(0, "werner", "test123", "blaat@bla.nl") )
         //users.insert( User(0, "nogiemand", "test123", "nogiemand@bla.nl") )
         val test = PasswordHasher.hashPassword("testing123")

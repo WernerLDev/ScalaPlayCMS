@@ -1,6 +1,8 @@
 
+var csrf = document.getElementById("csrftoken").innerText;
 
 export function getPageTypes() {
+    console.log(csrf);
     return fetch("/api/v1/pagetypes", { credentials: 'include' }).then(r => r.json())
 }
 
@@ -15,7 +17,10 @@ export function getDocument(id) {
 export function deleteDocument(id) {
     return fetch("/documents/" + id, {
         method: "delete",
-        credentials: 'include' 
+        credentials: 'include',
+        headers: {
+            "Csrf-Token": csrf
+        }
     }).then(r => r.json())
 }
 
@@ -29,7 +34,8 @@ export function addDocument(parent_id, name, pagetype) {
         method: "POST",
         credentials: 'include',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            "Csrf-Token": csrf
         },
         body
     }).then(r => r.json())
@@ -40,7 +46,8 @@ export function collapseDocument(id, collapsed) {
         method: "PUT",
         credentials: 'include' ,
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            "Csrf-Token": csrf
         },
         body: JSON.stringify({
             "collapsed": collapsed
@@ -53,7 +60,8 @@ export function renameDocument(id, name) {
         method: "PUT",
         credentials: 'include' ,
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            "Csrf-Token": csrf
         },
         body: JSON.stringify({
             "name": name
@@ -66,7 +74,8 @@ export function updateParentDocument(id, parent_id) {
         method: "PUT",
         credentials: 'include' ,
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            "Csrf-Token": csrf
         },
         body: JSON.stringify({
             "parent_id": parent_id
@@ -80,7 +89,8 @@ export function SaveEditables(id, editables) {
         method: "PUT",
         credentials: 'include' ,
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            "Csrf-Token": csrf
         },
         body: JSON.stringify({
             "editables": editables
@@ -99,7 +109,8 @@ export function addAsset(parent_id, name, path, mimetype) {
         method: "POST",
         credentials: 'include',
         headers: {
-            'content-type': 'application/json'
+            'content-type': 'application/json',
+            "Csrf-Token": csrf
         },
         body: JSON.stringify({
             'parent_id': parent_id,
@@ -116,6 +127,9 @@ export function uploadAsset(file) {
     return fetch("/api/v1/assets/upload", {
         method: "POST",
         credentials: 'include',
+        headers: {
+            "Csrf-Token": csrf
+        },
         body: data
     }).then(r => r.json())
 }
@@ -123,7 +137,13 @@ export function uploadAsset(file) {
 export function deleteAsset(id) {
     return fetch("/api/v1/assets/" + id, {
         method: "delete",
-        credentials: 'include' 
+        credentials: 'include',
+        headers: {
+            "Csrf-Token": csrf
+        },
+        body: JSON.stringify({
+             "csrfToken": csrf
+        })
     }).then(r => r.json())
 
 }
@@ -133,10 +153,12 @@ export function renameAsset(id, name) {
         method: "PUT",
         credentials: 'include' ,
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            "Csrf-Token": csrf
         },
         body: JSON.stringify({
-            "name": name
+            "name": name,
+             "csrfToken": csrf
         })
     }).then(r => r.json())
 }
@@ -154,10 +176,12 @@ export function updateParentAsset(id, parent_id) {
         method: "PUT",
         credentials: 'include' ,
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            "Csrf-Token": csrf
         },
         body: JSON.stringify({
-            "parent_id": parent_id
+            "parent_id": parent_id,
+             "csrfToken": csrf
         })
     }).then(r => r.json());
 }

@@ -17,6 +17,7 @@ import scala.util.{Success, Failure}
 import scala.concurrent._
 import scala.concurrent.duration._
 import core.utils._
+import play.filters.csrf._
 
 @Singleton
 class MainController @Inject()(documents:Documents, editables:Editables, templates:PageTemplates, WithAuthAction:AuthAction, PageAction:PageAction) extends Controller {
@@ -28,7 +29,8 @@ class MainController @Inject()(documents:Documents, editables:Editables, templat
    * a path of `/`.
    */
   def index = WithAuthAction { implicit request =>
-    Ok(core.views.html.index("Logged in as " + request.user.username))
+    val token = CSRF.getToken.get
+    Ok(core.views.html.index("Logged in as " + request.user.username, token.value))
   }
 
   def getPageTypes = WithAuthAction {
