@@ -214,19 +214,36 @@ body > .container-fluid {
 }
 
 .navbar li a, .navbar .navbar-brand {
-    color: #333 !important;
+    color: #333;
     text-transform: uppercase;
     height: 70px;
     line-height: 70px;
 }
 
-.navbar-nav li a:hover, .navbar-nav li.active a {
-    color: #000 !important;
-    background-color: #eee !important;
+.navbar-default .navbar-nav>li>a:hover {
+    color: #000;
+    background: #eee;
     text-transform: uppercase;
 }
 
 .navbar-default .navbar-toggle {
     border-color: transparent;
     color: #fff !important;
+}
+
+.navbar-default .navbar-nav > li {
+    border-left: 1px solid #f4f6ec;
+}
+
+.navbar-default .navbar-nav>.active>a,.navbar-default .navbar-nav>.active>a:hover
+{
+    background: #FFF;
+    border-top: 7px solid #c3d285;
+    line-height: 50px; 
+    text-transform: uppercase;
+    color: #000;
+}
+
+.navbar-default .navbar-nav>.active>a:hover {
+    background: #eee;
 }
