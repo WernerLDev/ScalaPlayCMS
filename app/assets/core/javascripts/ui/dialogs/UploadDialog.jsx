@@ -10,7 +10,7 @@ export default class UploadDialog extends React.Component {
     render() {
         return(
             <div>
-                <div className="overlay"></div>
+                <div onClick={this.props.onHide} className="overlay"></div>
                 <div className="uploadDialog">
                     <h3>Upload file</h3>
                     <input ref="fileselect" type="file" id="file-select" name="asset" />

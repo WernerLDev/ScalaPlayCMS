@@ -24,10 +24,10 @@ export default class AssetsPanel extends React.Component {
         });
     }
 
-    clickItem(id, label) {
+    clickItem(id, label, type) {
         var currTime = (new Date()).getTime();
         if(currTime - this.state.lastClick < 500 && this.state.selected == id) {
-            this.props.onOpen(id, "asset", label);
+            this.props.onOpen(id, type, label);
         }
         this.setState({ lastClick: currTime, selected: id })
     }
@@ -72,11 +72,16 @@ export default class AssetsPanel extends React.Component {
         //Api.updateParentDocument(id, parent_id).then(x => this.updateData());
     }
 
-    contextMenu(id, label) {
+    canCreateFolder(type) {
+        return type == "folder" || type == "home";
+    }
+
+    contextMenu(id, label, type) {
         return (
             <ContextMenu id={String(id) + label}>
                 <MenuItem onClick={() => this.setState({showUpload: true})} data={{item: 'open'}}>Upload file</MenuItem>
-                <MenuItem onClick={() => this.props.onOpen(id, "asset", label)} data={{item: 'open'}}>Open</MenuItem>
+                {this.canCreateFolder(type) ? <MenuItem onClick={() => this.setState({adding: id, newtype: 'folder'})} data={{item: 'open'}}>Create folder</MenuItem> : null}
+                <MenuItem onClick={() => this.props.onOpen(id, type, label)} data={{item: 'open'}}>Open</MenuItem>
                 <MenuItem onClick={() => this.setState({ renaming: id })} data={{item: 'rename'}}>Rename</MenuItem>
                 <MenuItem onClick={() => this.props.callback(this.props, "dblclick")} data={{item: 'open'}}>Dublicate</MenuItem>
                 <MenuItem onClick={this.deleteItem.bind(this)} data={{item: 'delete'}}>Delete</MenuItem>
@@ -97,7 +102,7 @@ export default class AssetsPanel extends React.Component {
                         renaming={this.state.renaming == x.id}
                         adding={this.state.adding == x.id}
                         onBlur={this.onBlur.bind(this)}
-                        onClick={() => this.clickItem(x.id, x.label)}
+                        onClick={() => this.clickItem(x.id, x.label, x.mimetype)}
                         onRename={this.renameItem.bind(this)}
                         onAdd={this.addItem.bind(this)}
                         parentChanged={this.parentChanged.bind(this)}
@@ -155,7 +160,7 @@ export default class AssetsPanel extends React.Component {
                     {this.renderTreeView(this.state.assets)}
                 </div>
                 {this.state.working ? this.renderLoading() : null}
-                {this.state.showUpload ? <UploadDialog onUploaded={this.uploaded.bind(this)} /> : null}
+                {this.state.showUpload ? <UploadDialog onHide={() => this.setState({showUpload: false})} onUploaded={this.uploaded.bind(this)} /> : null}
             </div>
         )
     }

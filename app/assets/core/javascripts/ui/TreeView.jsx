@@ -59,8 +59,7 @@ class TreeViewItemLabel extends React.Component {
                 onDragOver={this.onDragOver.bind(this)}
                 onDragLeave={this.onDragLeave.bind(this)}
                 onDropCapture={this.onDrop.bind(this)}
-                onContextMenu={this.props.onClick}
-                onClick={this.props.onClick}
+                onContextMenu={this.props.onContextMenu}
                 className={this.props.selected ? "selected treeitem" : "treeitem"}>
                 {this.props.children}
             </div>
@@ -126,15 +125,16 @@ export class TreeViewItem extends React.Component {
                 <TreeViewItemLabel
                     id={this.props.id}
                     parentChanged={this.props.parentChanged}
-                    onClick={this.props.onClick}
+                    onContextMenu={this.props.onClick}
                     selected={this.props.selected}>
                     {icon} <Icon type={this.props.type} /> {this.renderLabel()}
+                    <div onClick={this.props.onClick} className="treeitemclickarea"></div>
                 </TreeViewItemLabel>
 
                 </ContextMenuTrigger>
                 {this.props.adding ? this.renderNewForm() : null}
                 <div className={this.state.collapsed ? "" : "hidden"}>{this.props.children}</div>
-                {this.props.contextMenu(this.props.id, this.props.label)}
+                {this.props.contextMenu(this.props.id, this.props.label, this.props.type)}
             </li>
         )
     }

@@ -46,12 +46,15 @@ input.treeviewinputEdit {
             display: block; min-height: 25px; 
             div.treeitem {
                 display: flex;
-                
+               position: relative; 
                 -moz-user-select: none;
                 user-select: none;
                 height: 15px;
                 padding: 5px;
                 font-size: 14px;
+                div.treeitemclickarea {
+                    position: absolute; top: 0; left: 25px; bottom: 0; right: 0;
+                }
                 .fa {
                     width: 10px;
                     margin-right: 5px;

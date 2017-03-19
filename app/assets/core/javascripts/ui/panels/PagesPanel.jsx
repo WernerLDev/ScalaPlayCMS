@@ -75,7 +75,7 @@ export default class PagesPanel extends React.Component {
         Api.updateParentDocument(id, parent_id).then(x => this.updateData());
     }
 
-    contextMenu(id, label) {
+    contextMenu(id, label, type) {
         return (
             <ContextMenu id={String(id) + label}>
                 <SubMenu hoverDelay={0} title="Add Page">

@@ -16,11 +16,12 @@ import scala.util.{Success, Failure}
 import java.io.File
 
 @Singleton
-class AssetsController @Inject()(assets:Assets, WithAuthAction:AuthAction, PageAction:PageAction) extends Controller {
+class AssetsController @Inject()(assets:Assets, WithAuthAction:AuthAction, PageAction:PageAction, conf:Configuration) extends Controller {
 
     implicit val DocWrites = Json.writes[AssetTree]
     
     def all = WithAuthAction.async { request => {
+        println(conf.getString("elestic.uploaddir"))
         assets.listJson().map(x => {
             Ok(Json.toJson(x))
         })
@@ -49,19 +50,15 @@ class AssetsController @Inject()(assets:Assets, WithAuthAction:AuthAction, PageA
     def upload = WithAuthAction(parse.multipartFormData) { implicit request =>
         val assetsdir = "/home/werner/Projects/ElesticSpider/uploads/";
         request.body.file("asset").map { asset =>
-        
-        val filename = asset.filename 
-        val contentType = asset.contentType
-        val outputfile = new File(assetsdir + filename)
-        asset.ref.moveTo(outputfile)
-        
-        val filepath = "/uploads/" + filename
-        Ok(Json.obj("success" -> true, "name" -> filename, "path" -> filepath))
+            val filename = asset.filename 
+            val contentType = asset.contentType
+            val outputfile = new File(assetsdir + filename)
+            asset.ref.moveTo(outputfile)
+            
+            val filepath = "/uploads/" + filename
+            Ok(Json.obj("success" -> true, "name" -> filename, "path" -> filepath))
         }.getOrElse {
-        /*Redirect(routes.Application.uploadtest).flashing(
-            "error" -> "Missing file"
-        )*/
-        Ok(Json.obj("success" -> false, "name" -> "", "path" -> ""))
+            Ok(Json.obj("success" -> false, "name" -> "", "path" -> ""))
         }
     }
 

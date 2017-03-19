@@ -26357,7 +26357,7 @@
 	        }
 	    }, {
 	        key: 'contextMenu',
-	        value: function contextMenu(id, label) {
+	        value: function contextMenu(id, label, type) {
 	            var _this8 = this;
 	
 	            return _react2.default.createElement(
@@ -26642,8 +26642,7 @@
 	                    onDragOver: this.onDragOver.bind(this),
 	                    onDragLeave: this.onDragLeave.bind(this),
 	                    onDropCapture: this.onDrop.bind(this),
-	                    onContextMenu: this.props.onClick,
-	                    onClick: this.props.onClick,
+	                    onContextMenu: this.props.onContextMenu,
 	                    className: this.props.selected ? "selected treeitem" : "treeitem" },
 	                this.props.children
 	            );
@@ -26740,13 +26739,14 @@
 	                        {
 	                            id: this.props.id,
 	                            parentChanged: this.props.parentChanged,
-	                            onClick: this.props.onClick,
+	                            onContextMenu: this.props.onClick,
 	                            selected: this.props.selected },
 	                        icon,
 	                        ' ',
 	                        _react2.default.createElement(_Icon2.default, { type: this.props.type }),
 	                        ' ',
-	                        this.renderLabel()
+	                        this.renderLabel(),
+	                        _react2.default.createElement('div', { onClick: this.props.onClick, className: 'treeitemclickarea' })
 	                    )
 	                ),
 	                this.props.adding ? this.renderNewForm() : null,
@@ -26755,7 +26755,7 @@
 	                    { className: this.state.collapsed ? "" : "hidden" },
 	                    this.props.children
 	                ),
-	                this.props.contextMenu(this.props.id, this.props.label)
+	                this.props.contextMenu(this.props.id, this.props.label, this.props.type)
 	            );
 	        }
 	    }]);
@@ -29534,10 +29534,10 @@
 	        }
 	    }, {
 	        key: 'clickItem',
-	        value: function clickItem(id, label) {
+	        value: function clickItem(id, label, type) {
 	            var currTime = new Date().getTime();
 	            if (currTime - this.state.lastClick < 500 && this.state.selected == id) {
-	                this.props.onOpen(id, "asset", label);
+	                this.props.onOpen(id, type, label);
 	            }
 	            this.setState({ lastClick: currTime, selected: id });
 	        }
@@ -29587,8 +29587,13 @@
 	            //Api.updateParentDocument(id, parent_id).then(x => this.updateData());
 	        }
 	    }, {
+	        key: 'canCreateFolder',
+	        value: function canCreateFolder(type) {
+	            return type == "folder" || type == "home";
+	        }
+	    }, {
 	        key: 'contextMenu',
-	        value: function contextMenu(id, label) {
+	        value: function contextMenu(id, label, type) {
 	            var _this4 = this;
 	
 	            return _react2.default.createElement(
@@ -29601,10 +29606,17 @@
 	                        }, data: { item: 'open' } },
 	                    'Upload file'
 	                ),
+	                this.canCreateFolder(type) ? _react2.default.createElement(
+	                    _reactContextmenu.MenuItem,
+	                    { onClick: function onClick() {
+	                            return _this4.setState({ adding: id, newtype: 'folder' });
+	                        }, data: { item: 'open' } },
+	                    'Create folder'
+	                ) : null,
 	                _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
 	                    { onClick: function onClick() {
-	                            return _this4.props.onOpen(id, "asset", label);
+	                            return _this4.props.onOpen(id, type, label);
 	                        }, data: { item: 'open' } },
 	                    'Open'
 	                ),
@@ -29656,7 +29668,7 @@
 	                            adding: _this5.state.adding == x.id,
 	                            onBlur: _this5.onBlur.bind(_this5),
 	                            onClick: function onClick() {
-	                                return _this5.clickItem(x.id, x.label);
+	                                return _this5.clickItem(x.id, x.label, x.mimetype);
 	                            },
 	                            onRename: _this5.renameItem.bind(_this5),
 	                            onAdd: _this5.addItem.bind(_this5),
@@ -29718,6 +29730,8 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var _this8 = this;
+	
 	            if (this.state.assets.length <= 0) {
 	                return _react2.default.createElement(
 	                    'div',
@@ -29736,7 +29750,9 @@
 	                    this.renderTreeView(this.state.assets)
 	                ),
 	                this.state.working ? this.renderLoading() : null,
-	                this.state.showUpload ? _react2.default.createElement(_UploadDialog2.default, { onUploaded: this.uploaded.bind(this) }) : null
+	                this.state.showUpload ? _react2.default.createElement(_UploadDialog2.default, { onHide: function onHide() {
+	                        return _this8.setState({ showUpload: false });
+	                    }, onUploaded: this.uploaded.bind(this) }) : null
 	            );
 	        }
 	    }]);
@@ -29793,7 +29809,7 @@
 	            return _react2.default.createElement(
 	                'div',
 	                null,
-	                _react2.default.createElement('div', { className: 'overlay' }),
+	                _react2.default.createElement('div', { onClick: this.props.onHide, className: 'overlay' }),
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'uploadDialog' },

@@ -48,7 +48,7 @@ class AdminController @Inject()(users:Users, sessions:UserSessions) extends Cont
                 
                 val futureUser = users.findByUsername(userData.username) map (userOpt => {
                     userOpt map (user => {
-                        sessions.cleanup(user, request.headers.get("User-Agent").getOrElse("Unknown"), request.remoteAddress)
+                        val cleanup = sessions.cleanup(user, request.headers.get("User-Agent").getOrElse("Unknown"), request.remoteAddress)
                         val newSession = UserSession(
                             id = 0,
                             session_key = sessionkey,
@@ -58,7 +58,8 @@ class AdminController @Inject()(users:Users, sessions:UserSessions) extends Cont
                             useragent = request.headers.get("User-Agent").getOrElse("Unknown"),
                             expiration_date = new Timestamp(expirationdate.getTime())
                         )
-                        sessions.create( newSession )
+                        //create new session after cleanup is finished
+                        cleanup.map(c => sessions.create( newSession ))
                     })
                 })
                 futureUser.map(x => {
