@@ -27,6 +27,14 @@ class AssetsController @Inject()(assets:Assets, WithAuthAction:AuthAction, PageA
         })
     }}
 
+    implicit val AssetWrites = Json.writes[Asset]
+    def getById(id:Long) = WithAuthAction.async { request => 
+        assets.getById(id).map(assetOpt => {
+            assetOpt.map(asset => Ok(Json.toJson(asset)))
+            .getOrElse(NotFound("Couldn't find asset"))
+        })
+    }
+
     def create = WithAuthAction.async(parse.json) { request =>
       val parent_id = (request.body \ "parent_id").asOpt[Int].getOrElse(0)
       val name = (request.body \ "name").asOpt[String].getOrElse("")
@@ -48,18 +56,45 @@ class AssetsController @Inject()(assets:Assets, WithAuthAction:AuthAction, PageA
     }
 
     def upload = WithAuthAction(parse.multipartFormData) { implicit request =>
-        val assetsdir = "/home/werner/Projects/ElesticSpider/uploads/";
+        val uploadroot = conf.getString("elestic.uploadroot").getOrElse("")
+        val uploaddir = conf.getString("elestic.uploaddir").getOrElse("")
+        val assetsdir = uploadroot + uploaddir;
         request.body.file("asset").map { asset =>
             val filename = asset.filename 
             val contentType = asset.contentType
             val outputfile = new File(assetsdir + filename)
             asset.ref.moveTo(outputfile)
             
-            val filepath = "/uploads/" + filename
+            val filepath = uploaddir + filename
             Ok(Json.obj("success" -> true, "name" -> filename, "path" -> filepath))
         }.getOrElse {
             Ok(Json.obj("success" -> false, "name" -> "", "path" -> ""))
         }
     }
 
+    def delete(id:Long) = WithAuthAction.async { request =>
+        assets.delete(id).map(r => {
+            Ok(Json.obj("success" -> true))
+        })
+    }
+
+    def rename(id:Long) = WithAuthAction.async(parse.json) { request =>
+        (request.body \ "name").asOpt[String].map(name => {
+            assets.setName(id, name).map(x => 
+                Ok(Json.obj("success" -> true))
+            )
+        }).getOrElse(Future(BadRequest("Missing parameter [name]")) )
+    }
+
+    def getUpload(filename:String) = PageAction.async { implicit request =>
+        val assetdir = conf.getString("elestic.uploadroot").getOrElse("")
+        assets.getByName(filename).map(assetOpt => {
+            assetOpt.map(asset => {
+                Ok.sendFile(
+                    content = new File(assetdir + asset.path),
+                    inline = true
+                )
+            }).getOrElse(NotFound(views.html.notfound("The uploaded file you are looking for doesn't exist.")))
+        })
+   }
 }

@@ -39,28 +39,34 @@ export default class AssetsPanel extends React.Component {
         }
         var assetid = this.state.selected;
         this.setState({ working: true, deleting: assetid});
-        /*Api.deleteDocument(assetid).then(x => {
-            this.updateData().then(y => {
-                this.props.onDelete(docid, "asset");
-            })
-        });*/
+        Api.deleteAsset(assetid).then(x => {
+            this.updateData();
+        })
     }
 
     renameItem(name) {
-        var docid = this.state.selected;
+        var assetid = this.state.selected;
         this.setState({working: true});
-        /*Api.renameDocument(docid, name).then(x => {
-            this.updateData().then(x => this.props.onRename(docid, "asset", name) );
-        })*/
+        Api.renameAsset(assetid, name).then(x => {
+            this.updateData();
+        })        
     }
 
     addItem(name, parent_id) {
         this.setState({working: true});
-        /*Api.addDocument(parent_id, name, this.state.newtype).then(x => {
-            this.updateData().then(y => {
-                this.setState({selected: x.id});
-            });
-        })*/
+        console.log("Adding item " + name + "with parent_id " + parent_id + " of type " + this.state.newtype);
+        Api.addAsset(parent_id, name, "",this.state.newtype).then(x => {
+            this.updateData();
+        })
+    }
+
+    uploaded(uploading) {
+        this.setState({showUpload: false, working: true});
+        uploading.then(x => {
+            Api.addAsset(this.state.selected, x.name, x.path, 'picture').then(x => {
+                this.updateData();
+            })
+        });
     }
 
     onBlur() {
@@ -115,14 +121,6 @@ export default class AssetsPanel extends React.Component {
         );
     }
 
-    uploaded(uploading) {
-        this.setState({showUpload: false, working: true});
-        uploading.then(x => {
-            Api.addAsset(this.state.selected, x.name, x.path, 'picture').then(x => {
-                this.updateData();
-            })
-        });
-    }
 
     renderToolbar() {
         return(

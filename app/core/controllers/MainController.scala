@@ -122,7 +122,7 @@ class MainController @Inject()(documents:Documents, editables:Editables, templat
     result match {
       case Some(p) => templates.getAction(p)
       case None => PageAction { implicit request =>
-        NotFound(views.html.notfound("Page not found"))
+        NotFound(views.html.notfound("The page you are looking for doesn't exist."))
       }
     }
   }

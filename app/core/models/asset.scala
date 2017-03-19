@@ -1,6 +1,8 @@
 package core.models
 
 import play.api.Play
+import play.api._
+import play.api.mvc._
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import scala.concurrent.Future
 import slick.driver.JdbcProfile
@@ -32,7 +34,7 @@ class AssetTableDef(tag: Tag) extends Table[Asset](tag, "asset") {
 }
 
 @Singleton
-class Assets @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends HasDatabaseConfigProvider[JdbcProfile] {
+class Assets @Inject()(protected val dbConfigProvider: DatabaseConfigProvider, conf:Configuration) extends HasDatabaseConfigProvider[JdbcProfile] {
 
     val assets = TableQuery[AssetTableDef]
     val insertQuery = assets returning assets.map(_.id) into ((asset, id) => asset.copy(id = id))
@@ -48,6 +50,14 @@ class Assets @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) e
         listAll map (x => generateList(x.toList, 0))
     }
 
+    def getByName(name:String) = dbConfig.db.run {
+        assets.filter(_.name === name).result.headOption
+    }
+
+    def getById(id:Long) = dbConfig.db.run {
+        assets.filter(_.id === id).result.headOption
+    }
+
     def create(asset:Asset):Future[Asset] = {
         dbConfig.db.run( insertQuery += asset )
     }
@@ -56,6 +66,16 @@ class Assets @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) e
         val subitems:Future[Seq[Asset]] = dbConfig.db.run(assets.filter(_.parent_id === id).result)
         subitems.map(items => {
             items.map(x => delete(x.id))
+        })
+
+        val assetdir = conf.getString("elestic.uploadroot").getOrElse("")
+        (dbConfig.db.run(assets.filter(_.id === id).result.headOption)).map(assetOpt => {
+            assetOpt.map(asset => {
+                val file = new java.io.File(assetdir + asset.path)
+                if(file.exists) {
+                    file.delete();
+                }
+            })
         })
         val action = assets.filter(_.id === id).delete
         dbConfig.db.run(action)

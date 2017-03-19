@@ -2,7 +2,11 @@
 @(msg:String)(implicit request:PageRequest[AnyContent])
 
 @main("Page not found") {
-    <h1>Error 404</h1>
-    <p>The page you're requesting couldn't be found.</p>
+    <h1>Oops...</h1>
+    <p>Error 404, Something went wrong.</p>
     <p>@msg</p>
+
+    <img src="/assets/images/404.jpg" alt="" />
+}{
+    @defaultheader()
 }

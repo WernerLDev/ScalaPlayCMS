@@ -8,6 +8,7 @@ import PageEditPanel from './ui/panels/PageEditPanel.jsx';
 import * as TabsAction from './actions/TabViewActions.js';
 import _ from 'lodash/fp';
 import AssetsPanel from './ui/panels/AssetsPanel.jsx';
+import ImageViewer from './ui/panels/ImageViewer.jsx';
 
 export default class Main extends React.Component {
 
@@ -42,6 +43,8 @@ export default class Main extends React.Component {
         var content = (<div>{label}</div>);
         if(type == "file") {
             content = (<PageEditPanel id={id} />);
+        } else if(type == "picture") {
+            content = (<ImageViewer id={id} />)
         }
         var newTab = {
             id: id + type,

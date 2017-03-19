@@ -64,7 +64,6 @@ export default class TestEditor extends React.Component {
     }
 
     render() {
-        console.log(this.state.iframeloaded);
         if(this.state.document == null) {
             return(<div id="wrapper">
                     {this.renderToolbar()}

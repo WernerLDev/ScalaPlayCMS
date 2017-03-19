@@ -117,5 +117,34 @@ export function uploadAsset(file) {
         method: "POST",
         credentials: 'include',
         body: data
-}).then(r => r.json())
+    }).then(r => r.json())
+}
+
+export function deleteAsset(id) {
+    return fetch("/api/v1/assets/" + id, {
+        method: "delete",
+        credentials: 'include' 
+    }).then(r => r.json())
+
+}
+
+export function renameAsset(id, name) {
+    return fetch("/api/v1/assets/" + id + "/rename", {
+        method: "PUT",
+        credentials: 'include' ,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "name": name
+        })
+    }).then(r => r.json())
+}
+
+
+export function getAsset(id) {
+    return fetch("/api/v1/assets/" + id, {
+        method: "GET",
+        credentials: "include"
+    }).then(r => r.json())
 }

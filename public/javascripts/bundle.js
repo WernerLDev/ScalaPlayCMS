@@ -4171,6 +4171,10 @@
 	
 	var _AssetsPanel2 = _interopRequireDefault(_AssetsPanel);
 	
+	var _ImageViewer = __webpack_require__(253);
+	
+	var _ImageViewer2 = _interopRequireDefault(_ImageViewer);
+	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -4229,6 +4233,8 @@
 	            );
 	            if (type == "file") {
 	                content = _react2.default.createElement(_PageEditPanel2.default, { id: id });
+	            } else if (type == "picture") {
+	                content = _react2.default.createElement(_ImageViewer2.default, { id: id });
 	            }
 	            var newTab = {
 	                id: id + type,
@@ -27813,6 +27819,9 @@
 	exports.getAssets = getAssets;
 	exports.addAsset = addAsset;
 	exports.uploadAsset = uploadAsset;
+	exports.deleteAsset = deleteAsset;
+	exports.renameAsset = renameAsset;
+	exports.getAsset = getAsset;
 	function getPageTypes() {
 	    return fetch("/api/v1/pagetypes", { credentials: 'include' }).then(function (r) {
 	        return r.json();
@@ -27949,6 +27958,39 @@
 	        method: "POST",
 	        credentials: 'include',
 	        body: data
+	    }).then(function (r) {
+	        return r.json();
+	    });
+	}
+	
+	function deleteAsset(id) {
+	    return fetch("/api/v1/assets/" + id, {
+	        method: "delete",
+	        credentials: 'include'
+	    }).then(function (r) {
+	        return r.json();
+	    });
+	}
+	
+	function renameAsset(id, name) {
+	    return fetch("/api/v1/assets/" + id + "/rename", {
+	        method: "PUT",
+	        credentials: 'include',
+	        headers: {
+	            'Content-Type': 'application/json'
+	        },
+	        body: JSON.stringify({
+	            "name": name
+	        })
+	    }).then(function (r) {
+	        return r.json();
+	    });
+	}
+	
+	function getAsset(id) {
+	    return fetch("/api/v1/assets/" + id, {
+	        method: "GET",
+	        credentials: "include"
 	    }).then(function (r) {
 	        return r.json();
 	    });
@@ -28190,7 +28232,6 @@
 	        value: function render() {
 	            var _this4 = this;
 	
-	            console.log(this.state.iframeloaded);
 	            if (this.state.document == null) {
 	                return _react2.default.createElement(
 	                    'div',
@@ -29544,36 +29585,51 @@
 	    }, {
 	        key: 'deleteItem',
 	        value: function deleteItem() {
+	            var _this4 = this;
+	
 	            if (this.state.selected == -1) {
 	                alert("No item selected");
 	                return;
 	            }
 	            var assetid = this.state.selected;
 	            this.setState({ working: true, deleting: assetid });
-	            /*Api.deleteDocument(assetid).then(x => {
-	                this.updateData().then(y => {
-	                    this.props.onDelete(docid, "asset");
-	                })
-	            });*/
+	            Api.deleteAsset(assetid).then(function (x) {
+	                _this4.updateData();
+	            });
 	        }
 	    }, {
 	        key: 'renameItem',
 	        value: function renameItem(name) {
-	            var docid = this.state.selected;
+	            var _this5 = this;
+	
+	            var assetid = this.state.selected;
 	            this.setState({ working: true });
-	            /*Api.renameDocument(docid, name).then(x => {
-	                this.updateData().then(x => this.props.onRename(docid, "asset", name) );
-	            })*/
+	            Api.renameAsset(assetid, name).then(function (x) {
+	                _this5.updateData();
+	            });
 	        }
 	    }, {
 	        key: 'addItem',
 	        value: function addItem(name, parent_id) {
+	            var _this6 = this;
+	
 	            this.setState({ working: true });
-	            /*Api.addDocument(parent_id, name, this.state.newtype).then(x => {
-	                this.updateData().then(y => {
-	                    this.setState({selected: x.id});
+	            console.log("Adding item " + name + "with parent_id " + parent_id + " of type " + this.state.newtype);
+	            Api.addAsset(parent_id, name, "", this.state.newtype).then(function (x) {
+	                _this6.updateData();
+	            });
+	        }
+	    }, {
+	        key: 'uploaded',
+	        value: function uploaded(uploading) {
+	            var _this7 = this;
+	
+	            this.setState({ showUpload: false, working: true });
+	            uploading.then(function (x) {
+	                Api.addAsset(_this7.state.selected, x.name, x.path, 'picture').then(function (x) {
+	                    _this7.updateData();
 	                });
-	            })*/
+	            });
 	        }
 	    }, {
 	        key: 'onBlur',
@@ -29594,7 +29650,7 @@
 	    }, {
 	        key: 'contextMenu',
 	        value: function contextMenu(id, label, type) {
-	            var _this4 = this;
+	            var _this8 = this;
 	
 	            return _react2.default.createElement(
 	                _reactContextmenu.ContextMenu,
@@ -29602,35 +29658,35 @@
 	                _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
 	                    { onClick: function onClick() {
-	                            return _this4.setState({ showUpload: true });
+	                            return _this8.setState({ showUpload: true });
 	                        }, data: { item: 'open' } },
 	                    'Upload file'
 	                ),
 	                this.canCreateFolder(type) ? _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
 	                    { onClick: function onClick() {
-	                            return _this4.setState({ adding: id, newtype: 'folder' });
+	                            return _this8.setState({ adding: id, newtype: 'folder' });
 	                        }, data: { item: 'open' } },
 	                    'Create folder'
 	                ) : null,
 	                _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
 	                    { onClick: function onClick() {
-	                            return _this4.props.onOpen(id, type, label);
+	                            return _this8.props.onOpen(id, type, label);
 	                        }, data: { item: 'open' } },
 	                    'Open'
 	                ),
 	                _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
 	                    { onClick: function onClick() {
-	                            return _this4.setState({ renaming: id });
+	                            return _this8.setState({ renaming: id });
 	                        }, data: { item: 'rename' } },
 	                    'Rename'
 	                ),
 	                _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
 	                    { onClick: function onClick() {
-	                            return _this4.props.callback(_this4.props, "dblclick");
+	                            return _this8.props.callback(_this8.props, "dblclick");
 	                        }, data: { item: 'open' } },
 	                    'Dublicate'
 	                ),
@@ -29642,7 +29698,7 @@
 	                _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
 	                    { onClick: function onClick() {
-	                            return _this4.props.callback(_this4.props, "dblclick");
+	                            return _this8.props.callback(_this8.props, "dblclick");
 	                        }, data: { item: 'open' } },
 	                    'Properties'
 	                )
@@ -29651,7 +29707,7 @@
 	    }, {
 	        key: 'renderTreeView',
 	        value: function renderTreeView(items) {
-	            var _this5 = this;
+	            var _this9 = this;
 	
 	            if (items.length <= 0) return null;
 	            return _react2.default.createElement(
@@ -29663,42 +29719,30 @@
 	                        {
 	                            id: x.id,
 	                            type: x.mimetype,
-	                            deleted: _this5.state.deleting == x.id,
-	                            renaming: _this5.state.renaming == x.id,
-	                            adding: _this5.state.adding == x.id,
-	                            onBlur: _this5.onBlur.bind(_this5),
+	                            deleted: _this9.state.deleting == x.id,
+	                            renaming: _this9.state.renaming == x.id,
+	                            adding: _this9.state.adding == x.id,
+	                            onBlur: _this9.onBlur.bind(_this9),
 	                            onClick: function onClick() {
-	                                return _this5.clickItem(x.id, x.label, x.mimetype);
+	                                return _this9.clickItem(x.id, x.label, x.mimetype);
 	                            },
-	                            onRename: _this5.renameItem.bind(_this5),
-	                            onAdd: _this5.addItem.bind(_this5),
-	                            parentChanged: _this5.parentChanged.bind(_this5),
-	                            selected: _this5.state.selected == x.id,
+	                            onRename: _this9.renameItem.bind(_this9),
+	                            onAdd: _this9.addItem.bind(_this9),
+	                            parentChanged: _this9.parentChanged.bind(_this9),
+	                            selected: _this9.state.selected == x.id,
 	                            key: x.id,
 	                            collapsed: x.collapsed,
-	                            contextMenu: _this5.contextMenu.bind(_this5),
+	                            contextMenu: _this9.contextMenu.bind(_this9),
 	                            label: x.label },
-	                        _this5.renderTreeView(x.children)
+	                        _this9.renderTreeView(x.children)
 	                    );
 	                })
 	            );
 	        }
 	    }, {
-	        key: 'uploaded',
-	        value: function uploaded(uploading) {
-	            var _this6 = this;
-	
-	            this.setState({ showUpload: false, working: true });
-	            uploading.then(function (x) {
-	                Api.addAsset(_this6.state.selected, x.name, x.path, 'picture').then(function (x) {
-	                    _this6.updateData();
-	                });
-	            });
-	        }
-	    }, {
 	        key: 'renderToolbar',
 	        value: function renderToolbar() {
-	            var _this7 = this;
+	            var _this10 = this;
 	
 	            return _react2.default.createElement(
 	                'div',
@@ -29711,8 +29755,8 @@
 	                        } }),
 	                    _react2.default.createElement(_SmallToolBar.SmallToolBarItem, { icon: 'trash', onClick: this.deleteItem.bind(this) }),
 	                    _react2.default.createElement(_SmallToolBar.SmallToolBarItem, { alignright: true, icon: 'refresh', onClick: function onClick() {
-	                            _this7.setState({ working: true });
-	                            _this7.updateData();
+	                            _this10.setState({ working: true });
+	                            _this10.updateData();
 	                        } })
 	                )
 	            );
@@ -29730,7 +29774,7 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var _this8 = this;
+	            var _this11 = this;
 	
 	            if (this.state.assets.length <= 0) {
 	                return _react2.default.createElement(
@@ -29751,7 +29795,7 @@
 	                ),
 	                this.state.working ? this.renderLoading() : null,
 	                this.state.showUpload ? _react2.default.createElement(_UploadDialog2.default, { onHide: function onHide() {
-	                        return _this8.setState({ showUpload: false });
+	                        return _this11.setState({ showUpload: false });
 	                    }, onUploaded: this.uploaded.bind(this) }) : null
 	            );
 	        }
@@ -29818,15 +29862,25 @@
 	                        null,
 	                        'Upload file'
 	                    ),
-	                    _react2.default.createElement('input', { ref: 'fileselect', type: 'file', id: 'file-select', name: 'asset' }),
 	                    _react2.default.createElement(
-	                        'button',
-	                        { type: 'submit', id: 'upload-button', onClick: function onClick() {
-	                                var file = _this2.refs.fileselect.files[0];
-	                                var uploadPromise = Api.uploadAsset(file);
-	                                _this2.props.onUploaded(uploadPromise);
-	                            } },
-	                        'Upload'
+	                        'label',
+	                        { className: 'uploadbtn' },
+	                        _react2.default.createElement('input', { multiple: true,
+	                            type: 'file',
+	                            id: 'file-select',
+	                            name: 'asset',
+	                            onChange: function onChange(e) {
+	                                var files = e.currentTarget.files;
+	                                [].forEach.call(files, function (file) {
+	                                    var uploadPromise = Api.uploadAsset(file);
+	                                    this.props.onUploaded(uploadPromise);
+	                                }.bind(_this2));
+	                            } }),
+	                        _react2.default.createElement(
+	                            'span',
+	                            null,
+	                            'Select one or more files'
+	                        )
 	                    )
 	                )
 	            );
@@ -29837,6 +29891,84 @@
 	}(_react2.default.Component);
 	
 	exports.default = UploadDialog;
+
+/***/ },
+/* 253 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _api = __webpack_require__(239);
+	
+	var Api = _interopRequireWildcard(_api);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var ImageViewer = function (_React$Component) {
+	    _inherits(ImageViewer, _React$Component);
+	
+	    function ImageViewer(props, context) {
+	        _classCallCheck(this, ImageViewer);
+	
+	        var _this = _possibleConstructorReturn(this, (ImageViewer.__proto__ || Object.getPrototypeOf(ImageViewer)).call(this, props, context));
+	
+	        _this.state = { asset: null };
+	        return _this;
+	    }
+	
+	    _createClass(ImageViewer, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+	
+	            Api.getAsset(this.props.id).then(function (asset) {
+	                _this2.setState({ asset: asset });
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            if (this.state.asset == null) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    { id: 'wrapper' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'loading' },
+	                        _react2.default.createElement('img', { src: '/assets/images/rolling.svg' })
+	                    )
+	                );
+	            }
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'imageviewer' },
+	                _react2.default.createElement('img', { src: "/uploads/" + this.state.asset.name })
+	            );
+	        }
+	    }]);
+	
+	    return ImageViewer;
+	}(_react2.default.Component);
+	
+	exports.default = ImageViewer;
 
 /***/ }
 /******/ ]);
