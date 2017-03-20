@@ -58,8 +58,9 @@ class AdminController @Inject()(users:Users, sessions:UserSessions) extends Cont
                             useragent = request.headers.get("User-Agent").getOrElse("Unknown"),
                             expiration_date = new Timestamp(expirationdate.getTime())
                         )
+                        sessions.create(newSession)
                         //create new session after cleanup is finished
-                        cleanup.map(c => sessions.create( newSession ))
+                        //cleanup.map(c => sessions.create( newSession ))
                     })
                 })
                 futureUser.map(x => {

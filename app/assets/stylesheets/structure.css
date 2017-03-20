@@ -48,9 +48,9 @@ p, span {
     font-family: 'Lato', sans-serif;
 	font-weight: 300; text-align: center;
 	margin-bottom: 0;
-   -webkit-box-shadow: inset -1px -14px 62px -53px rgba(0,0,0,0.75);
--moz-box-shadow: inset -1px -14px 62px -53px rgba(0,0,0,0.75);
-box-shadow: inset -1px -14px 62px -53px rgba(0,0,0,0.75);
+    -webkit-box-shadow: inset -1px -14px 62px -53px rgba(0,0,0,0.75);
+    -moz-box-shadow: inset -1px -14px 62px -53px rgba(0,0,0,0.75);
+    box-shadow: inset -1px -23px 62px -53px rgba(0,0,0,0.75);
 }
 
 
@@ -90,11 +90,13 @@ box-shadow: inset -1px -14px 62px -53px rgba(0,0,0,0.75);
 }
 
 .darkheader {
-    background: url(/assets/images/headerpattern_old.png); color: #FFF;
+    background: url(../images/headers/bloghead6.png); color: #fff;
+    background-attachment: fixed;
+    background-position-y: -88px;
 }
 
 .darkheader > div.container h2 {
-    color: #FFF;
+    color: #fff;
 }
 
 .section-row {
@@ -205,7 +207,7 @@ body > .container-fluid {
     margin-left: 15px;
     font-size: 24px;
     font-weight: 300;
-    line-height: 70px;
+    line-height: 64px;
     text-transform: uppercase;
 }
 .navbar-container {
@@ -222,7 +224,7 @@ body > .container-fluid {
 
 .navbar-default .navbar-nav>li>a:hover {
     color: #000;
-    background: #eee;
+    background: #f8f9f4;
     text-transform: uppercase;
 }
 
@@ -237,13 +239,13 @@ body > .container-fluid {
 
 .navbar-default .navbar-nav>.active>a,.navbar-default .navbar-nav>.active>a:hover
 {
-    background: #FFF;
-    border-top: 7px solid #c3d285;
+    background: #f8f9f4;
+    border-top: 5px solid #c3d285;
     line-height: 50px; 
     text-transform: uppercase;
     color: #000;
 }
 
 .navbar-default .navbar-nav>.active>a:hover {
-    background: #eee;
+    background: #f8f9f4;
 }

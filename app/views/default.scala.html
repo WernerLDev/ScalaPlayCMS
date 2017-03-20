@@ -1,10 +1,14 @@
 @import core.utils._
+@import core.views.html.editables._
 @(document:Document)(implicit request:PageRequest[AnyContent])
 
 @main("Nog een test") {
-    <h1>@document.name</h1>
 
-    Default view
+    <div class="row section-rowww">
+        <div class="col-md-12">
+            @inlineeditable("pagecontent", "div", true)
+        </div>
+    </div>
 }{
     @testheader(document.name)
 }

@@ -45,7 +45,8 @@ input.treeviewinputEdit {
             margin-left: -10px;
             display: block; min-height: 25px; 
             div.treeitem {
-                display: flex;
+                display: block;
+                white-space: nowrap;
                position: relative; 
                 -moz-user-select: none;
                 user-select: none;
@@ -93,7 +94,7 @@ input.treeviewinputEdit {
 }
 
 .tree > ul {
-    margin: 0; padding: 0; border: 0;  
+    margin: 0 20px 20px 0; padding: 0; border: 0;  
 }
 .tree > ul > li { margin: 0 }
 
