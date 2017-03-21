@@ -7,6 +7,8 @@ Here's a screenshot of app so far.
 
 ![Alt text](http://werlang.nl/rand/loginscreen.png "Screenshot")
 ![Alt text](http://werlang.nl/rand/inlineeditting.png "Screenshot")
+![Alt text](http://werlang.nl/rand/assets.png "Screenshot")
+
 
 This is your new Play application
 =================================
