@@ -46,8 +46,8 @@ export default class TestEditor extends React.Component {
         console.log("Previewing");
     }
 
-    delete() {
-        console.log("Deleting");
+    onDelete() {
+        this.props.ee.emitEvent("pagedeleted", [this.props.id]);
     }
 
     renderToolbar() {
@@ -58,7 +58,7 @@ export default class TestEditor extends React.Component {
                 <ToolbarItemLarge clicked={this.saveItem.bind(this)} icon="floppy-o" label="Save" />
                 <ToolbarItemLarge clicked={this.settings.bind(this)} icon="gears" label="Settings" />
                 <ToolbarItemLarge clicked={this.preview.bind(this)} icon="eye" label="Preview" />
-                <ToolbarItemLarge clicked={this.delete.bind(this)} icon="trash" label="" classes="button-right redbtn" />
+                <ToolbarItemLarge clicked={this.onDelete.bind(this)} icon="trash" label="" classes="button-right redbtn" />
             </LargeToolBar>
         );
     }

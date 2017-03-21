@@ -21,7 +21,8 @@
     "react-contextmenu": "^2.2.3",
     "react-dom": "^15.4.2",
     "react-split-pane": "^0.1.59",
-    "webpack": "^1.14.0"
+    "webpack": "^1.14.0",
+    "wolfy87-eventemitter": "^5.1.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

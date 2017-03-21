@@ -21,7 +21,7 @@ export default class ImageViewer extends React.Component {
     }
 
     delete() {
-
+        this.props.ee.emitEvent("assetdeleted", [this.props.id, "picture"]);
     }
 
     renderToolbar() {

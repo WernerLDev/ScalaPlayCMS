@@ -106,7 +106,7 @@ export class TreeViewItem extends React.Component {
         return(<ul>
             <li>
                 <div className={"treeitem"}>
-                <Icon type="empty"/> <Icon type="file" />
+                <Icon type="empty"/> <Icon type={this.props.addicon} />
                 <input autoFocus placeholder="New item name" type="text"
                     onKeyUp={this.keypress.bind(this)}
                     onChange={(e) => this.setState({inputvalue: e.currentTarget.value})}

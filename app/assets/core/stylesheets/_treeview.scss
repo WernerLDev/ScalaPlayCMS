@@ -19,15 +19,18 @@ input.treeviewinput, input.treeviewinputEdit {
     font-size: 14px;
 }
 
+input.treeviewinput{
+    position: absolute; top: 5px; left: 42px; right: 0;
+}
+
 input.treeviewinputEdit {
+    position: absolute; top: 5px; left: 43px; right: 0;
     background: $color1;
     border-radius: 4px;
     border: 0;
-    width: 100%;
+    width: auto;
     min-width: 10px;
-    margin-top: -2px;
     padding-left: 0;
-    padding-top: 3px;
     height: 15px;
     color: #FFF;
 }
@@ -38,11 +41,11 @@ input.treeviewinputEdit {
     ul {
         list-style-type: none;
         display: block;
-        padding: 0 0 0 0px; margin: 0 0 0 26px;
+        padding: 0 0 0 0px; margin: 0 0 0 30px;
         border-left: 1px dotted #d2d2d2;
 
         li {
-            margin-left: -10px;
+            margin-left: -11px;
             display: block; min-height: 25px; 
             div.treeitem {
                 display: block;
@@ -93,8 +96,8 @@ input.treeviewinputEdit {
     }
 }
 
-.tree > ul {
-    margin: 0 20px 20px 0; padding: 0; border: 0;  
+.treeviewcontainer > ul {
+    margin-bottom: 15px;
 }
 .tree > ul > li { margin: 0 }
 

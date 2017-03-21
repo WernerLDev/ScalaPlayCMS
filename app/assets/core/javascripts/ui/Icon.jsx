@@ -16,7 +16,7 @@ export default function Icon(props) {
        )
     } else if(props.type == "folder") {
        return (
-            <i className="fa fa-folder-o fileicon" aria-hidden="true"></i>
+            <i className="fa fa-folder fileicon" aria-hidden="true"></i>
        )
     } else if(props.type == "picture") {
        return (

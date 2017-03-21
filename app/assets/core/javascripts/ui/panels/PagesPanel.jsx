@@ -17,11 +17,17 @@ export default class PagesPanel extends React.Component {
                 this.setState({ pages: docs, pagetypes: types.pagetypes });
             })
         });
+
+        this.props.ee.on("pagedeleted", function(id){
+            this.deleteItem(id);
+        }.bind(this));
     }
 
     updateData() {
         return Api.getDocuments().then(docs => {
-            this.setState( {pages: docs, deleting: -1, adding: -1, renaming: -1, working: false} );
+            setTimeout(() => {
+                this.setState( {pages: docs, deleting: -1, adding: -1, renaming: -1, working: false} );
+            },200);
         });
     }
 
@@ -33,13 +39,17 @@ export default class PagesPanel extends React.Component {
         this.setState({ lastClick: currTime, selected: id })
     }
 
-    deleteItem() {
-        if(this.state.selected == -1) {
+    deleteItem(id) {
+        var docid = id;
+        if(isNaN(docid)) {
+            docid = this.state.selected;
+        }
+
+        if(docid == -1) {
             alert("No item selected");
             return;
         }
         if(confirm("Do you really want to delete this page? (This cannot be undone).")) {
-            var docid = this.state.selected;
             this.setState({ working: true, deleting: docid});
             Api.deleteDocument(docid).then(x => {
                 this.updateData().then(y => {
@@ -70,7 +80,8 @@ export default class PagesPanel extends React.Component {
         this.setState({renaming: -1, adding: -1});
     }
 
-    parentChanged(id, parent_id) {
+    //Called by treeviewitem after drag event
+    onParentChanged(id, parent_id) {
         this.setState({working: true});
         Api.updateParentDocument(id, parent_id).then(x => this.updateData());
     }
@@ -101,11 +112,12 @@ export default class PagesPanel extends React.Component {
                         deleted={this.state.deleting == x.id}
                         renaming={this.state.renaming == x.id}
                         adding={this.state.adding == x.id}
+                        addicon="file"
                         onBlur={this.onBlur.bind(this)}
                         onClick={() => this.clickItem(x.id, x.label)}
                         onRename={this.renameItem.bind(this)}
                         onAdd={this.addItem.bind(this)}
-                        parentChanged={this.parentChanged.bind(this)}
+                        parentChanged={this.onParentChanged.bind(this)}
                         selected={this.state.selected == x.id}
                         key={x.id} collapsed={x.collapsed}
                         contextMenu={this.contextMenu.bind(this)}

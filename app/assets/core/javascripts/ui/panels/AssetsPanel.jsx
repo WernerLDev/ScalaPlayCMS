@@ -16,11 +16,17 @@ export default class AssetsPanel extends React.Component {
         Api.getAssets().then(assets => {
             this.setState({ assets: assets });
         });
+
+        this.props.ee.on("assetdeleted", function(id, type){
+            this.deleteItem(type, id);
+        }.bind(this));
     }
 
     updateData() {
         return Api.getAssets().then(assets => {
-            this.setState( {assets: assets, deleting: -1, adding: -1, renaming: -1, working: false} );
+            setTimeout(() =>{
+                this.setState( {assets: assets, deleting: -1, adding: -1, renaming: -1, working: false} );
+            },200);
         });
     }
 
@@ -32,18 +38,23 @@ export default class AssetsPanel extends React.Component {
         this.setState({ lastClick: currTime, selected: id })
     }
 
-    deleteItem(type) {
-        if(this.state.selected == -1) {
+    deleteItem(type, id) {
+        var assetid = id;
+        if(isNaN(assetid)) {
+            assetid = this.state.selected;
+        }
+        if(assetid == -1) {
             alert("No item selected");
             return;
         }
-        var assetid = this.state.selected;
-        this.setState({ working: true, deleting: assetid});
-        Api.deleteAsset(assetid).then(x => {
-            this.updateData().then(x => {
-                this.props.onDelete(assetid, type);
-            });
-        })
+        if(confirm("Do you really want to delete this?")) {
+            this.setState({ working: true, deleting: assetid});
+            Api.deleteAsset(assetid).then(x => {
+                this.updateData().then(x => {
+                    this.props.onDelete(assetid, type);
+                });
+            })
+        }
     }
 
     renameItem(name) {
@@ -59,7 +70,6 @@ export default class AssetsPanel extends React.Component {
 
     addItem(name, parent_id) {
         this.setState({working: true});
-        console.log("Adding item " + name + "with parent_id " + parent_id + " of type " + this.state.newtype);
         Api.addAsset(parent_id, name, "",this.state.newtype).then(x => {
             this.updateData();
         })
@@ -114,6 +124,7 @@ export default class AssetsPanel extends React.Component {
                         deleted={this.state.deleting == x.id}
                         renaming={this.state.renaming == x.id}
                         adding={this.state.adding == x.id}
+                        addicon="folder"
                         onBlur={this.onBlur.bind(this)}
                         onClick={() => this.clickItem(x.id, x.label, x.mimetype)}
                         onRename={this.renameItem.bind(this)}

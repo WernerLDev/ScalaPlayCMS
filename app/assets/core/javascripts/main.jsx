@@ -9,13 +9,14 @@ import * as TabsAction from './actions/TabViewActions.js';
 import _ from 'lodash/fp';
 import AssetsPanel from './ui/panels/AssetsPanel.jsx';
 import ImageViewer from './ui/panels/ImageViewer.jsx';
+import EventEmitter from 'wolfy87-eventemitter';
 
 export default class Main extends React.Component {
 
     constructor(props, context) {
         super(props, context);
         var initialTabs = TabsAction.getInitialTabs();
-        this.state = { section: "pages", activetab: 0, tabs: initialTabs }
+        this.state = { section: "pages", activetab: 0, tabs: initialTabs, ee: new EventEmitter() }
     }
 
     switchSection(section) {
@@ -36,15 +37,15 @@ export default class Main extends React.Component {
         if(tabid == this.state.activetab) {
             newactive = TabsAction.findNewActive(tabid, this.state.tabs);
         }
-        this.setState({ tabs: newtabs, activetab: newactive });
+        this.setState({ tabs: newtabs, activetab: newactive })
     }
 
     openTab(id, type, label) {
         var content = (<div>{label}</div>);
         if(type == "file") {
-            content = (<PageEditPanel id={id} />);
+            content = (<PageEditPanel ee={this.state.ee} id={id} />);
         } else if(type == "picture") {
-            content = (<ImageViewer id={id} />)
+            content = (<ImageViewer ee={this.state.ee} id={id} />)
         }
         var newTab = {
             id: id + type,
@@ -104,6 +105,7 @@ export default class Main extends React.Component {
                             </div>
                             <div className={this.state.section == "pages" ? "visible tree" : "hidden"}>
                                 <PagesPanel
+                                ee={this.state.ee}
                                 onOpen={this.openTab.bind(this)}
                                 onRename={this.renameTab.bind(this)}
                                 onDelete={(id, type) => this.closeTab(id + type)} />
@@ -113,6 +115,7 @@ export default class Main extends React.Component {
                             </div>
                             <div className={this.state.section == "assets" ? "visible tree" : "hidden"}>
                                 <AssetsPanel 
+                                    ee={this.state.ee}
                                     onOpen={this.openTab.bind(this)}
                                     onRename={this.renameTab.bind(this)}
                                     onDelete={(id, type) => this.closeTab(id + type)} />
