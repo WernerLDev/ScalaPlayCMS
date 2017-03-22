@@ -28234,6 +28234,21 @@
 	            });
 	        }
 	    }, {
+	        key: 'refreshPage',
+	        value: function refreshPage() {
+	            var _this3 = this;
+	
+	            var oldPath = this.state.document.path;
+	            this.setState({ iframeloaded: false });
+	            Api.getDocument(this.props.id).then(function (doc) {
+	                _this3.setState({ document: doc }, function () {
+	                    if (doc.path == oldPath) {
+	                        _this3.refs.docpage.contentWindow.location.reload(true);
+	                    }
+	                });
+	            });
+	        }
+	    }, {
 	        key: 'publish',
 	        value: function publish() {
 	            console.log("publishing");
@@ -28241,7 +28256,7 @@
 	    }, {
 	        key: 'saveItem',
 	        value: function saveItem() {
-	            var _this3 = this;
+	            var _this4 = this;
 	
 	            this.setState({ iframeloaded: false });
 	            var test = this.refs.docpage.contentDocument.getElementsByClassName("editable");
@@ -28257,7 +28272,7 @@
 	                console.log("saved !");
 	                setTimeout(function () {
 	                    this.setState({ iframeloaded: true });
-	                }.bind(_this3), 500);
+	                }.bind(_this4), 500);
 	            });
 	        }
 	    }, {
@@ -28285,14 +28300,14 @@
 	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.publish.bind(this), icon: 'chevron-down', label: '' }),
 	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.saveItem.bind(this), icon: 'floppy-o', label: 'Save' }),
 	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.settings.bind(this), icon: 'gears', label: 'Settings' }),
-	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.preview.bind(this), icon: 'eye', label: 'Preview' }),
+	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.refreshPage.bind(this), icon: 'refresh', label: 'Refresh' }),
 	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.onDelete.bind(this), icon: 'trash', label: '', classes: 'button-right redbtn' })
 	            );
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var _this4 = this;
+	            var _this5 = this;
 	
 	            if (this.state.document == null) {
 	                return _react2.default.createElement(
@@ -28314,7 +28329,7 @@
 	                    'div',
 	                    { className: 'iframe-wrapper' },
 	                    _react2.default.createElement('iframe', { onLoad: function onLoad() {
-	                            return _this4.setState({ iframeloaded: true });
+	                            return _this5.setState({ iframeloaded: true });
 	                        }, ref: 'docpage', src: this.state.document.path + "?editmode=editing" })
 	                ),
 	                this.state.iframeloaded ? null : _react2.default.createElement(
@@ -29930,6 +29945,47 @@
 	    }
 	
 	    _createClass(UploadDialog, [{
+	        key: 'advancedUpload',
+	        value: function advancedUpload() {
+	            var div = document.createElement('div');
+	            return ('draggable' in div || 'ondragstart' in div && 'ondrop' in div) && 'FormData' in window && 'FileReader' in window;
+	        }
+	    }, {
+	        key: 'onDragOver',
+	        value: function onDragOver(e) {
+	            e.preventDefault();
+	            e.stopPropagation();
+	            console.log("Moving file over here");
+	            this.refs.uploadbtn.classList.add("fileover");
+	        }
+	    }, {
+	        key: 'onDragLeave',
+	        value: function onDragLeave(e) {
+	            e.preventDefault();
+	            e.stopPropagation();
+	            console.log("Left with file");
+	            this.refs.uploadbtn.classList.remove("fileover");
+	        }
+	    }, {
+	        key: 'onDrop',
+	        value: function onDrop(e) {
+	            e.preventDefault();
+	            e.stopPropagation();
+	            var droppedFiles = e.dataTransfer.files;
+	            console.log("Dropped files");
+	            console.log(droppedFiles);
+	            this.refs.uploadbtn.classList.remove("fileover");
+	            this.doUpload(droppedFiles);
+	        }
+	    }, {
+	        key: 'doUpload',
+	        value: function doUpload(files) {
+	            [].forEach.call(files, function (file) {
+	                var uploadPromise = Api.uploadAsset(file);
+	                this.props.onUploaded(uploadPromise);
+	            }.bind(this));
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var _this2 = this;
@@ -29947,23 +30003,30 @@
 	                        'Upload file'
 	                    ),
 	                    _react2.default.createElement(
-	                        'label',
-	                        { className: 'uploadbtn' },
-	                        _react2.default.createElement('input', { multiple: true,
-	                            type: 'file',
-	                            id: 'file-select',
-	                            name: 'asset',
-	                            onChange: function onChange(e) {
-	                                var files = e.currentTarget.files;
-	                                [].forEach.call(files, function (file) {
-	                                    var uploadPromise = Api.uploadAsset(file);
-	                                    this.props.onUploaded(uploadPromise);
-	                                }.bind(_this2));
-	                            } }),
+	                        'form',
+	                        {
+	                            onDragOver: this.onDragOver.bind(this),
+	                            onDragLeave: this.onDragLeave.bind(this),
+	                            onDropCapture: this.onDrop.bind(this)
+	                        },
 	                        _react2.default.createElement(
-	                            'span',
-	                            null,
-	                            'Select one or more files'
+	                            'label',
+	                            { ref: 'uploadbtn', className: 'uploadbtn' },
+	                            _react2.default.createElement('input', { multiple: true,
+	                                type: 'file',
+	                                id: 'file-select',
+	                                name: 'asset[]',
+	                                onChange: function onChange(e) {
+	                                    var files = e.currentTarget.files;
+	                                    _this2.doUpload(files);
+	                                } }),
+	                            _react2.default.createElement(
+	                                'span',
+	                                null,
+	                                _react2.default.createElement('i', { className: 'fa fa-upload', 'aria-hidden': 'true' }),
+	                                _react2.default.createElement('br', null),
+	                                'Click or drop file(s) to upload'
+	                            )
 	                        )
 	                    )
 	                )

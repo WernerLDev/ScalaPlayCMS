@@ -15,6 +15,18 @@ export default class TestEditor extends React.Component {
         })
     }
 
+    refreshPage() {
+         var oldPath = this.state.document.path;
+         this.setState({iframeloaded: false});
+         Api.getDocument(this.props.id).then(doc => {
+            this.setState({ document: doc }, () => {
+                if(doc.path == oldPath) {
+                    this.refs.docpage.contentWindow.location.reload(true);
+                }
+            });
+        })
+    }
+
     publish() {
         console.log("publishing");
     }
@@ -50,6 +62,8 @@ export default class TestEditor extends React.Component {
         this.props.ee.emitEvent("pagedeleted", [this.props.id]);
     }
 
+    
+
     renderToolbar() {
         return (
             <LargeToolBar>
@@ -57,7 +71,7 @@ export default class TestEditor extends React.Component {
                 <ToolbarItemLarge clicked={this.publish.bind(this)} icon="chevron-down" label="" />
                 <ToolbarItemLarge clicked={this.saveItem.bind(this)} icon="floppy-o" label="Save" />
                 <ToolbarItemLarge clicked={this.settings.bind(this)} icon="gears" label="Settings" />
-                <ToolbarItemLarge clicked={this.preview.bind(this)} icon="eye" label="Preview" />
+                <ToolbarItemLarge clicked={this.refreshPage.bind(this)} icon="refresh" label="Refresh" />
                 <ToolbarItemLarge clicked={this.onDelete.bind(this)} icon="trash" label="" classes="button-right redbtn" />
             </LargeToolBar>
         );
