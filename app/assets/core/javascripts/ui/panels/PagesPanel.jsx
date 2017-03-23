@@ -106,8 +106,9 @@ export default class PagesPanel extends React.Component {
         if(items.length <= 0) return null;
         return(
             <TreeView>
-                {items.map(x => 
+                {items.map(x =>
                     <TreeViewItem
+                        drop="all"
                         id={x.id} type={x.doctype}
                         deleted={this.state.deleting == x.id}
                         renaming={this.state.renaming == x.id}

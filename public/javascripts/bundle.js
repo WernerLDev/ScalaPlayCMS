@@ -26456,6 +26456,7 @@
 	                    return _react2.default.createElement(
 	                        _TreeView.TreeViewItem,
 	                        {
+	                            drop: 'all',
 	                            id: x.id, type: x.doctype,
 	                            deleted: _this9.state.deleting == x.id,
 	                            renaming: _this9.state.renaming == x.id,
@@ -26601,8 +26602,31 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var TreeViewItemLabel = function (_React$Component) {
-	    _inherits(TreeViewItemLabel, _React$Component);
+	var TreeViewListItem = function (_React$Component) {
+	    _inherits(TreeViewListItem, _React$Component);
+	
+	    function TreeViewListItem(props, context) {
+	        _classCallCheck(this, TreeViewListItem);
+	
+	        return _possibleConstructorReturn(this, (TreeViewListItem.__proto__ || Object.getPrototypeOf(TreeViewListItem)).call(this, props, context));
+	    }
+	
+	    _createClass(TreeViewListItem, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'li',
+	                { className: this.props.deleted ? "deleted" : "" },
+	                this.props.children
+	            );
+	        }
+	    }]);
+	
+	    return TreeViewListItem;
+	}(_react2.default.Component);
+	
+	var TreeViewItemLabel = function (_React$Component2) {
+	    _inherits(TreeViewItemLabel, _React$Component2);
 	
 	    function TreeViewItemLabel(props, context) {
 	        _classCallCheck(this, TreeViewItemLabel);
@@ -26619,6 +26643,9 @@
 	            [].forEach.call(subitems, function (elem) {
 	                elem.classList.add("nondraggable");
 	            });
+	            [].forEach.call(document.getElementsByClassName("treeitemclickarea"), function (elem) {
+	                elem.style.display = "none";
+	            });
 	        }
 	    }, {
 	        key: 'onDragStop',
@@ -26628,10 +26655,15 @@
 	            [].forEach.call(subitems, function (elem) {
 	                elem.classList.remove("nondraggable");
 	            });
+	            [].forEach.call(document.getElementsByClassName("treeitemclickarea"), function (elem) {
+	                elem.style.display = "display";
+	                console.log("adding back thing");
+	            });
 	        }
 	    }, {
 	        key: 'onDragOver',
 	        value: function onDragOver(e) {
+	            console.log("asdfasdf");
 	            if (e.target.classList.contains("nondraggable")) {
 	                return;
 	            }
@@ -26652,42 +26684,57 @@
 	    }, {
 	        key: 'onDrop',
 	        value: function onDrop(e) {
-	            var targetid = e.dataTransfer.getData("id");
 	            e.target.classList.remove("draghover");
+	            var targetid = e.dataTransfer.getData("id");
 	            this.props.parentChanged(targetid, this.props.id);
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                {
-	                    draggable: 'true',
-	                    onDragStart: this.onDragStart.bind(this),
-	                    onDragEnd: this.onDragStop.bind(this),
-	                    onDragOver: this.onDragOver.bind(this),
-	                    onDragLeave: this.onDragLeave.bind(this),
-	                    onDropCapture: this.onDrop.bind(this),
-	                    onContextMenu: this.props.onContextMenu,
-	                    className: this.props.selected ? "selected treeitem" : "treeitem" },
-	                this.props.children
-	            );
+	            console.log(this.props.drop);
+	            if (this.props.drop == "all" || this.props.type == this.props.drop) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    {
+	                        draggable: 'true',
+	                        onDragStart: this.onDragStart.bind(this),
+	                        onDragEnd: this.onDragStop.bind(this),
+	                        onDragOver: this.onDragOver.bind(this),
+	                        onDragLeave: this.onDragLeave.bind(this),
+	                        onDropCapture: this.onDrop.bind(this),
+	                        onContextMenu: this.props.onContextMenu,
+	                        className: this.props.selected ? "selected treeitem" : "treeitem" },
+	                    this.props.children
+	                );
+	            } else {
+	                return _react2.default.createElement(
+	                    'div',
+	                    {
+	                        draggable: 'true',
+	                        onContextMenu: this.props.onContextMenu,
+	                        className: this.props.selected ? "selected nondraggable treeitem" : "nondraggable treeitem",
+	                        onDragStart: this.onDragStart.bind(this),
+	                        onDragEnd: this.onDragStop.bind(this)
+	                    },
+	                    this.props.children
+	                );
+	            }
 	        }
 	    }]);
 	
 	    return TreeViewItemLabel;
 	}(_react2.default.Component);
 	
-	var TreeViewItem = exports.TreeViewItem = function (_React$Component2) {
-	    _inherits(TreeViewItem, _React$Component2);
+	var TreeViewItem = exports.TreeViewItem = function (_React$Component3) {
+	    _inherits(TreeViewItem, _React$Component3);
 	
 	    function TreeViewItem(props, context) {
 	        _classCallCheck(this, TreeViewItem);
 	
-	        var _this2 = _possibleConstructorReturn(this, (TreeViewItem.__proto__ || Object.getPrototypeOf(TreeViewItem)).call(this, props, context));
+	        var _this3 = _possibleConstructorReturn(this, (TreeViewItem.__proto__ || Object.getPrototypeOf(TreeViewItem)).call(this, props, context));
 	
-	        _this2.state = { collapsed: props.collapsed, inputvalue: "" };
-	        return _this2;
+	        _this3.state = { collapsed: props.collapsed, inputvalue: "" };
+	        return _this3;
 	    }
 	
 	    _createClass(TreeViewItem, [{
@@ -26710,13 +26757,13 @@
 	    }, {
 	        key: 'renderLabel',
 	        value: function renderLabel() {
-	            var _this3 = this;
+	            var _this4 = this;
 	
 	            if (this.props.renaming) {
 	                return _react2.default.createElement('input', { autoFocus: true, type: 'text', className: 'treeviewinputEdit', defaultValue: this.props.label,
 	                    onBlur: this.props.onBlur, onKeyUp: this.keypress.bind(this),
 	                    onChange: function onChange(x) {
-	                        return _this3.setState({ inputvalue: x.currentTarget.value });
+	                        return _this4.setState({ inputvalue: x.currentTarget.value });
 	                    } });
 	            } else {
 	                return this.props.label;
@@ -26725,7 +26772,7 @@
 	    }, {
 	        key: 'renderNewForm',
 	        value: function renderNewForm() {
-	            var _this4 = this;
+	            var _this5 = this;
 	
 	            return _react2.default.createElement(
 	                'ul',
@@ -26742,7 +26789,7 @@
 	                        _react2.default.createElement('input', { autoFocus: true, placeholder: 'New item name', type: 'text',
 	                            onKeyUp: this.keypress.bind(this),
 	                            onChange: function onChange(e) {
-	                                return _this4.setState({ inputvalue: e.currentTarget.value });
+	                                return _this5.setState({ inputvalue: e.currentTarget.value });
 	                            },
 	                            className: 'treeviewinput', onBlur: this.props.onBlur })
 	                    )
@@ -26754,22 +26801,27 @@
 	        value: function render() {
 	            var icon = _react2.default.createElement(_Icon2.default, { onClick: this.collapse.bind(this), type: this.state.collapsed ? "arrow-down" : "arrow-right" });
 	            if (!this.props.children) icon = _react2.default.createElement(_Icon2.default, { type: 'empty' });
+	            var typeicon = this.props.type;
+	            if (this.props.type == "folder" && this.state.collapsed) typeicon = "folder-open";
+	
 	            return _react2.default.createElement(
-	                'li',
-	                { className: this.props.deleted ? "deleted" : "" },
+	                TreeViewListItem,
+	                { type: this.props.type, drop: this.props.drop, deleted: this.props.deleted },
 	                _react2.default.createElement(
 	                    _reactContextmenu.ContextMenuTrigger,
 	                    { holdToDisplay: -1, id: String(this.props.id) + this.props.label },
 	                    _react2.default.createElement(
 	                        TreeViewItemLabel,
 	                        {
+	                            drop: this.props.drop,
+	                            type: this.props.type,
 	                            id: this.props.id,
 	                            parentChanged: this.props.parentChanged,
 	                            onContextMenu: this.props.onClick,
 	                            selected: this.props.selected },
 	                        icon,
 	                        ' ',
-	                        _react2.default.createElement(_Icon2.default, { type: this.props.type }),
+	                        _react2.default.createElement(_Icon2.default, { type: typeicon }),
 	                        ' ',
 	                        this.renderLabel(),
 	                        this.props.renaming ? null : _react2.default.createElement('div', { onClick: this.props.onClick, className: 'treeitemclickarea' })
@@ -26789,8 +26841,8 @@
 	    return TreeViewItem;
 	}(_react2.default.Component);
 	
-	var TreeView = exports.TreeView = function (_React$Component3) {
-	    _inherits(TreeView, _React$Component3);
+	var TreeView = exports.TreeView = function (_React$Component4) {
+	    _inherits(TreeView, _React$Component4);
 	
 	    function TreeView(props, context) {
 	        _classCallCheck(this, TreeView);
@@ -26839,6 +26891,8 @@
 	        return _react2.default.createElement("i", { className: "fa fa-file-code-o fileicon", "aria-hidden": "true" });
 	    } else if (props.type == "folder") {
 	        return _react2.default.createElement("i", { className: "fa fa-folder fileicon", "aria-hidden": "true" });
+	    } else if (props.type == "folder-open") {
+	        return _react2.default.createElement("i", { className: "fa fa-folder-open fileicon", "aria-hidden": "true" });
 	    } else if (props.type == "picture") {
 	        return _react2.default.createElement("i", { className: "fa fa-file-image-o fileicon", "aria-hidden": "true" });
 	    } else if (props.type == "home") {
@@ -29815,6 +29869,7 @@
 	                    return _react2.default.createElement(
 	                        _TreeView.TreeViewItem,
 	                        {
+	                            drop: 'folder',
 	                            id: x.id,
 	                            type: x.mimetype,
 	                            deleted: _this10.state.deleting == x.id,

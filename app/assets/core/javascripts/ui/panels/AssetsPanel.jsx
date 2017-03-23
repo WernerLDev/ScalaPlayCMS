@@ -119,6 +119,7 @@ export default class AssetsPanel extends React.Component {
             <TreeView>
                 {items.map(x => 
                     <TreeViewItem
+                        drop="folder"
                         id={x.id}
                         type={x.mimetype}
                         deleted={this.state.deleting == x.id}

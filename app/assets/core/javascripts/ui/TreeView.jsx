@@ -3,6 +3,21 @@ import Icon from './Icon.jsx';
 import { ContextMenu, MenuItem, SubMenu, ContextMenuTrigger } from "react-contextmenu";
 import * as Api from '../api/api.js';
 
+class TreeViewListItem extends React.Component {
+
+    constructor(props, context) {
+        super(props, context);
+    }
+
+    render() {
+        return(
+            <li className={this.props.deleted ? "deleted" : ""}>
+                {this.props.children}
+            </li>
+        );
+    }
+}
+
 class TreeViewItemLabel extends React.Component {
 
     constructor(props, context) {
@@ -16,6 +31,9 @@ class TreeViewItemLabel extends React.Component {
          [].forEach.call(subitems, function(elem){
             elem.classList.add("nondraggable");
          });
+         [].forEach.call(document.getElementsByClassName("treeitemclickarea"), function(elem){
+            elem.style.display = "none";
+         });
     }
 
     onDragStop(e) {
@@ -24,9 +42,14 @@ class TreeViewItemLabel extends React.Component {
          [].forEach.call(subitems, function(elem){
             elem.classList.remove("nondraggable");
          });
+         [].forEach.call(document.getElementsByClassName("treeitemclickarea"), function(elem){
+            elem.style.display = "display";
+            console.log("adding back thing")
+         });
     }
 
     onDragOver(e) {
+        console.log("asdfasdf");
         if(e.target.classList.contains("nondraggable")) {
             return;
         }
@@ -45,25 +68,39 @@ class TreeViewItemLabel extends React.Component {
     }
 
     onDrop(e) {
-        var targetid = e.dataTransfer.getData("id");
         e.target.classList.remove("draghover");
+        var targetid = e.dataTransfer.getData("id");
         this.props.parentChanged(targetid, this.props.id);
     }
 
     render() {
-        return(
-            <div
-                draggable="true"
-                onDragStart={this.onDragStart.bind(this)}
-                onDragEnd={this.onDragStop.bind(this)}
-                onDragOver={this.onDragOver.bind(this)}
-                onDragLeave={this.onDragLeave.bind(this)}
-                onDropCapture={this.onDrop.bind(this)}
-                onContextMenu={this.props.onContextMenu}
-                className={this.props.selected ? "selected treeitem" : "treeitem"}>
-                {this.props.children}
-            </div>
-        )
+        console.log(this.props.drop);
+        if(this.props.drop == "all" || this.props.type == this.props.drop) {
+            return(
+                <div
+                    draggable="true"
+                    onDragStart={this.onDragStart.bind(this)}
+                    onDragEnd={this.onDragStop.bind(this)}
+                    onDragOver={this.onDragOver.bind(this)}
+                    onDragLeave={this.onDragLeave.bind(this)}
+                    onDropCapture={this.onDrop.bind(this)}
+                    onContextMenu={this.props.onContextMenu}
+                    className={this.props.selected ? "selected treeitem" : "treeitem"}>
+                    {this.props.children}
+                </div>
+            )
+        } else {
+            return (
+                <div 
+                    draggable="true"
+                    onContextMenu={this.props.onContextMenu}
+                    className={this.props.selected ? "selected nondraggable treeitem" : "nondraggable treeitem"}
+                    onDragStart={this.onDragStart.bind(this)}
+                    onDragEnd={this.onDragStop.bind(this)}
+                    >
+                    {this.props.children}
+                </div>)
+        }
     }
 }
 
@@ -119,15 +156,20 @@ export class TreeViewItem extends React.Component {
     render() {
         var icon = (<Icon onClick={this.collapse.bind(this)} type={this.state.collapsed ? "arrow-down" : "arrow-right"} />);
         if(!this.props.children) icon = (<Icon type="empty" />); 
+        var typeicon = this.props.type;
+        if(this.props.type == "folder" && this.state.collapsed) typeicon = "folder-open";
+
         return(
-            <li className={this.props.deleted ? "deleted" : ""}>
+            <TreeViewListItem type={this.props.type} drop={this.props.drop} deleted={this.props.deleted}>
                 <ContextMenuTrigger holdToDisplay={-1} id={String(this.props.id) + this.props.label}>
                 <TreeViewItemLabel
+                    drop={this.props.drop}
+                    type={this.props.type}
                     id={this.props.id}
                     parentChanged={this.props.parentChanged}
                     onContextMenu={this.props.onClick}
                     selected={this.props.selected}>
-                    {icon} <Icon type={this.props.type} /> {this.renderLabel()}
+                    {icon} <Icon type={typeicon} /> {this.renderLabel()}
                     {this.props.renaming ? null : <div onClick={this.props.onClick} className="treeitemclickarea"></div>}
                 </TreeViewItemLabel>
 
@@ -135,7 +177,7 @@ export class TreeViewItem extends React.Component {
                 {this.props.adding ? this.renderNewForm() : null}
                 <div className={this.state.collapsed ? "" : "hidden"}>{this.props.children}</div>
                 {this.props.contextMenu(this.props.id, this.props.label, this.props.type)}
-            </li>
+            </TreeViewListItem>
         )
     }
 }

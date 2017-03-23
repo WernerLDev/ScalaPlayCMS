@@ -18,7 +18,12 @@ export default function Icon(props) {
        return (
             <i className="fa fa-folder fileicon" aria-hidden="true"></i>
        )
-    } else if(props.type == "picture") {
+    } else if(props.type == "folder-open"){
+       return (
+            <i className="fa fa-folder-open fileicon" aria-hidden="true"></i>
+       )
+    } 
+    else if(props.type == "picture") {
        return (
             <i className="fa fa-file-image-o fileicon" aria-hidden="true"></i>
        )
