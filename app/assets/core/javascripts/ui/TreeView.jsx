@@ -43,13 +43,12 @@ class TreeViewItemLabel extends React.Component {
             elem.classList.remove("nondraggable");
          });
          [].forEach.call(document.getElementsByClassName("treeitemclickarea"), function(elem){
-            elem.style.display = "display";
+            elem.style.display = "block";
             console.log("adding back thing")
          });
     }
 
     onDragOver(e) {
-        console.log("asdfasdf");
         if(e.target.classList.contains("nondraggable")) {
             return;
         }

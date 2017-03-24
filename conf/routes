@@ -30,6 +30,7 @@ POST    /api/v1/assets/upload       core.controllers.api.AssetsController.upload
 PUT     /api/v1/assets/:id/rename   core.controllers.api.AssetsController.rename(id:Long)
 DELETE  /api/v1/assets/:id          core.controllers.api.AssetsController.delete(id:Long)
 PUT     /api/v1/assets/:id/updateparent     core.controllers.api.AssetsController.updateParent(id:Long)
+PUT     /api/v1/assets/:id/collapse core.controllers.api.AssetsController.collapse(id:Long)
 GET     /uploads/:name              core.controllers.api.AssetsController.getUpload(name:String)
 
 # Map static resources from the /public folder to the /assets URL path

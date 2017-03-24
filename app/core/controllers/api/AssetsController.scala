@@ -94,6 +94,15 @@ class AssetsController @Inject()(assets:Assets, WithAuthAction:AuthAction, PageA
         }).getOrElse( Future(BadRequest("Error: missing parameter [parent_id]")) )
     }
 
+    def collapse(id:Long) = WithAuthAction.async(parse.json) { request =>
+        val collapseState = (request.body \ "collapsed").asOpt[Boolean]
+        (collapseState map { collapse:Boolean =>
+        assets.setCollapsed(id, collapse) map { x =>
+            Ok(Json.toJson(Map("success" -> JsNumber(x))))
+        }
+        }).getOrElse( Future(BadRequest("Error: Missing parameter [collapsed]")) )
+    }
+
     def getUpload(filename:String) = PageAction.async { implicit request =>
         val assetdir = conf.getString("elestic.uploadroot").getOrElse("")
         assets.getByName(filename).map(assetOpt => {

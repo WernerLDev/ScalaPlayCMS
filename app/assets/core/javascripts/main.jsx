@@ -112,6 +112,8 @@ export default class Main extends React.Component {
                             </div>
                             <div className={this.state.section == "entities" ? "visible" : "hidden"}>
                                 Entities
+
+                                
                             </div>
                             <div className={this.state.section == "assets" ? "visible tree" : "hidden"}>
                                 <AssetsPanel 

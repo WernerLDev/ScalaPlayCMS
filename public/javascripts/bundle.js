@@ -26381,6 +26381,11 @@
 	            });
 	        }
 	    }, {
+	        key: 'isNotHome',
+	        value: function isNotHome(type) {
+	            return type != "home";
+	        }
+	    }, {
 	        key: 'contextMenu',
 	        value: function contextMenu(id, label, type) {
 	            var _this8 = this;
@@ -26408,32 +26413,32 @@
 	                        }, data: { item: 'open' } },
 	                    'Open'
 	                ),
-	                _react2.default.createElement(
+	                this.isNotHome ? _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
 	                    { onClick: function onClick() {
 	                            return _this8.props.callback(_this8.props, "dblclick");
 	                        }, data: { item: 'open' } },
 	                    'Unpublish'
-	                ),
-	                _react2.default.createElement(
+	                ) : null,
+	                this.isNotHome(type) ? _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
 	                    { onClick: function onClick() {
 	                            return _this8.setState({ renaming: id });
 	                        }, data: { item: 'rename' } },
 	                    'Rename'
-	                ),
-	                _react2.default.createElement(
+	                ) : null,
+	                this.isNotHome(type) ? _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
 	                    { onClick: function onClick() {
 	                            return _this8.props.callback(_this8.props, "dblclick");
 	                        }, data: { item: 'open' } },
 	                    'Dublicate'
-	                ),
-	                _react2.default.createElement(
+	                ) : null,
+	                this.isNotHome(type) ? _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
 	                    { onClick: this.deleteItem.bind(this), data: { item: 'delete' } },
 	                    'Delete'
-	                ),
+	                ) : null,
 	                _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
 	                    { onClick: function onClick() {
@@ -26494,8 +26499,9 @@
 	                        } }),
 	                    _react2.default.createElement(_SmallToolBar.SmallToolBarItem, { icon: 'trash', onClick: this.deleteItem.bind(this) }),
 	                    _react2.default.createElement(_SmallToolBar.SmallToolBarItem, { alignright: true, icon: 'refresh', onClick: function onClick() {
-	                            _this10.setState({ working: true });
-	                            _this10.updateData();
+	                            _this10.setState({ working: true }, function () {
+	                                _this10.updateData();
+	                            });
 	                        } })
 	                )
 	            );
@@ -26656,14 +26662,13 @@
 	                elem.classList.remove("nondraggable");
 	            });
 	            [].forEach.call(document.getElementsByClassName("treeitemclickarea"), function (elem) {
-	                elem.style.display = "display";
+	                elem.style.display = "block";
 	                console.log("adding back thing");
 	            });
 	        }
 	    }, {
 	        key: 'onDragOver',
 	        value: function onDragOver(e) {
-	            console.log("asdfasdf");
 	            if (e.target.classList.contains("nondraggable")) {
 	                return;
 	            }
@@ -27876,7 +27881,7 @@
 /* 239 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -27897,38 +27902,44 @@
 	exports.renameAsset = renameAsset;
 	exports.getAsset = getAsset;
 	exports.updateParentAsset = updateParentAsset;
+	exports.collapseAsset = collapseAsset;
 	
 	var csrf = document.getElementById("csrftoken").innerText;
 	
-	function getPageTypes() {
-	    console.log(csrf);
-	    return fetch("/api/v1/pagetypes", { credentials: 'include' }).then(function (r) {
+	function ApiCall(call, method, body) {
+	    var params = {
+	        method: method,
+	        credentials: 'include',
+	        headers: {
+	            'Content-Type': 'application/json',
+	            "Csrf-Token": csrf
+	        }
+	    };
+	    if (method != "GET" && method != "HEAD") {
+	        params["body"] = body;
+	    }
+	
+	    return fetch(call, params).then(function (r) {
 	        return r.json();
+	    }).catch(function (e) {
+	        return alert("something went wrong");
 	    });
+	}
+	
+	function getPageTypes() {
+	    return ApiCall("/api/v1/pagetypes", "GET");
 	}
 	
 	function getDocuments() {
-	    return fetch("/documents", { credentials: 'include' }).then(function (r) {
-	        return r.json();
-	    });
+	    return ApiCall("/documents", "GET");
 	}
 	
 	function getDocument(id) {
-	    return fetch("/documents/" + id, { credentials: 'include' }).then(function (r) {
-	        return r.json();
-	    });
+	    return ApiCall("/documents/" + id, "GET");
 	}
 	
 	function deleteDocument(id) {
-	    return fetch("/documents/" + id, {
-	        method: "delete",
-	        credentials: 'include',
-	        headers: {
-	            "Csrf-Token": csrf
-	        }
-	    }).then(function (r) {
-	        return r.json();
-	    });
+	    return ApiCall("/documents/" + id, "DELETE");
 	}
 	
 	function addDocument(parent_id, name, pagetype) {
@@ -27937,179 +27948,84 @@
 	        "name": name,
 	        "pagetype": pagetype
 	    });
-	    return fetch("/documents", {
-	        method: "POST",
-	        credentials: 'include',
-	        headers: {
-	            'Content-Type': 'application/json',
-	            "Csrf-Token": csrf
-	        },
-	        body: body
-	    }).then(function (r) {
-	        return r.json();
-	    });
+	    return ApiCall("/documents", "POST", body);
 	}
 	
 	function collapseDocument(id, collapsed) {
-	    return fetch("/documents/" + id + "/collapse", {
-	        method: "PUT",
-	        credentials: 'include',
-	        headers: {
-	            'Content-Type': 'application/json',
-	            "Csrf-Token": csrf
-	        },
-	        body: JSON.stringify({
-	            "collapsed": collapsed
-	        })
-	    }).then(function (r) {
-	        return r.json();
+	    var body = JSON.stringify({
+	        "collapsed": collapsed
 	    });
+	    return ApiCall("/documents/" + id + "/collapse", "PUT", body);
 	}
 	
 	function renameDocument(id, name) {
-	    return fetch("/documents/" + id + "/rename", {
-	        method: "PUT",
-	        credentials: 'include',
-	        headers: {
-	            'Content-Type': 'application/json',
-	            "Csrf-Token": csrf
-	        },
-	        body: JSON.stringify({
-	            "name": name
-	        })
-	    }).then(function (r) {
-	        return r.json();
+	    var body = JSON.stringify({
+	        "name": name
 	    });
+	    return ApiCall("/documents/" + id + "/rename", "PUT", body);
 	}
 	
 	function updateParentDocument(id, parent_id) {
-	    return fetch("/documents/" + id + "/updateparent", {
-	        method: "PUT",
-	        credentials: 'include',
-	        headers: {
-	            'Content-Type': 'application/json',
-	            "Csrf-Token": csrf
-	        },
-	        body: JSON.stringify({
-	            "parent_id": parent_id
-	        })
-	    }).then(function (r) {
-	        return r.json();
+	    var body = JSON.stringify({
+	        "parent_id": parent_id
 	    });
+	    return ApiCall("/documents/" + id + "/updateparent", "PUT", body);
 	}
 	
 	function SaveEditables(id, editables) {
-	    return fetch("/documents/" + id + "/editables", {
-	        method: "PUT",
-	        credentials: 'include',
-	        headers: {
-	            'Content-Type': 'application/json',
-	            "Csrf-Token": csrf
-	        },
-	        body: JSON.stringify({
-	            "editables": editables
-	        })
-	    }).then(function (r) {
-	        return r.json();
+	    var body = JSON.stringify({
+	        "editables": editables
 	    });
+	    return ApiCall("/documents/" + id + "/editables", "PUT", body);
 	}
 	
 	function getAssets() {
-	    return fetch("/api/v1/assets", { credentials: 'include' }).then(function (r) {
-	        return r.json();
-	    });
+	    return ApiCall("/api/v1/assets", "GET");
 	}
 	
 	function addAsset(parent_id, name, path, mimetype) {
-	    return fetch("/api/v1/assets", {
-	        method: "POST",
-	        credentials: 'include',
-	        headers: {
-	            'content-type': 'application/json',
-	            "Csrf-Token": csrf
-	        },
-	        body: JSON.stringify({
-	            'parent_id': parent_id,
-	            'name': name,
-	            'path': path,
-	            'mimetype': mimetype
-	        })
-	    }).then(function (r) {
-	        return r.json();
+	    var body = JSON.stringify({
+	        'parent_id': parent_id,
+	        'name': name,
+	        'path': path,
+	        'mimetype': mimetype
 	    });
+	    return ApiCall("/api/v1/assets", "POST", body);
 	}
 	
 	function uploadAsset(file) {
 	    var data = new FormData();
 	    data.append("asset", file);
-	    return fetch("/api/v1/assets/upload", {
-	        method: "POST",
-	        credentials: 'include',
-	        headers: {
-	            "Csrf-Token": csrf
-	        },
-	        body: data
-	    }).then(function (r) {
-	        return r.json();
-	    });
+	    return ApiCall("/api/v1/assets/upload", "POST", data);
 	}
 	
 	function deleteAsset(id) {
-	    return fetch("/api/v1/assets/" + id, {
-	        method: "delete",
-	        credentials: 'include',
-	        headers: {
-	            "Csrf-Token": csrf
-	        },
-	        body: JSON.stringify({
-	            "csrfToken": csrf
-	        })
-	    }).then(function (r) {
-	        return r.json();
-	    });
+	    return ApiCall("/api/v1/assets/" + id, "DELETE");
 	}
 	
 	function renameAsset(id, name) {
-	    return fetch("/api/v1/assets/" + id + "/rename", {
-	        method: "PUT",
-	        credentials: 'include',
-	        headers: {
-	            'Content-Type': 'application/json',
-	            "Csrf-Token": csrf
-	        },
-	        body: JSON.stringify({
-	            "name": name,
-	            "csrfToken": csrf
-	        })
-	    }).then(function (r) {
-	        return r.json();
+	    var body = JSON.stringify({
+	        "name": name
 	    });
+	    return ApiCall("/api/v1/assets/" + id + "/rename", "PUT", body);
 	}
 	
 	function getAsset(id) {
-	    return fetch("/api/v1/assets/" + id, {
-	        method: "GET",
-	        credentials: "include"
-	    }).then(function (r) {
-	        return r.json();
-	    });
+	    return ApiCall("/api/v1/assets/" + id, "GET");
 	}
 	
 	function updateParentAsset(id, parent_id) {
-	    return fetch("/api/v1/assets/" + id + "/updateparent", {
-	        method: "PUT",
-	        credentials: 'include',
-	        headers: {
-	            'Content-Type': 'application/json',
-	            "Csrf-Token": csrf
-	        },
-	        body: JSON.stringify({
-	            "parent_id": parent_id,
-	            "csrfToken": csrf
-	        })
-	    }).then(function (r) {
-	        return r.json();
+	    var body = JSON.stringify({
+	        "parent_id": parent_id
 	    });
+	    return ApiCall("/api/v1/assets/" + id + "/updateparent", "PUT", body);
+	}
+	
+	function collapseAsset(id, collapsed) {
+	    var body = JSON.stringify({
+	        "collapsed": collapsed
+	    });
+	    return ApiCall("/assets/" + id + "/collapse", "PUT", body);
 	}
 
 /***/ },
@@ -29793,8 +29709,8 @@
 	            });
 	        }
 	    }, {
-	        key: 'canCreateFolder',
-	        value: function canCreateFolder(type) {
+	        key: 'canCreate',
+	        value: function canCreate(type) {
 	            return type == "folder" || type == "home";
 	        }
 	    }, {
@@ -29805,14 +29721,14 @@
 	            return _react2.default.createElement(
 	                _reactContextmenu.ContextMenu,
 	                { id: String(id) + label },
-	                _react2.default.createElement(
+	                this.canCreate(type) ? _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
 	                    { onClick: function onClick() {
 	                            return _this9.setState({ showUpload: true });
 	                        }, data: { item: 'open' } },
 	                    'Upload file'
-	                ),
-	                this.canCreateFolder(type) ? _react2.default.createElement(
+	                ) : null,
+	                this.canCreate(type) ? _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
 	                    { onClick: function onClick() {
 	                            return _this9.setState({ adding: id, newtype: 'folder' });

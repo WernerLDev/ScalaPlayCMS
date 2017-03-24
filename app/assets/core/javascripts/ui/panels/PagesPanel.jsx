@@ -86,6 +86,10 @@ export default class PagesPanel extends React.Component {
         Api.updateParentDocument(id, parent_id).then(x => this.updateData());
     }
 
+    isNotHome(type) {
+        return type != "home";
+    }
+
     contextMenu(id, label, type) {
         return (
             <ContextMenu id={String(id) + label}>
@@ -93,10 +97,10 @@ export default class PagesPanel extends React.Component {
                     {this.state.pagetypes.map(x => <MenuItem key={x.typekey} onClick={() => this.setState({adding: id, newtype: x.typekey})}>{x.typename}</MenuItem> )}
                 </SubMenu>
                 <MenuItem onClick={() => this.props.onOpen(id, "file", label)} data={{item: 'open'}}>Open</MenuItem>
-                <MenuItem onClick={() => this.props.callback(this.props, "dblclick")} data={{item: 'open'}}>Unpublish</MenuItem>
-                <MenuItem onClick={() => this.setState({ renaming: id })} data={{item: 'rename'}}>Rename</MenuItem>
-                <MenuItem onClick={() => this.props.callback(this.props, "dblclick")} data={{item: 'open'}}>Dublicate</MenuItem>
-                <MenuItem onClick={this.deleteItem.bind(this)} data={{item: 'delete'}}>Delete</MenuItem>
+                {this.isNotHome ? <MenuItem onClick={() => this.props.callback(this.props, "dblclick")} data={{item: 'open'}}>Unpublish</MenuItem> : null }
+                {this.isNotHome(type) ? <MenuItem onClick={() => this.setState({ renaming: id })} data={{item: 'rename'}}>Rename</MenuItem> : null }
+                {this.isNotHome(type) ? <MenuItem onClick={() => this.props.callback(this.props, "dblclick")} data={{item: 'open'}}>Dublicate</MenuItem> : null }
+                {this.isNotHome(type) ? <MenuItem onClick={this.deleteItem.bind(this)} data={{item: 'delete'}}>Delete</MenuItem> : null }
                 <MenuItem onClick={() => this.props.callback(this.props, "dblclick")} data={{item: 'open'}}>Settings</MenuItem>
             </ContextMenu>
         )
@@ -134,9 +138,10 @@ export default class PagesPanel extends React.Component {
                     <SmallToolBarItem icon="plus" onClick={() => console.log("not implemented yet")} />
                     <SmallToolBarItem icon="trash" onClick={this.deleteItem.bind(this)} />
                     <SmallToolBarItem alignright={true} icon="refresh" onClick={() => {
-                        this.setState({working: true});
-                        this.updateData();
-                        }} />
+                        this.setState({working: true}, () => {
+                            this.updateData();
+                        });
+                    }} />
                 </SmallToolBar>
             </div>);
     }

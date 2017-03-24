@@ -95,15 +95,15 @@ export default class AssetsPanel extends React.Component {
         })
     }
 
-    canCreateFolder(type) {
+    canCreate(type) {
         return type == "folder" || type == "home";
     }
 
     contextMenu(id, label, type) {
         return (
             <ContextMenu id={String(id) + label}>
-                <MenuItem onClick={() => this.setState({showUpload: true})} data={{item: 'open'}}>Upload file</MenuItem>
-                {this.canCreateFolder(type) ? <MenuItem onClick={() => this.setState({adding: id, newtype: 'folder'})} data={{item: 'open'}}>Create folder</MenuItem> : null}
+                {this.canCreate(type) ? <MenuItem onClick={() => this.setState({showUpload: true})} data={{item: 'open'}}>Upload file</MenuItem> : null}
+                {this.canCreate(type) ? <MenuItem onClick={() => this.setState({adding: id, newtype: 'folder'})} data={{item: 'open'}}>Create folder</MenuItem> : null}
                 <MenuItem onClick={() => this.props.onOpen(id, type, label)} data={{item: 'open'}}>Open</MenuItem>
                 <MenuItem onClick={() => this.setState({ renaming: id, newtype: type })} data={{item: 'rename'}}>Rename</MenuItem>
                 <MenuItem onClick={() => this.props.callback(this.props, "dblclick")} data={{item: 'open'}}>Dublicate</MenuItem>
