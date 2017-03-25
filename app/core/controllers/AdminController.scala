@@ -119,7 +119,7 @@ class AdminController @Inject()(users:Users, sessions:UserSessions, resettokens:
                                 """
                             mailerClient.send(Email(
                                 "Password reset for your admin panel",
-                                "NoReply <noreply@werlang.nl",
+                                "NoReply <noreply@werlang.nl>",
                                 Seq(user.username + " <" + user.email + ">"),
                                 bodyText = Some(emailTxt)
                             ))
@@ -152,7 +152,7 @@ class AdminController @Inject()(users:Users, sessions:UserSessions, resettokens:
                         """
                     mailerClient.send(Email(
                         "New password for your admin panel",
-                        "NoReply <noreply@werlang.nl",
+                        "NoReply <noreply@werlang.nl>",
                         Seq(user.username + " <" + user.email + ">"),
                         bodyText = Some(emailTxt)
                     ))
