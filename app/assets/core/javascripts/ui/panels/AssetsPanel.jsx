@@ -135,6 +135,7 @@ export default class AssetsPanel extends React.Component {
                         key={x.id}
                         collapsed={x.collapsed}
                         contextMenu={this.contextMenu.bind(this)}
+                        onCollapse={(state) => Api.collapseAsset(x.id, state)}
                         label={x.label}>{this.renderTreeView(x.children)}</TreeViewItem> )}
             </TreeView>
         );

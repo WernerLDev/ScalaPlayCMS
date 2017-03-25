@@ -126,6 +126,7 @@ export default class PagesPanel extends React.Component {
                         selected={this.state.selected == x.id}
                         key={x.id} collapsed={x.collapsed}
                         contextMenu={this.contextMenu.bind(this)}
+                        onCollapse={(state) => Api.collapseDocument(x.id, state)}
                         label={x.label}>{this.renderTreeView(x.children)}</TreeViewItem> )}
             </TreeView>
         );

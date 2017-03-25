@@ -1,20 +1,30 @@
 
 var csrf = document.getElementById("csrftoken").innerText;
 
-function ApiCall(call, method, body) {
+function handleErrors(response) {
+    if(!response.ok) {
+        alert(response.status + " - " + response.statusText);
+        throw Error(response.statusText);
+    } else {
+        return response;
+    }
+}
+
+function ApiCall(call, method, body, contenttype) {
+    var type = contenttype == null ? 'application/json' : contenttype;
     var params = {
         method: method,
         credentials: 'include',
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': type,
             "Csrf-Token": csrf
         }
     }
     if(method != "GET" && method != "HEAD") {
         params["body"] = body;
-    }
+    } 
 
-    return fetch(call, params).then(r => r.json()).catch(e => alert("something went wrong") );
+    return fetch(call, params).then(handleErrors).then(r => r.json());
 }
 
 export function getPageTypes() {
@@ -88,7 +98,7 @@ export function addAsset(parent_id, name, path, mimetype) {
 export function uploadAsset(file) {
     var data  = new FormData();
     data.append("asset", file);
-    return ApiCall("/api/v1/assets/upload", "POST", data);
+    return ApiCall("/api/v1/assets/upload", "POST", data, "multipart/form-data");
 }
 
 export function deleteAsset(id) {
@@ -118,5 +128,5 @@ export function collapseAsset(id, collapsed) {
     var body = JSON.stringify({
         "collapsed": collapsed
     });
-    return ApiCall("/assets/" + id + "/collapse", "PUT", body);
+    return ApiCall("/api/v1/assets/" + id + "/collapse", "PUT", body);
 }

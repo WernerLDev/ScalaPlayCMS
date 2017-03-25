@@ -40,10 +40,15 @@ class SessionTableDef(tag: Tag) extends Table[UserSession](tag, "session") {
 class UserSessions @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends HasDatabaseConfigProvider[JdbcProfile] {
 
     val sessions = TableQuery[SessionTableDef]
+    val users = TableQuery[UserTableDef]
     val insertQuery = sessions returning sessions.map(_.id) into ((session, id) => session.copy(id = id))
 
     def getSession(user:User, key:String) = dbConfig.db.run {
       sessions.filter(x => x.user_id === user.id && x.session_key === key).result.headOption
+    }
+
+    def getByKey(key:String):Future[Option[(UserSession, User)]] = dbConfig.db.run {
+      sessions.join(users).on(_.user_id === _.id).filter(_._1.session_key === key).result.headOption
     }
 
     def create(session:UserSession) = dbConfig.db.run {

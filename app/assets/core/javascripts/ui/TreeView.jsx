@@ -112,8 +112,10 @@ export class TreeViewItem extends React.Component {
     }
 
     collapse() {
-        Api.collapseDocument(this.props.id, !this.state.collapsed);
-        this.setState({ collapsed: !this.state.collapsed })
+        //Api.collapseDocument(this.props.id, !this.state.collapsed);
+        this.setState({ collapsed: !this.state.collapsed }, () => {
+            this.props.onCollapse(this.state.collapsed);
+        })
     }
 
     keypress(e) {

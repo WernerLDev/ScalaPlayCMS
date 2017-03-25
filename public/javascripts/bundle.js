@@ -26477,6 +26477,9 @@
 	                            selected: _this9.state.selected == x.id,
 	                            key: x.id, collapsed: x.collapsed,
 	                            contextMenu: _this9.contextMenu.bind(_this9),
+	                            onCollapse: function onCollapse(state) {
+	                                return Api.collapseDocument(x.id, state);
+	                            },
 	                            label: x.label },
 	                        _this9.renderTreeView(x.children)
 	                    );
@@ -26745,8 +26748,12 @@
 	    _createClass(TreeViewItem, [{
 	        key: 'collapse',
 	        value: function collapse() {
-	            Api.collapseDocument(this.props.id, !this.state.collapsed);
-	            this.setState({ collapsed: !this.state.collapsed });
+	            var _this4 = this;
+	
+	            //Api.collapseDocument(this.props.id, !this.state.collapsed);
+	            this.setState({ collapsed: !this.state.collapsed }, function () {
+	                _this4.props.onCollapse(_this4.state.collapsed);
+	            });
 	        }
 	    }, {
 	        key: 'keypress',
@@ -26762,13 +26769,13 @@
 	    }, {
 	        key: 'renderLabel',
 	        value: function renderLabel() {
-	            var _this4 = this;
+	            var _this5 = this;
 	
 	            if (this.props.renaming) {
 	                return _react2.default.createElement('input', { autoFocus: true, type: 'text', className: 'treeviewinputEdit', defaultValue: this.props.label,
 	                    onBlur: this.props.onBlur, onKeyUp: this.keypress.bind(this),
 	                    onChange: function onChange(x) {
-	                        return _this4.setState({ inputvalue: x.currentTarget.value });
+	                        return _this5.setState({ inputvalue: x.currentTarget.value });
 	                    } });
 	            } else {
 	                return this.props.label;
@@ -26777,7 +26784,7 @@
 	    }, {
 	        key: 'renderNewForm',
 	        value: function renderNewForm() {
-	            var _this5 = this;
+	            var _this6 = this;
 	
 	            return _react2.default.createElement(
 	                'ul',
@@ -26794,7 +26801,7 @@
 	                        _react2.default.createElement('input', { autoFocus: true, placeholder: 'New item name', type: 'text',
 	                            onKeyUp: this.keypress.bind(this),
 	                            onChange: function onChange(e) {
-	                                return _this5.setState({ inputvalue: e.currentTarget.value });
+	                                return _this6.setState({ inputvalue: e.currentTarget.value });
 	                            },
 	                            className: 'treeviewinput', onBlur: this.props.onBlur })
 	                    )
@@ -27881,7 +27888,7 @@
 /* 239 */
 /***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -27906,12 +27913,22 @@
 	
 	var csrf = document.getElementById("csrftoken").innerText;
 	
-	function ApiCall(call, method, body) {
+	function handleErrors(response) {
+	    if (!response.ok) {
+	        alert(response.status + " - " + response.statusText);
+	        throw Error(response.statusText);
+	    } else {
+	        return response;
+	    }
+	}
+	
+	function ApiCall(call, method, body, contenttype) {
+	    var type = contenttype == null ? 'application/json' : contenttype;
 	    var params = {
 	        method: method,
 	        credentials: 'include',
 	        headers: {
-	            'Content-Type': 'application/json',
+	            'Content-Type': type,
 	            "Csrf-Token": csrf
 	        }
 	    };
@@ -27919,10 +27936,8 @@
 	        params["body"] = body;
 	    }
 	
-	    return fetch(call, params).then(function (r) {
+	    return fetch(call, params).then(handleErrors).then(function (r) {
 	        return r.json();
-	    }).catch(function (e) {
-	        return alert("something went wrong");
 	    });
 	}
 	
@@ -27996,7 +28011,7 @@
 	function uploadAsset(file) {
 	    var data = new FormData();
 	    data.append("asset", file);
-	    return ApiCall("/api/v1/assets/upload", "POST", data);
+	    return ApiCall("/api/v1/assets/upload", "POST", data, "multipart/form-data");
 	}
 	
 	function deleteAsset(id) {
@@ -28025,7 +28040,7 @@
 	    var body = JSON.stringify({
 	        "collapsed": collapsed
 	    });
-	    return ApiCall("/assets/" + id + "/collapse", "PUT", body);
+	    return ApiCall("/api/v1/assets/" + id + "/collapse", "PUT", body);
 	}
 
 /***/ },
@@ -29803,6 +29818,9 @@
 	                            key: x.id,
 	                            collapsed: x.collapsed,
 	                            contextMenu: _this10.contextMenu.bind(_this10),
+	                            onCollapse: function onCollapse(state) {
+	                                return Api.collapseAsset(x.id, state);
+	                            },
 	                            label: x.label },
 	                        _this10.renderTreeView(x.children)
 	                    );
