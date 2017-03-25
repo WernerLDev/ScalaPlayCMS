@@ -13,6 +13,10 @@ GET     /admin                      core.controllers.MainController.index
 GET     /admin/login                core.controllers.AdminController.login
 POST    /admin/login                core.controllers.AdminController.doLogin
 GET     /admin/logout               core.controllers.AdminController.logout
+GET     /admin/login/retrievePassword       core.controllers.AdminController.retrievePasswordForm
+POST    /admin/login/retrievePassword     core.controllers.AdminController.retrievePassword
+GET     /admin/login/resetpassword/:token  core.controllers.AdminController.resetPassword(token:String)
+
 GET     /api/v1/pagetypes           core.controllers.MainController.getPageTypes
 GET     /documents                  core.controllers.MainController.listDocuments
 GET     /documents/:id              core.controllers.MainController.getDocument(id:Long)

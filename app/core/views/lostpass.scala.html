@@ -1,0 +1,42 @@
+
+@import core.controllers.LostPassData
+@import helper._
+@(lostPassForm: Form[LostPassData])(implicit messages: Messages, flash:Flash, request:Request[AnyContent])
+
+@core.views.html.main("Login"){
+
+<div class="login-wrapper">
+
+    <div class="login-page" style="opacity: 0;">
+    <div class="form">
+        @flash.get("mailsent") match {
+            case Some(x) => {
+                <p>If an account with the e-mail address <i>@x</i> exists it should receive an email soon.</p>
+                <p class="message"><a href="/admin/login">Sign In</a></p>
+            }
+            case None => {
+                @helper.form(action = core.controllers.routes.AdminController.retrievePassword) {
+                    @helper.input(lostPassForm("email")) { (id, name, value, args) =>
+                        <input autofocus type="email" name="@name" id="@id" value="@value" placeholder="Email" @toHtmlArgs(args)>
+                        <span class="fa fa-info-circle errspan"></span>
+                    }
+                    <button>Retrieve password</button>
+                    @CSRF.formField
+                    <p class="message"><a href="/admin/login">Sign In</a></p>
+                }
+            }
+        }
+        
+    </div>
+    </div>
+    <div class="loginfooter">Copyright and stuff</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script>
+
+$(document).ready(function(){
+    $(".login-page").animate({opacity: 1}, "slow");
+});
+
+</script>
+}

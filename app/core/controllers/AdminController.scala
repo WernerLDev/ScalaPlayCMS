@@ -15,11 +15,13 @@ import play.api.i18n.Messages.Implicits._
 import core.models._
 import java.sql.Timestamp
 import java.util.Date
+import play.api.libs.mailer._
 
 case class UserData(username:String, password:String)
+case class LostPassData(email:String)
 
 @Singleton
-class AdminController @Inject()(users:Users, sessions:UserSessions) extends Controller {
+class AdminController @Inject()(users:Users, sessions:UserSessions, resettokens:ResetTokens, mailerClient: MailerClient) extends Controller {
 
     val loginForm = Form(
         mapping(
@@ -31,7 +33,8 @@ class AdminController @Inject()(users:Users, sessions:UserSessions) extends Cont
     def login = Action { implicit request =>
         //users.insert( User(0, "werner", "test123", "blaat@bla.nl") )
         //users.insert( User(0, "nogiemand", "test123", "nogiemand@bla.nl") )
-        val test = PasswordHasher.hashPassword("testing123")
+        //val test = PasswordHasher.hashPassword("testing123")
+        val test = PasswordHasher.generateKey
         println(test)
         Ok(core.views.html.login(loginForm))
     }
@@ -45,7 +48,7 @@ class AdminController @Inject()(users:Users, sessions:UserSessions) extends Cont
                         case Some(user:User) => {
                             val currDate:Date = new Date()
                             val expirationDate:Date = new Date(currDate.getTime() + 1 * 24 * 3600 * 1000)
-                            val sessionKey = PasswordHasher.md5Hash(currDate.toString)
+                            val sessionKey = PasswordHasher.generateKey
                             val useragent = request.headers.get("User-Agent").getOrElse("Unknown")
                             val ip = request.remoteAddress
                             sessions.cleanup(user, useragent, ip) flatMap(x => {
@@ -78,6 +81,90 @@ class AdminController @Inject()(users:Users, sessions:UserSessions) extends Cont
         )
     }
 
+
+    val lostpassForm = Form(
+        mapping(
+            "email" -> email
+        )(LostPassData.apply)(LostPassData.unapply)    
+    )
+
+    def retrievePasswordForm = Action { implicit request => {
+        Ok(core.views.html.lostpass(lostpassForm))
+    }}
+
+    def redirectLostPass(email:String) = {
+        Redirect(core.controllers.routes.AdminController.retrievePasswordForm)
+                .withNewSession.flashing("mailsent" -> email)
+    }
+
+    def retrievePassword = Action.async { implicit request =>
+        lostpassForm.bindFromRequest.fold(
+            formWithErrors => Future(BadRequest(core.views.html.lostpass(formWithErrors))),
+            lostpassData => {
+                users.findByEmail(lostpassData.email) flatMap (userOpt => userOpt match {
+                    case Some(user:User) => {
+                        val currDate:Date = new Date()
+                        val expirationDate:Date = new Date(currDate.getTime() + 1 * 24 * 3600 * 1000)
+                        val resetToken = PasswordHasher.generateKey
+                        resettokens.create(ResetToken(
+                            id = 0,
+                            user_id = user.id,
+                            resettoken = resetToken,
+                            expires_at = new Timestamp(expirationDate.getTime())
+                        )) map (x => {
+                            val emailTxt = s"""
+                                Hello ${user.username},\n\n
+                                You or someone else requested a new password. Click on the following link to reset your password.\n\n
+                                http://localhost:9000/admin/login/resetpassword/$resetToken 
+                                """
+                            mailerClient.send(Email(
+                                "Password reset for your admin panel",
+                                "NoReply <noreply@werlang.nl",
+                                Seq(user.username + " <" + user.email + ">"),
+                                bodyText = Some(emailTxt)
+                            ))
+                            redirectLostPass(user.email)
+                        })
+
+                    }
+                    case None => Future(redirectLostPass(lostpassData.email))
+                })
+
+            }
+        )
+    }
+
+    def resetPassword(tokenstring:String) = Action.async { implicit request =>
+        resettokens.getByToken(tokenstring) flatMap (tokenOpt => tokenOpt match {
+            case Some((token:ResetToken, user:User)) => {
+                val newPassword = PasswordHasher.generatePassword
+                val newUser = User(
+                    id = user.id,
+                    username = user.username,
+                    email = user.email,
+                    passwordhash = PasswordHasher.hashPassword(newPassword)
+                )
+                users.update(newUser) flatMap (x => {
+                    val emailTxt = s"""
+                        Hello ${user.username},\n\n
+                        Your password has been reset.\n\n
+                        Your new password is: $newPassword
+                        """
+                    mailerClient.send(Email(
+                        "New password for your admin panel",
+                        "NoReply <noreply@werlang.nl",
+                        Seq(user.username + " <" + user.email + ">"),
+                        bodyText = Some(emailTxt)
+                    ))
+                    val msg = "Your password has been reset. Check your email."
+                    resettokens.deleteByToken(tokenstring) map ( y => {
+                        Ok(core.views.html.guestmessage("Password reset", msg) )
+                    })
+                })
+            }
+            case None => Future(BadRequest("Invalid resettoken"))
+        })
+    }
 
     def logout = Action { implicit request =>
         request.session.get("skey") map (key => sessions.deleteByKey(key))

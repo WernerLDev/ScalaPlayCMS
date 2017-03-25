@@ -49,6 +49,10 @@
     .form button:hover,.form button:active,.form button:focus {
     background: $color1;
     }
+    .form input:focus {
+        border-bottom: 2px solid $color1;
+        padding-bottom: 13px;
+    }
     .form .message {
     margin: 15px 0 0;
     color: #b3b3b3;
@@ -101,7 +105,8 @@
     }
 
     .error input {
-        border: 1px solid red;
+        border-bottom: 2px solid red;
+        padding-bottom: 13px;
     }
 
     dd {
@@ -125,5 +130,25 @@
         padding: 5px 0;
         font-size: 13px;
         color: #383838;
+    }
+
+    .loginfooter {
+        position: fixed; left: 0; right: 0; bottom: 0;
+        height: 40px; color: #FFF; 
+        line-height: 40px; text-align: center;
+    }
+
+    .errspan {
+        display: none;
+        float: right;
+        margin-right: 7px;
+        margin-top: -46px;
+        position: relative;
+        z-index: 2;
+        color: red;
+    }
+
+    .error .errspan {
+        display: inline-block;
     }
 }

@@ -50,6 +50,10 @@ class Users @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) ex
         users.filter(_.username === username).result.headOption
     }
 
+    def findByEmail(email:String):Future[Option[User]] = dbConfig.db.run {
+        users.filter(_.email === email).result.headOption
+    }
+
     def insert(user:User) = dbConfig.db.run {
         insertQuery += User(0, user.username, PasswordHasher.hashPassword(user.passwordhash), user.email)
     }

@@ -17,7 +17,8 @@ libraryDependencies ++= Seq(
   "jp.t2v" %% "play2-auth"        % "0.14.2",
   play.sbt.Play.autoImport.cache,
   filters,
-  "org.mindrot" % "jbcrypt" % "0.3m"
+  "org.mindrot" % "jbcrypt" % "0.3m",
+  "com.typesafe.play" %% "play-mailer" % "5.0.0"
 )
 
 PlayKeys.playRunHooks += Webpack(baseDirectory.value)

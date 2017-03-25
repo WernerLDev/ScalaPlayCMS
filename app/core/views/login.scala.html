@@ -8,20 +8,23 @@
 
     <div class="login-page" style="opacity: 0;">
     <div class="form">
-        <form method="POST" action="" class="register-form">
-            <input type="text" placeholder="email address"/>
+        @helper.form(action = core.controllers.routes.AdminController.retrievePassword, args = 'class -> "register-form") {
+            <input type="text" name="email" placeholder="email address"/>
             <button>Retrieve password</button>
+            @CSRF.formField
             <p class="message"><a href="#">Sign In</a></p>
-        </form>
+        }
         @helper.form(action = core.controllers.routes.AdminController.doLogin()) {
             @for(error <- flash.get("loginfailed")) {
                 <div class="errormsg"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> @error</div>
             }
             @helper.input(loginForm("username")) { (id, name, value, args) =>
                 <input autofocus type="text" name="@name" id="@id" value="@value" placeholder="Username" @toHtmlArgs(args)>
+                <span class="fa fa-info-circle errspan"></span>
             }
             @helper.input(loginForm("password")) { (id, name, value, args) =>
                 <input type="password" name="@name" id="@id" placeholder="Password" @toHtmlArgs(args)>
+                <span class="fa fa-info-circle errspan"></span>
             }
             <button>login</button>
             <p class="message">Forgot password? <a href="#">Retrieve password</a></p>
@@ -29,6 +32,7 @@
         }
     </div>
     </div>
+    <div class="loginfooter">Copyright and stuff</div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script>
