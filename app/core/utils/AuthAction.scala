@@ -47,36 +47,25 @@ class AuthAction @Inject()(users:Users, sessions:UserSessions) extends ActionBui
       case None => Future(redirectLogin)
     })
   }
-
-
 }
 
 class PageRequest[A](val user:Option[User], val editmode:Boolean, val editables:List[Editable], val documents:List[DocumentJson], request:Request[A]) extends WrappedRequest[A](request)
 
 class PageAction @Inject()(users:Users, editables:Editables, documents:Documents) extends ActionBuilder[PageRequest] with ActionTransformer[Request, PageRequest] {
 
-
   def transform[A](request:Request[A]) = {
     val username = request.session.get("username").getOrElse("")
     val editmode = request.getQueryString("editmode").getOrElse("")
-    users.findByUsername(username) flatMap (userOpt => userOpt match {
-      case Some(user:User) => {
-        editables.getByPath(request.path) flatMap (de => {
-          val editableValues = de.map(_._1).toList
-          documents.listJson map (menuitems => {
-            new PageRequest(userOpt, editmode == "editing", editableValues, menuitems, request)
-          })
+
+    editables.getByPath(request.path) flatMap (docEditable => {
+      val editableValues = docEditable.map(_._1).toList
+      documents.listJson flatMap (menuitems => {
+        users.findByUsername(username) map (userOpt => userOpt match {
+          case Some(user:User) => new PageRequest(userOpt, editmode == "editing", editableValues, menuitems, request)
+          case None => new PageRequest(None, false, editableValues, menuitems, request)
         })
-      }
-      case None => {
-        editables.getByPath(request.path) flatMap (de => {
-          val editableValues = de.map(_._1).toList
-          documents.listJson map (menuitems => {
-            new PageRequest(None, false, editableValues, menuitems, request)
-          })
-        })
-      }
+      })
     })
   }
-  
+
 }
