@@ -25,9 +25,7 @@ class AdminController @Inject()(users:Users, sessions:UserSessions) extends Cont
         mapping(
             "username" -> nonEmptyText,
             "password" -> nonEmptyText
-        )(UserData.apply)(UserData.unapply) verifying("Incorrect username or password", fields => fields match {
-            case userData => users.check(userData.username, userData.password).isDefined
-        })
+        )(UserData.apply)(UserData.unapply)    
     )
 
     def login = Action { implicit request =>
@@ -42,36 +40,39 @@ class AdminController @Inject()(users:Users, sessions:UserSessions) extends Cont
         loginForm.bindFromRequest.fold(
             formWithErrors => Future(BadRequest(core.views.html.login(formWithErrors))),
             userData => {
-                val currDate:Date = new Date()
-                var expirationdate:Date = new Date(currDate.getTime() + 1 * 24 * 3600 * 1000)
-                val sessionkey = PasswordHasher.md5Hash(currDate.toString)
-                
-                val futureUser = users.findByUsername(userData.username) map (userOpt => {
-                    userOpt map (user => {
-                        val cleanup = sessions.cleanup(user, request.headers.get("User-Agent").getOrElse("Unknown"), request.remoteAddress)
-                        val newSession = UserSession(
-                            id = 0,
-                            session_key = sessionkey,
-                            user_id = user.id,
-                            passwordhash = user.passwordhash,
-                            ipaddress = request.remoteAddress,
-                            useragent = request.headers.get("User-Agent").getOrElse("Unknown"),
-                            expiration_date = new Timestamp(expirationdate.getTime())
-                        )
-                        sessions.create(newSession)
-                        //create new session after cleanup is finished
-                        //cleanup.map(c => sessions.create( newSession ))
-                    })
-                })
-                futureUser.map(x => {
-                    Redirect(core.controllers.routes.MainController.index)
-                    .withSession( 
-                        request.session + ("username" -> userData.username) + ("skey" -> sessionkey)
-                    )
+                users.authenticate(userData.username, userData.password) flatMap (userOpt => {
+                    userOpt match {
+                        case Some(user:User) => {
+                            val currDate:Date = new Date()
+                            val expirationDate:Date = new Date(currDate.getTime() + 1 * 24 * 3600 * 1000)
+                            val sessionKey = PasswordHasher.md5Hash(currDate.toString)
+                            val useragent = request.headers.get("User-Agent").getOrElse("Unknown")
+                            val ip = request.remoteAddress
+                            sessions.cleanup(user, useragent, ip) flatMap(x => {
+                                val newSession = UserSession(
+                                    id = 0,
+                                    session_key = sessionKey,
+                                    user_id = user.id,
+                                    passwordhash = user.passwordhash,
+                                    ipaddress = request.remoteAddress,
+                                    useragent = request.headers.get("User-Agent").getOrElse("Unknown"),
+                                    expiration_date = new Timestamp(expirationDate.getTime())
+                                )
+                                sessions.create(newSession) map(session => {
+                                    Redirect(core.controllers.routes.MainController.index)
+                                    .withSession( 
+                                        request.session + ("username" -> user.username) + ("skey" -> sessionKey)
+                                    )
+                                })
+                            })
+                        }
+                        case None => Future(BadRequest(core.views.html.login(loginForm)))
+                    }
                 })
             }
         )
     }
+
 
     def logout = Action { implicit request =>
         request.session.get("skey") map (key => sessions.deleteByKey(key))

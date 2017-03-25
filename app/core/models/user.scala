@@ -35,14 +35,14 @@ class Users @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) ex
     val users = TableQuery[UserTableDef]
     val insertQuery = users returning users.map(_.id) into ((user, id) => user.copy(id = id))
 
-    def check(username:String, password:String):Option[User] = {
-        val userOpt = Await.result(findByUsername(username), Duration.Inf)
-        userOpt.flatMap (user => {
-            if(PasswordHasher.checkPassword(password, user.passwordhash)) {
-                Some(user)
-            } else {
-                None
+    def authenticate(username:String, password:String):Future[Option[User]] = {
+        findByUsername(username) map (userOpt => userOpt match {
+            case Some(user:User) => {
+                if(PasswordHasher.checkPassword(password, user.passwordhash)) {
+                    Some(user)
+                } else None
             }
+            case None => None
         })
     }
 

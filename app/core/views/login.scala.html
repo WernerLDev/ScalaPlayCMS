@@ -14,13 +14,14 @@
             <p class="message"><a href="#">Sign In</a></p>
         </form>
         @helper.form(action = core.controllers.routes.AdminController.doLogin()) {
-            @if(loginForm.hasErrors) {
-                <div class="errors">
-                    <span class="errormsg">Incorrect username or password</span>
-                </div>
+            @helper.input(loginForm("username")) { (id, name, value, args) =>
+                <input type="text" name="@name" id="@id" value="@value" placeholder="Username" @toHtmlArgs(args)>
             }
-            <input type="text" name="username" placeholder="username"/>
-            <input type="password" name="password" placeholder="password"/>
+            @helper.input(loginForm("password")) { (id, name, value, args) =>
+                <input type="password" name="@name" id="@id" placeholder="Password" @toHtmlArgs(args)>
+            }
+            <!--<input type="text" name="username" placeholder="username"/>
+            <input type="password" name="password" placeholder="password"/>-->
             <button>login</button>
             <p class="message">Forgot password? <a href="#">Retrieve password</a></p>
             @CSRF.formField

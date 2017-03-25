@@ -95,7 +95,27 @@
     color: #EF3B3A;
     }
 
-    input.error {
+    dd.error {
+        display: none;
+        color: red;
+    }
+
+    .error input {
         border: 1px solid red;
+    }
+
+    dd {
+        margin: 0;
+    }
+
+    dt {
+        text-align: left;
+        label {
+            display: none;
+        }
+    }
+
+    .info {
+        display: none;
     }
 }
