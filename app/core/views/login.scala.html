@@ -16,15 +16,15 @@
         }
         @helper.form(action = core.controllers.routes.AdminController.doLogin()) {
             @for(error <- flash.get("loginfailed")) {
-                <div class="errormsg"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> @error</div>
+                <div class="errormsg"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> @error</div>
             }
             @helper.input(loginForm("username")) { (id, name, value, args) =>
                 <input autofocus type="text" name="@name" id="@id" value="@value" placeholder="Username" @toHtmlArgs(args)>
-                <span class="fa fa-info-circle errspan"></span>
+                <span class="fa fa-exclamation-circle errspan"></span>
             }
             @helper.input(loginForm("password")) { (id, name, value, args) =>
                 <input type="password" name="@name" id="@id" placeholder="Password" @toHtmlArgs(args)>
-                <span class="fa fa-info-circle errspan"></span>
+                <span class="fa fa-exclamation-circle errspan"></span>
             }
             <button>login</button>
             <p class="message">Forgot password? <a href="#">Retrieve password</a></p>

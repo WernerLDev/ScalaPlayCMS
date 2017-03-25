@@ -27924,13 +27924,18 @@
 	
 	function ApiCall(call, method, body, contenttype) {
 	    var type = contenttype == null ? 'application/json' : contenttype;
+	    var headers = {
+	        "Csrf-Token": csrf
+	    };
+	    if (contenttype != false && contenttype != null) {
+	        headers["Content-Type"] = contenttype;
+	    } else if (contenttype == null) {
+	        headers["Content-Type"] = "application/json";
+	    }
 	    var params = {
 	        method: method,
 	        credentials: 'include',
-	        headers: {
-	            'Content-Type': type,
-	            "Csrf-Token": csrf
-	        }
+	        headers: headers
 	    };
 	    if (method != "GET" && method != "HEAD") {
 	        params["body"] = body;
@@ -28011,7 +28016,7 @@
 	function uploadAsset(file) {
 	    var data = new FormData();
 	    data.append("asset", file);
-	    return ApiCall("/api/v1/assets/upload", "POST", data, "multipart/form-data");
+	    return ApiCall("/api/v1/assets/upload", "POST", data, false);
 	}
 	
 	function deleteAsset(id) {

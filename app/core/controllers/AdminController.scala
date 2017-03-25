@@ -162,7 +162,7 @@ class AdminController @Inject()(users:Users, sessions:UserSessions, resettokens:
                     })
                 })
             }
-            case None => Future(BadRequest("Invalid resettoken"))
+            case None => Future(BadRequest(core.views.html.guestmessage("Error", "Invalid resettoken") ))
         })
     }
 
