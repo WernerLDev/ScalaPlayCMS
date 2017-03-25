@@ -1,7 +1,7 @@
 
 .login-wrapper {
     position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: url("/assets/images/loginbg2.jpg");
+    background: url("/assets/images/login/loginbg.jpg");
     background-size: cover;
 
 
@@ -117,5 +117,13 @@
 
     .info {
         display: none;
+    }
+
+    .errormsg {
+        border: 1px solid red;
+        background: #ffcdcd;
+        padding: 5px 0;
+        font-size: 13px;
+        color: #383838;
     }
 }

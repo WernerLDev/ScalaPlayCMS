@@ -54,8 +54,8 @@ class AdminController @Inject()(users:Users, sessions:UserSessions) extends Cont
                                     session_key = sessionKey,
                                     user_id = user.id,
                                     passwordhash = user.passwordhash,
-                                    ipaddress = request.remoteAddress,
-                                    useragent = request.headers.get("User-Agent").getOrElse("Unknown"),
+                                    ipaddress = ip,
+                                    useragent = useragent,
                                     expiration_date = new Timestamp(expirationDate.getTime())
                                 )
                                 sessions.create(newSession) map(session => {
@@ -66,7 +66,12 @@ class AdminController @Inject()(users:Users, sessions:UserSessions) extends Cont
                                 })
                             })
                         }
-                        case None => Future(BadRequest(core.views.html.login(loginForm)))
+                        case None => {
+                            Future(
+                                Redirect(core.controllers.routes.AdminController.login)
+                                .withNewSession.flashing("loginfailed" -> "Login attempt failed.")
+                            )   
+                        }
                     }
                 })
             }

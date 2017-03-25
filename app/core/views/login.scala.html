@@ -1,6 +1,6 @@
 @import core.controllers.UserData
 @import helper._
-@(loginForm: Form[UserData])(implicit messages: Messages, request:Request[AnyContent])
+@(loginForm: Form[UserData])(implicit messages: Messages, flash:Flash, request:Request[AnyContent])
 
 @core.views.html.main("Login"){
 
@@ -14,14 +14,15 @@
             <p class="message"><a href="#">Sign In</a></p>
         </form>
         @helper.form(action = core.controllers.routes.AdminController.doLogin()) {
+            @for(error <- flash.get("loginfailed")) {
+                <div class="errormsg"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> @error</div>
+            }
             @helper.input(loginForm("username")) { (id, name, value, args) =>
-                <input type="text" name="@name" id="@id" value="@value" placeholder="Username" @toHtmlArgs(args)>
+                <input autofocus type="text" name="@name" id="@id" value="@value" placeholder="Username" @toHtmlArgs(args)>
             }
             @helper.input(loginForm("password")) { (id, name, value, args) =>
                 <input type="password" name="@name" id="@id" placeholder="Password" @toHtmlArgs(args)>
             }
-            <!--<input type="text" name="username" placeholder="username"/>
-            <input type="password" name="password" placeholder="password"/>-->
             <button>login</button>
             <p class="message">Forgot password? <a href="#">Retrieve password</a></p>
             @CSRF.formField
