@@ -117,7 +117,7 @@ export default class AssetsPanel extends React.Component {
         var addsubmenu = (
             <SubMenu hoverDelay={0} title="Add...">
                  <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'upload'}}>Upload file(s)</MenuItem>
-                 <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'createfolder'}}>Create folder</MenuItem>
+                 <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'createfolder'}}>Folder</MenuItem>
             </SubMenu>
         );
         return(
@@ -126,7 +126,6 @@ export default class AssetsPanel extends React.Component {
                 <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'open'}}>Open</MenuItem>
                 {menuid != "assetshome" ? <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'rename'}}>Rename</MenuItem> : null}
                 {menuid != "assetshome" ? <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'delete'}}>Delete</MenuItem> : null}
-                {menuid != "assetshome" ? <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'rename'}}>Dublicate</MenuItem> : null}
                 <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'rename'}}>Settings</MenuItem>
             </ContextMenu>
         )

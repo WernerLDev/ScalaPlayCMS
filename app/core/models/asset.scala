@@ -45,7 +45,7 @@ class Assets @Inject()(protected val dbConfigProvider: DatabaseConfigProvider, c
 
     def listJson():Future[List[AssetTree]] = {
         def generateList(d:List[Asset],parentid:Long):List[AssetTree] = {
-            d.filter(x => x.parent_id == parentid).map(x => AssetTree(x.id, x.name, x.path, x.name, x.mimetype, x.collapsed, generateList(d ,x.id)))
+            d.filter(x => x.parent_id == parentid).sortBy(a => a.mimetype).map(x => AssetTree(x.id, x.name, x.path, x.name, x.mimetype, x.collapsed, generateList(d ,x.id)))
         }
         listAll map (x => generateList(x.toList, 0))
     }
