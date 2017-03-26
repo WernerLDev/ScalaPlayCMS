@@ -21,7 +21,7 @@ class AssetsController @Inject()(assets:Assets, WithAuthAction:AuthAction, PageA
     implicit val DocWrites = Json.writes[AssetTree]
     
     def all = WithAuthAction.async { request => {
-        println(conf.getString("elestic.uploaddir"))
+        //println(conf.getString("elestic.uploaddir"))
         assets.listJson().map(x => {
             Ok(Json.toJson(x))
         })

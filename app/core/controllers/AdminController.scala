@@ -34,8 +34,6 @@ class AdminController @Inject()(users:Users, sessions:UserSessions, resettokens:
         //users.insert( User(0, "werner", "test123", "blaat@bla.nl") )
         //users.insert( User(0, "nogiemand", "test123", "nogiemand@bla.nl") )
         //val test = PasswordHasher.hashPassword("testing123")
-        val test = PasswordHasher.generateKey
-        println(test)
         Ok(core.views.html.login(loginForm))
     }
 
@@ -112,11 +110,10 @@ class AdminController @Inject()(users:Users, sessions:UserSessions, resettokens:
                             resettoken = resetToken,
                             expires_at = new Timestamp(expirationDate.getTime())
                         )) map (x => {
-                            val emailTxt = s"""
-                                Hello ${user.username},\n\n
-                                You or someone else requested a new password. Click on the following link to reset your password.\n\n
-                                http://localhost:9000/admin/login/resetpassword/$resetToken 
-                                """
+                            val emailTxt = s"""Hello ${user.username},\n\n
+                                              |You or someone else requested a new password. Click on the following link to reset your password.\n\n
+                                              |http://localhost:9000/admin/login/resetpassword/$resetToken 
+                                              |""".stripMargin
                             mailerClient.send(Email(
                                 "Password reset for your admin panel",
                                 "NoReply <noreply@werlang.nl>",
@@ -145,11 +142,10 @@ class AdminController @Inject()(users:Users, sessions:UserSessions, resettokens:
                     passwordhash = PasswordHasher.hashPassword(newPassword)
                 )
                 users.update(newUser) flatMap (x => {
-                    val emailTxt = s"""
-                        Hello ${user.username},\n\n
-                        Your password has been reset.\n\n
-                        Your new password is: $newPassword
-                        """
+                    val emailTxt = s"""Hello ${user.username},\n\n
+                                      |Your password has been reset.\n\n
+                                      |Your new password is: $newPassword
+                                    """.stripMargin
                     mailerClient.send(Email(
                         "New password for your admin panel",
                         "NoReply <noreply@werlang.nl>",

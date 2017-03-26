@@ -26449,6 +26449,38 @@
 	            );
 	        }
 	    }, {
+	        key: 'contextOpenAction',
+	        value: function contextOpenAction(e, data) {
+	            console.log(data);
+	        }
+	    }, {
+	        key: 'renderContextMenu',
+	        value: function renderContextMenu(menuid) {
+	            return _react2.default.createElement(
+	                _reactContextmenu.ContextMenu,
+	                { id: String(menuid) },
+	                _react2.default.createElement(
+	                    _reactContextmenu.MenuItem,
+	                    { onClick: this.contextOpenAction },
+	                    'Open'
+	                ),
+	                _react2.default.createElement(
+	                    _reactContextmenu.MenuItem,
+	                    { onClick: function onClick() {
+	                            return console.log("Renaming");
+	                        } },
+	                    'Rename'
+	                ),
+	                _react2.default.createElement(
+	                    _reactContextmenu.MenuItem,
+	                    { onClick: function onClick() {
+	                            return console.log("Deleting");
+	                        } },
+	                    'Delete'
+	                )
+	            );
+	        }
+	    }, {
 	        key: 'renderTreeView',
 	        value: function renderTreeView(items) {
 	            var _this9 = this;
@@ -26477,6 +26509,7 @@
 	                            selected: _this9.state.selected == x.id,
 	                            key: x.id, collapsed: x.collapsed,
 	                            contextMenu: _this9.contextMenu.bind(_this9),
+	                            contextMenuId: 'page',
 	                            onCollapse: function onCollapse(state) {
 	                                return Api.collapseDocument(x.id, state);
 	                            },
@@ -26538,7 +26571,8 @@
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: this.state.working ? "working treeviewcontainer" : "treeviewcontainer" },
-	                    this.renderTreeView(this.state.pages)
+	                    this.renderTreeView(this.state.pages),
+	                    this.renderContextMenu("page")
 	                )
 	            );
 	        }
@@ -26699,7 +26733,6 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            console.log(this.props.drop);
 	            if (this.props.drop == "all" || this.props.type == this.props.drop) {
 	                return _react2.default.createElement(
 	                    'div',
@@ -26809,6 +26842,11 @@
 	            );
 	        }
 	    }, {
+	        key: 'collect',
+	        value: function collect(props) {
+	            return { label: props.label };
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var icon = _react2.default.createElement(_Icon2.default, { onClick: this.collapse.bind(this), type: this.state.collapsed ? "arrow-down" : "arrow-right" });
@@ -26821,7 +26859,7 @@
 	                { type: this.props.type, drop: this.props.drop, deleted: this.props.deleted },
 	                _react2.default.createElement(
 	                    _reactContextmenu.ContextMenuTrigger,
-	                    { holdToDisplay: -1, id: String(this.props.id) + this.props.label },
+	                    { holdToDisplay: -1, id: this.props.contextMenuId, collect: this.collect, label: this.props.label },
 	                    _react2.default.createElement(
 	                        TreeViewItemLabel,
 	                        {
@@ -26844,14 +26882,16 @@
 	                    'div',
 	                    { className: this.state.collapsed ? "" : "hidden" },
 	                    this.props.children
-	                ),
-	                this.props.contextMenu(this.props.id, this.props.label, this.props.type)
+	                )
 	            );
 	        }
 	    }]);
 	
 	    return TreeViewItem;
 	}(_react2.default.Component);
+	
+	// {this.props.contextMenu(this.props.id, this.props.label, this.props.type)}
+	
 	
 	var TreeView = exports.TreeView = function (_React$Component4) {
 	    _inherits(TreeView, _React$Component4);
@@ -29823,6 +29863,7 @@
 	                            key: x.id,
 	                            collapsed: x.collapsed,
 	                            contextMenu: _this10.contextMenu.bind(_this10),
+	                            contextMenuId: 'assets',
 	                            onCollapse: function onCollapse(state) {
 	                                return Api.collapseAsset(x.id, state);
 	                            },

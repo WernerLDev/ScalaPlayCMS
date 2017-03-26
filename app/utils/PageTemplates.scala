@@ -24,7 +24,7 @@ class PageTemplates @Inject()(controller:HomeController, PageAction:PageAction) 
             case Some(pagetype) => pagetype.action(page)
             case None => {
                 PageAction { implicit request =>
-                    NotFound(views.html.notfound("Didn't find the page type'"))
+                    NotFound(views.html.notfound("The page you're requesting has an invalid page type.'"))
                 }
             }
         }

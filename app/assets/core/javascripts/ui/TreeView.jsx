@@ -73,7 +73,6 @@ class TreeViewItemLabel extends React.Component {
     }
 
     render() {
-        console.log(this.props.drop);
         if(this.props.drop == "all" || this.props.type == this.props.drop) {
             return(
                 <div
@@ -154,6 +153,10 @@ export class TreeViewItem extends React.Component {
         </ul>);
     }
 
+    collect(props) {
+        return { label: props.label }
+    }
+
     render() {
         var icon = (<Icon onClick={this.collapse.bind(this)} type={this.state.collapsed ? "arrow-down" : "arrow-right"} />);
         if(!this.props.children) icon = (<Icon type="empty" />); 
@@ -162,7 +165,7 @@ export class TreeViewItem extends React.Component {
 
         return(
             <TreeViewListItem type={this.props.type} drop={this.props.drop} deleted={this.props.deleted}>
-                <ContextMenuTrigger holdToDisplay={-1} id={String(this.props.id) + this.props.label}>
+                <ContextMenuTrigger holdToDisplay={-1} id={this.props.contextMenuId} collect={this.collect} label={this.props.label}>
                 <TreeViewItemLabel
                     drop={this.props.drop}
                     type={this.props.type}
@@ -177,12 +180,13 @@ export class TreeViewItem extends React.Component {
                 </ContextMenuTrigger>
                 {this.props.adding ? this.renderNewForm() : null}
                 <div className={this.state.collapsed ? "" : "hidden"}>{this.props.children}</div>
-                {this.props.contextMenu(this.props.id, this.props.label, this.props.type)}
+               
             </TreeViewListItem>
         )
-    }
+    } 
 }
 
+// {this.props.contextMenu(this.props.id, this.props.label, this.props.type)}
 
 
 

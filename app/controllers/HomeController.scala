@@ -32,7 +32,7 @@ class HomeController @Inject()(PageAction:PageAction, editables:Editables) exten
   }
 
   def default(p:Document) = PageAction { implicit request =>
-    println(request.user)
+    //println(request.user)
     Ok(views.html.default(p))
   }
 

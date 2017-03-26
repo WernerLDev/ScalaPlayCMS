@@ -106,6 +106,20 @@ export default class PagesPanel extends React.Component {
         )
     }
 
+    contextOpenAction(e, data) {
+        console.log(data);
+    }
+
+    renderContextMenu(menuid) {
+        return(
+            <ContextMenu id={String(menuid)}>
+                <MenuItem onClick={this.contextOpenAction}>Open</MenuItem>
+                <MenuItem onClick={() => console.log("Renaming")}>Rename</MenuItem>
+                <MenuItem onClick={() => console.log("Deleting")}>Delete</MenuItem>
+            </ContextMenu>
+        )
+    }
+
     renderTreeView(items) {
         if(items.length <= 0) return null;
         return(
@@ -126,6 +140,7 @@ export default class PagesPanel extends React.Component {
                         selected={this.state.selected == x.id}
                         key={x.id} collapsed={x.collapsed}
                         contextMenu={this.contextMenu.bind(this)}
+                        contextMenuId="page"
                         onCollapse={(state) => Api.collapseDocument(x.id, state)}
                         label={x.label}>{this.renderTreeView(x.children)}</TreeViewItem> )}
             </TreeView>
@@ -168,6 +183,7 @@ export default class PagesPanel extends React.Component {
                 {this.renderToolbar()}
                 <div className={this.state.working ? "working treeviewcontainer" : "treeviewcontainer"}>
                     {this.renderTreeView(this.state.pages)}
+                    {this.renderContextMenu("page")}
                 </div>
             </div>
         )

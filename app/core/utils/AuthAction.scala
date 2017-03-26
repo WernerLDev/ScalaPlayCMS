@@ -24,7 +24,7 @@ class AuthAction @Inject()(users:Users, sessions:UserSessions) extends ActionBui
      session.expiration_date.getTime() >= currDate.getTime())
   }
 
-  val redirectLogin = {
+  lazy val redirectLogin = {
     Results.Redirect(core.controllers.routes.AdminController.login)
     .withNewSession
   }
