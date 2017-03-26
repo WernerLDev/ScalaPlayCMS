@@ -61,7 +61,7 @@ class AdminController @Inject()(users:Users, sessions:UserSessions, resettokens:
                                 )
                                 sessions.create(newSession) map(session => {
                                     Redirect(core.controllers.routes.MainController.index)
-                                    .withSession( 
+                                    .withSession(
                                         request.session + ("username" -> user.username) + ("skey" -> sessionKey)
                                     )
                                 })
@@ -71,7 +71,7 @@ class AdminController @Inject()(users:Users, sessions:UserSessions, resettokens:
                             Future(
                                 Redirect(core.controllers.routes.AdminController.login)
                                 .withNewSession.flashing("loginfailed" -> "Login attempt failed.")
-                            )   
+                            )
                         }
                     }
                 })
