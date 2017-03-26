@@ -56,7 +56,6 @@ class PageAction @Inject()(users:Users, editables:Editables, documents:Documents
   def transform[A](request:Request[A]) = {
     val username = request.session.get("username").getOrElse("")
     val editmode = request.getQueryString("editmode").getOrElse("")
-
     editables.getByPath(request.path) flatMap (docEditable => {
       val editableValues = docEditable.map(_._1).toList
       documents.listJson flatMap (menuitems => {

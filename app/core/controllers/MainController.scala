@@ -119,10 +119,15 @@ class MainController @Inject()(documents:Documents, editables:Editables, templat
     }).getOrElse(BadRequest("Parameter missing"))
   }
 
-  def page(path:String) = PageAction.async { implicit request =>
+  def page(path:String) = Action.async { implicit request =>
     documents.getByPath("/" + path) flatMap (docOpt => docOpt match {
       case Some(p) => templates.getAction(p)(request)
-      case None => Future(NotFound(views.html.notfound("The page you are looking for doesn't exist.")))
+      case None => {
+        documents.listJson map (menuitems => {
+          implicit val pagerequest = new PageRequest(None, false, List(), menuitems, request)
+          NotFound(views.html.notfound("The page you are looking for doesn't exist."))
+        })
+      }
     })
   }
 

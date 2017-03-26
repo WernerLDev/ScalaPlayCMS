@@ -1,0 +1,1 @@
+error.required=Dit veld is verplicht

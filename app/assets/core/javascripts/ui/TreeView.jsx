@@ -154,7 +154,7 @@ export class TreeViewItem extends React.Component {
     }
 
     collect(props) {
-        return { label: props.label }
+        return { label: props.label, type: props.itemtype }
     }
 
     render() {
@@ -165,7 +165,7 @@ export class TreeViewItem extends React.Component {
 
         return(
             <TreeViewListItem type={this.props.type} drop={this.props.drop} deleted={this.props.deleted}>
-                <ContextMenuTrigger holdToDisplay={-1} id={this.props.contextMenuId} collect={this.collect} label={this.props.label}>
+                <ContextMenuTrigger holdToDisplay={-1} id={this.props.contextMenuId} collect={this.collect} itemtype={this.props.type} label={this.props.label}>
                 <TreeViewItemLabel
                     drop={this.props.drop}
                     type={this.props.type}

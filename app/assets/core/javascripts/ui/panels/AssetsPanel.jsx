@@ -96,19 +96,38 @@ export default class AssetsPanel extends React.Component {
     }
 
     canCreate(type) {
-        return type == "folder" || type == "home";
+        return type == "assetsfolder" || type == "assetshome";
     }
 
-    contextMenu(id, label, type) {
-        return (
-            <ContextMenu id={String(id) + label}>
-                {this.canCreate(type) ? <MenuItem onClick={() => this.setState({showUpload: true})} data={{item: 'open'}}>Upload file</MenuItem> : null}
-                {this.canCreate(type) ? <MenuItem onClick={() => this.setState({adding: id, newtype: 'folder'})} data={{item: 'open'}}>Create folder</MenuItem> : null}
-                <MenuItem onClick={() => this.props.onOpen(id, type, label)} data={{item: 'open'}}>Open</MenuItem>
-                <MenuItem onClick={() => this.setState({ renaming: id, newtype: type })} data={{item: 'rename'}}>Rename</MenuItem>
-                <MenuItem onClick={() => this.props.callback(this.props, "dblclick")} data={{item: 'open'}}>Dublicate</MenuItem>
-                <MenuItem onClick={() => this.deleteItem(type)} data={{item: 'delete'}}>Delete</MenuItem>
-                <MenuItem onClick={() => this.props.callback(this.props, "dblclick")} data={{item: 'open'}}>Properties</MenuItem>
+    contextClickAction(e, data) {
+        if(data.name == "open") {
+            this.props.onOpen(this.state.selected, data.type, data.label);
+        } else if(data.name == "rename") {
+            this.setState({renaming: this.state.selected, newtype: data.type});
+        } else if(data.name == "delete") {
+            this.deleteItem(data.type, this.state.selected);
+        } else if(data.name == "createfolder") {
+            this.setState({adding: this.state.selected, newtype: "folder"});
+        } else if(data.name == "upload") {
+            this.setState({showUpload: true});
+        }
+    }
+
+    renderContextMenu(menuid) {
+        var addsubmenu = (
+            <SubMenu hoverDelay={0} title="Add...">
+                 <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'upload'}}>Upload file(s)</MenuItem>
+                 <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'createfolder'}}>Create folder</MenuItem>
+            </SubMenu>
+        );
+        return(
+            <ContextMenu id={String(menuid)}>
+                {this.canCreate(menuid) ? addsubmenu : null }
+                <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'open'}}>Open</MenuItem>
+                {menuid != "assetshome" ? <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'rename'}}>Rename</MenuItem> : null}
+                {menuid != "assetshome" ? <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'delete'}}>Delete</MenuItem> : null}
+                {menuid != "assetshome" ? <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'rename'}}>Dublicate</MenuItem> : null}
+                <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'rename'}}>Settings</MenuItem>
             </ContextMenu>
         )
     }
@@ -134,8 +153,7 @@ export default class AssetsPanel extends React.Component {
                         selected={this.state.selected == x.id}
                         key={x.id}
                         collapsed={x.collapsed}
-                        contextMenu={this.contextMenu.bind(this)}
-                        contextMenuId="assets"
+                        contextMenuId={"assets" + x.mimetype}
                         onCollapse={(state) => Api.collapseAsset(x.id, state)}
                         label={x.label}>{this.renderTreeView(x.children)}</TreeViewItem> )}
             </TreeView>
@@ -178,6 +196,10 @@ export default class AssetsPanel extends React.Component {
                 <div className={this.state.working ? "working treeviewcontainer" : "treeviewcontainer"}>
                     {this.renderTreeView(this.state.assets)}
                 </div>
+                {this.renderContextMenu("assetshome")}
+                {this.renderContextMenu("assetsfolder")}
+                {this.renderContextMenu("assetspicture")}
+
                 {this.state.working ? this.renderLoading() : null}
                 {this.state.showUpload ? <UploadDialog onHide={() => this.setState({showUpload: false})} onUploaded={this.uploaded.bind(this)} /> : null}
             </div>

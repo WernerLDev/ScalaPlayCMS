@@ -90,32 +90,29 @@ export default class PagesPanel extends React.Component {
         return type != "home";
     }
 
-    contextMenu(id, label, type) {
-        return (
-            <ContextMenu id={String(id) + label}>
-                <SubMenu hoverDelay={0} title="Add Page">
-                    {this.state.pagetypes.map(x => <MenuItem key={x.typekey} onClick={() => this.setState({adding: id, newtype: x.typekey})}>{x.typename}</MenuItem> )}
-                </SubMenu>
-                <MenuItem onClick={() => this.props.onOpen(id, "file", label)} data={{item: 'open'}}>Open</MenuItem>
-                {this.isNotHome ? <MenuItem onClick={() => this.props.callback(this.props, "dblclick")} data={{item: 'open'}}>Unpublish</MenuItem> : null }
-                {this.isNotHome(type) ? <MenuItem onClick={() => this.setState({ renaming: id })} data={{item: 'rename'}}>Rename</MenuItem> : null }
-                {this.isNotHome(type) ? <MenuItem onClick={() => this.props.callback(this.props, "dblclick")} data={{item: 'open'}}>Dublicate</MenuItem> : null }
-                {this.isNotHome(type) ? <MenuItem onClick={this.deleteItem.bind(this)} data={{item: 'delete'}}>Delete</MenuItem> : null }
-                <MenuItem onClick={() => this.props.callback(this.props, "dblclick")} data={{item: 'open'}}>Settings</MenuItem>
-            </ContextMenu>
-        )
-    }
-
-    contextOpenAction(e, data) {
-        console.log(data);
+    contextClickAction(e, data) {
+        if(data.name == "open") {
+            this.props.onOpen(this.state.selected, "file", data.label);
+        } else if(data.name == "rename") {
+            this.setState({renaming: this.state.selected});
+        } else if(data.name == "delete") {
+            this.deleteItem(this.state.selected);
+        } else if(data.name == "add") {
+            this.setState({adding: this.state.selected, newtype: data.newtype});
+        }
     }
 
     renderContextMenu(menuid) {
         return(
             <ContextMenu id={String(menuid)}>
-                <MenuItem onClick={this.contextOpenAction}>Open</MenuItem>
-                <MenuItem onClick={() => console.log("Renaming")}>Rename</MenuItem>
-                <MenuItem onClick={() => console.log("Deleting")}>Delete</MenuItem>
+                <SubMenu hoverDelay={0} title="Add Page">
+                    {this.state.pagetypes.map(x => <MenuItem key={x.typekey} onClick={this.contextClickAction.bind(this)} data={{name: 'add', newtype: x.typekey}}>{x.typename}</MenuItem> )}
+                </SubMenu>
+                <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'open'}}>Open</MenuItem>
+                {menuid != "home" ? <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'rename'}}>Rename</MenuItem> : null}
+                {menuid != "home" ? <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'delete'}}>Delete</MenuItem> : null}
+                <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'rename'}}>Dublicate</MenuItem>
+                <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'rename'}}>Settings</MenuItem>
             </ContextMenu>
         )
     }
@@ -139,8 +136,7 @@ export default class PagesPanel extends React.Component {
                         parentChanged={this.onParentChanged.bind(this)}
                         selected={this.state.selected == x.id}
                         key={x.id} collapsed={x.collapsed}
-                        contextMenu={this.contextMenu.bind(this)}
-                        contextMenuId="page"
+                        contextMenuId={x.doctype == "home" ? "home" : "page"}
                         onCollapse={(state) => Api.collapseDocument(x.id, state)}
                         label={x.label}>{this.renderTreeView(x.children)}</TreeViewItem> )}
             </TreeView>
@@ -184,6 +180,7 @@ export default class PagesPanel extends React.Component {
                 <div className={this.state.working ? "working treeviewcontainer" : "treeviewcontainer"}>
                     {this.renderTreeView(this.state.pages)}
                     {this.renderContextMenu("page")}
+                    {this.renderContextMenu("home")}
                 </div>
             </div>
         )

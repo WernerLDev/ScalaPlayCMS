@@ -10,8 +10,8 @@ import play.api.data.Forms._
 import scala.concurrent._
 import scala.concurrent.duration._
 import core.utils.PasswordHasher
-import play.api.Play.current
-import play.api.i18n.Messages.Implicits._
+import play.api.i18n._
+import play.api.i18n.I18nSupport
 import core.models._
 import java.sql.Timestamp
 import java.util.Date
@@ -21,7 +21,12 @@ case class UserData(username:String, password:String)
 case class LostPassData(email:String)
 
 @Singleton
-class AdminController @Inject()(users:Users, sessions:UserSessions, resettokens:ResetTokens, mailerClient: MailerClient) extends Controller {
+class AdminController @Inject()(
+    val messagesApi: MessagesApi,
+    users:Users, 
+    sessions:UserSessions, 
+    resettokens:ResetTokens, 
+    mailerClient: MailerClient) extends Controller with I18nSupport {
 
     val loginForm = Form(
         mapping(
@@ -110,8 +115,8 @@ class AdminController @Inject()(users:Users, sessions:UserSessions, resettokens:
                             resettoken = resetToken,
                             expires_at = new Timestamp(expirationDate.getTime())
                         )) map (x => {
-                            val emailTxt = s"""Hello ${user.username},\n\n
-                                              |You or someone else requested a new password. Click on the following link to reset your password.\n\n
+                            val emailTxt = s"""Hello ${user.username},\n
+                                              |You or someone else requested a new password. Click on the following link to reset your password.
                                               |http://localhost:9000/admin/login/resetpassword/$resetToken 
                                               |""".stripMargin
                             mailerClient.send(Email(

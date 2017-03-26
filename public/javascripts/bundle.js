@@ -26386,97 +26386,61 @@
 	            return type != "home";
 	        }
 	    }, {
-	        key: 'contextMenu',
-	        value: function contextMenu(id, label, type) {
+	        key: 'contextClickAction',
+	        value: function contextClickAction(e, data) {
+	            if (data.name == "open") {
+	                this.props.onOpen(this.state.selected, "file", data.label);
+	            } else if (data.name == "rename") {
+	                this.setState({ renaming: this.state.selected });
+	            } else if (data.name == "delete") {
+	                this.deleteItem(this.state.selected);
+	            } else if (data.name == "add") {
+	                this.setState({ adding: this.state.selected, newtype: data.newtype });
+	            }
+	        }
+	    }, {
+	        key: 'renderContextMenu',
+	        value: function renderContextMenu(menuid) {
 	            var _this8 = this;
 	
 	            return _react2.default.createElement(
 	                _reactContextmenu.ContextMenu,
-	                { id: String(id) + label },
+	                { id: String(menuid) },
 	                _react2.default.createElement(
 	                    _reactContextmenu.SubMenu,
 	                    { hoverDelay: 0, title: 'Add Page' },
 	                    this.state.pagetypes.map(function (x) {
 	                        return _react2.default.createElement(
 	                            _reactContextmenu.MenuItem,
-	                            { key: x.typekey, onClick: function onClick() {
-	                                    return _this8.setState({ adding: id, newtype: x.typekey });
-	                                } },
+	                            { key: x.typekey, onClick: _this8.contextClickAction.bind(_this8), data: { name: 'add', newtype: x.typekey } },
 	                            x.typename
 	                        );
 	                    })
 	                ),
 	                _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
-	                    { onClick: function onClick() {
-	                            return _this8.props.onOpen(id, "file", label);
-	                        }, data: { item: 'open' } },
+	                    { onClick: this.contextClickAction.bind(this), data: { name: 'open' } },
 	                    'Open'
 	                ),
-	                this.isNotHome ? _react2.default.createElement(
+	                menuid != "home" ? _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
-	                    { onClick: function onClick() {
-	                            return _this8.props.callback(_this8.props, "dblclick");
-	                        }, data: { item: 'open' } },
-	                    'Unpublish'
-	                ) : null,
-	                this.isNotHome(type) ? _react2.default.createElement(
-	                    _reactContextmenu.MenuItem,
-	                    { onClick: function onClick() {
-	                            return _this8.setState({ renaming: id });
-	                        }, data: { item: 'rename' } },
+	                    { onClick: this.contextClickAction.bind(this), data: { name: 'rename' } },
 	                    'Rename'
 	                ) : null,
-	                this.isNotHome(type) ? _react2.default.createElement(
+	                menuid != "home" ? _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
-	                    { onClick: function onClick() {
-	                            return _this8.props.callback(_this8.props, "dblclick");
-	                        }, data: { item: 'open' } },
+	                    { onClick: this.contextClickAction.bind(this), data: { name: 'delete' } },
+	                    'Delete'
+	                ) : null,
+	                _react2.default.createElement(
+	                    _reactContextmenu.MenuItem,
+	                    { onClick: this.contextClickAction.bind(this), data: { name: 'rename' } },
 	                    'Dublicate'
-	                ) : null,
-	                this.isNotHome(type) ? _react2.default.createElement(
-	                    _reactContextmenu.MenuItem,
-	                    { onClick: this.deleteItem.bind(this), data: { item: 'delete' } },
-	                    'Delete'
-	                ) : null,
+	                ),
 	                _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
-	                    { onClick: function onClick() {
-	                            return _this8.props.callback(_this8.props, "dblclick");
-	                        }, data: { item: 'open' } },
+	                    { onClick: this.contextClickAction.bind(this), data: { name: 'rename' } },
 	                    'Settings'
-	                )
-	            );
-	        }
-	    }, {
-	        key: 'contextOpenAction',
-	        value: function contextOpenAction(e, data) {
-	            console.log(data);
-	        }
-	    }, {
-	        key: 'renderContextMenu',
-	        value: function renderContextMenu(menuid) {
-	            return _react2.default.createElement(
-	                _reactContextmenu.ContextMenu,
-	                { id: String(menuid) },
-	                _react2.default.createElement(
-	                    _reactContextmenu.MenuItem,
-	                    { onClick: this.contextOpenAction },
-	                    'Open'
-	                ),
-	                _react2.default.createElement(
-	                    _reactContextmenu.MenuItem,
-	                    { onClick: function onClick() {
-	                            return console.log("Renaming");
-	                        } },
-	                    'Rename'
-	                ),
-	                _react2.default.createElement(
-	                    _reactContextmenu.MenuItem,
-	                    { onClick: function onClick() {
-	                            return console.log("Deleting");
-	                        } },
-	                    'Delete'
 	                )
 	            );
 	        }
@@ -26508,8 +26472,7 @@
 	                            parentChanged: _this9.onParentChanged.bind(_this9),
 	                            selected: _this9.state.selected == x.id,
 	                            key: x.id, collapsed: x.collapsed,
-	                            contextMenu: _this9.contextMenu.bind(_this9),
-	                            contextMenuId: 'page',
+	                            contextMenuId: x.doctype == "home" ? "home" : "page",
 	                            onCollapse: function onCollapse(state) {
 	                                return Api.collapseDocument(x.id, state);
 	                            },
@@ -26572,7 +26535,8 @@
 	                    'div',
 	                    { className: this.state.working ? "working treeviewcontainer" : "treeviewcontainer" },
 	                    this.renderTreeView(this.state.pages),
-	                    this.renderContextMenu("page")
+	                    this.renderContextMenu("page"),
+	                    this.renderContextMenu("home")
 	                )
 	            );
 	        }
@@ -26844,7 +26808,7 @@
 	    }, {
 	        key: 'collect',
 	        value: function collect(props) {
-	            return { label: props.label };
+	            return { label: props.label, type: props.itemtype };
 	        }
 	    }, {
 	        key: 'render',
@@ -26859,7 +26823,7 @@
 	                { type: this.props.type, drop: this.props.drop, deleted: this.props.deleted },
 	                _react2.default.createElement(
 	                    _reactContextmenu.ContextMenuTrigger,
-	                    { holdToDisplay: -1, id: this.props.contextMenuId, collect: this.collect, label: this.props.label },
+	                    { holdToDisplay: -1, id: this.props.contextMenuId, collect: this.collect, itemtype: this.props.type, label: this.props.label },
 	                    _react2.default.createElement(
 	                        TreeViewItemLabel,
 	                        {
@@ -29771,71 +29735,75 @@
 	    }, {
 	        key: 'canCreate',
 	        value: function canCreate(type) {
-	            return type == "folder" || type == "home";
+	            return type == "assetsfolder" || type == "assetshome";
 	        }
 	    }, {
-	        key: 'contextMenu',
-	        value: function contextMenu(id, label, type) {
-	            var _this9 = this;
-	
+	        key: 'contextClickAction',
+	        value: function contextClickAction(e, data) {
+	            if (data.name == "open") {
+	                this.props.onOpen(this.state.selected, data.type, data.label);
+	            } else if (data.name == "rename") {
+	                this.setState({ renaming: this.state.selected, newtype: data.type });
+	            } else if (data.name == "delete") {
+	                this.deleteItem(data.type, this.state.selected);
+	            } else if (data.name == "createfolder") {
+	                this.setState({ adding: this.state.selected, newtype: "folder" });
+	            } else if (data.name == "upload") {
+	                this.setState({ showUpload: true });
+	            }
+	        }
+	    }, {
+	        key: 'renderContextMenu',
+	        value: function renderContextMenu(menuid) {
+	            var addsubmenu = _react2.default.createElement(
+	                _reactContextmenu.SubMenu,
+	                { hoverDelay: 0, title: 'Add...' },
+	                _react2.default.createElement(
+	                    _reactContextmenu.MenuItem,
+	                    { onClick: this.contextClickAction.bind(this), data: { name: 'upload' } },
+	                    'Upload file(s)'
+	                ),
+	                _react2.default.createElement(
+	                    _reactContextmenu.MenuItem,
+	                    { onClick: this.contextClickAction.bind(this), data: { name: 'createfolder' } },
+	                    'Create folder'
+	                )
+	            );
 	            return _react2.default.createElement(
 	                _reactContextmenu.ContextMenu,
-	                { id: String(id) + label },
-	                this.canCreate(type) ? _react2.default.createElement(
-	                    _reactContextmenu.MenuItem,
-	                    { onClick: function onClick() {
-	                            return _this9.setState({ showUpload: true });
-	                        }, data: { item: 'open' } },
-	                    'Upload file'
-	                ) : null,
-	                this.canCreate(type) ? _react2.default.createElement(
-	                    _reactContextmenu.MenuItem,
-	                    { onClick: function onClick() {
-	                            return _this9.setState({ adding: id, newtype: 'folder' });
-	                        }, data: { item: 'open' } },
-	                    'Create folder'
-	                ) : null,
+	                { id: String(menuid) },
+	                this.canCreate(menuid) ? addsubmenu : null,
 	                _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
-	                    { onClick: function onClick() {
-	                            return _this9.props.onOpen(id, type, label);
-	                        }, data: { item: 'open' } },
+	                    { onClick: this.contextClickAction.bind(this), data: { name: 'open' } },
 	                    'Open'
 	                ),
-	                _react2.default.createElement(
+	                menuid != "assetshome" ? _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
-	                    { onClick: function onClick() {
-	                            return _this9.setState({ renaming: id, newtype: type });
-	                        }, data: { item: 'rename' } },
+	                    { onClick: this.contextClickAction.bind(this), data: { name: 'rename' } },
 	                    'Rename'
-	                ),
-	                _react2.default.createElement(
+	                ) : null,
+	                menuid != "assetshome" ? _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
-	                    { onClick: function onClick() {
-	                            return _this9.props.callback(_this9.props, "dblclick");
-	                        }, data: { item: 'open' } },
-	                    'Dublicate'
-	                ),
-	                _react2.default.createElement(
-	                    _reactContextmenu.MenuItem,
-	                    { onClick: function onClick() {
-	                            return _this9.deleteItem(type);
-	                        }, data: { item: 'delete' } },
+	                    { onClick: this.contextClickAction.bind(this), data: { name: 'delete' } },
 	                    'Delete'
-	                ),
+	                ) : null,
+	                menuid != "assetshome" ? _react2.default.createElement(
+	                    _reactContextmenu.MenuItem,
+	                    { onClick: this.contextClickAction.bind(this), data: { name: 'rename' } },
+	                    'Dublicate'
+	                ) : null,
 	                _react2.default.createElement(
 	                    _reactContextmenu.MenuItem,
-	                    { onClick: function onClick() {
-	                            return _this9.props.callback(_this9.props, "dblclick");
-	                        }, data: { item: 'open' } },
-	                    'Properties'
+	                    { onClick: this.contextClickAction.bind(this), data: { name: 'rename' } },
+	                    'Settings'
 	                )
 	            );
 	        }
 	    }, {
 	        key: 'renderTreeView',
 	        value: function renderTreeView(items) {
-	            var _this10 = this;
+	            var _this9 = this;
 	
 	            if (items.length <= 0) return null;
 	            return _react2.default.createElement(
@@ -29848,27 +29816,26 @@
 	                            drop: 'folder',
 	                            id: x.id,
 	                            type: x.mimetype,
-	                            deleted: _this10.state.deleting == x.id,
-	                            renaming: _this10.state.renaming == x.id,
-	                            adding: _this10.state.adding == x.id,
+	                            deleted: _this9.state.deleting == x.id,
+	                            renaming: _this9.state.renaming == x.id,
+	                            adding: _this9.state.adding == x.id,
 	                            addicon: 'folder',
-	                            onBlur: _this10.onBlur.bind(_this10),
+	                            onBlur: _this9.onBlur.bind(_this9),
 	                            onClick: function onClick() {
-	                                return _this10.clickItem(x.id, x.label, x.mimetype);
+	                                return _this9.clickItem(x.id, x.label, x.mimetype);
 	                            },
-	                            onRename: _this10.renameItem.bind(_this10),
-	                            onAdd: _this10.addItem.bind(_this10),
-	                            parentChanged: _this10.parentChanged.bind(_this10),
-	                            selected: _this10.state.selected == x.id,
+	                            onRename: _this9.renameItem.bind(_this9),
+	                            onAdd: _this9.addItem.bind(_this9),
+	                            parentChanged: _this9.parentChanged.bind(_this9),
+	                            selected: _this9.state.selected == x.id,
 	                            key: x.id,
 	                            collapsed: x.collapsed,
-	                            contextMenu: _this10.contextMenu.bind(_this10),
-	                            contextMenuId: 'assets',
+	                            contextMenuId: "assets" + x.mimetype,
 	                            onCollapse: function onCollapse(state) {
 	                                return Api.collapseAsset(x.id, state);
 	                            },
 	                            label: x.label },
-	                        _this10.renderTreeView(x.children)
+	                        _this9.renderTreeView(x.children)
 	                    );
 	                })
 	            );
@@ -29876,7 +29843,7 @@
 	    }, {
 	        key: 'renderToolbar',
 	        value: function renderToolbar() {
-	            var _this11 = this;
+	            var _this10 = this;
 	
 	            return _react2.default.createElement(
 	                'div',
@@ -29889,8 +29856,8 @@
 	                        } }),
 	                    _react2.default.createElement(_SmallToolBar.SmallToolBarItem, { icon: 'trash', onClick: this.deleteItem.bind(this) }),
 	                    _react2.default.createElement(_SmallToolBar.SmallToolBarItem, { alignright: true, icon: 'refresh', onClick: function onClick() {
-	                            _this11.setState({ working: true });
-	                            _this11.updateData();
+	                            _this10.setState({ working: true });
+	                            _this10.updateData();
 	                        } })
 	                )
 	            );
@@ -29908,7 +29875,7 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var _this12 = this;
+	            var _this11 = this;
 	
 	            if (this.state.assets.length <= 0) {
 	                return _react2.default.createElement(
@@ -29927,9 +29894,12 @@
 	                    { className: this.state.working ? "working treeviewcontainer" : "treeviewcontainer" },
 	                    this.renderTreeView(this.state.assets)
 	                ),
+	                this.renderContextMenu("assetshome"),
+	                this.renderContextMenu("assetsfolder"),
+	                this.renderContextMenu("assetspicture"),
 	                this.state.working ? this.renderLoading() : null,
 	                this.state.showUpload ? _react2.default.createElement(_UploadDialog2.default, { onHide: function onHide() {
-	                        return _this12.setState({ showUpload: false });
+	                        return _this11.setState({ showUpload: false });
 	                    }, onUploaded: this.uploaded.bind(this) }) : null
 	            );
 	        }
