@@ -127,12 +127,13 @@ export class TreeViewItem extends React.Component {
         }
     }
 
+     //onBlur={this.props.onBlur}
     renderLabel() {
         if(this.props.renaming) {
             return(
-                <input autoFocus type="text" className="treeviewinputEdit" defaultValue={this.props.label} 
+                <div className="renamewrapper"><input autoFocus type="text" className="treeviewinputEdit" defaultValue={this.props.label} 
                 onBlur={this.props.onBlur} onKeyUp={this.keypress.bind(this)}
-                onChange={(x) => this.setState({inputvalue: x.currentTarget.value })} />
+                onChange={(x) => this.setState({inputvalue: x.currentTarget.value })} /></div>
             )
         } else {
             return(this.props.label)
@@ -144,10 +145,11 @@ export class TreeViewItem extends React.Component {
             <li>
                 <div className={"treeitem"}>
                 <Icon type="empty"/> <Icon type={this.props.addicon} />
+                <div className="addformwrapper">
                 <input autoFocus placeholder="New item name" type="text"
                     onKeyUp={this.keypress.bind(this)}
                     onChange={(e) => this.setState({inputvalue: e.currentTarget.value})}
-                    className="treeviewinput" onBlur={this.props.onBlur} />
+                    className="treeviewinput" onBlur={this.props.onBlur} /></div>
                 </div>
             </li>
         </ul>);

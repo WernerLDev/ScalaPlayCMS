@@ -7,7 +7,7 @@
 input.treeviewinput, input.treeviewinputEdit {
     display: block;
     border: 0;
-    border: 1px solid $color1;
+    /*border: 1px solid $color1;*/
     border-radius: 4px;
     padding-left: 5px;
     height: 15px;
@@ -20,19 +20,30 @@ input.treeviewinput, input.treeviewinputEdit {
 }
 
 input.treeviewinput{
-    position: absolute; top: 5px; left: 42px; right: 0;
+    /*position: absolute; top: 5px; left: 42px; right: 0;*/
+    width: 100%;
+    background: #ececec;
+    height: 20px;
+    border: 1px solid $color2;
+}
+
+.renamewrapper {
+    position: absolute; top: 5px; left: 43px; right: 5px; bottom: 0;
+}
+.addformwrapper {
+    position: absolute; top: 3px; left: 43px; right: 8px; bottom: 0;
 }
 
 input.treeviewinputEdit {
-    position: absolute; top: 5px; left: 43px; right: 0;
-    background: $color1;
+    /*position: absolute; top: 5px; left: 43px; right: 0;*/
+    background: $color2;
     border-radius: 4px;
     border: 0;
-    width: auto;
+    width: 100%;
     min-width: 10px;
     padding-left: 0;
     height: 15px;
-    color: #FFF;
+    color: $color1;
 }
 
 .tree {
