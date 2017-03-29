@@ -3,7 +3,6 @@ package core.controllers
 import javax.inject._
 import play.api._
 import play.api.mvc._
-import models.{Document, DocumentJson, Documents}
 import core.models._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -110,6 +109,13 @@ class MainController @Inject()(documents:Documents, editables:Editables, templat
     }).getOrElse( Future(BadRequest("Error: missing parameter [parent_id]")) )
   }
 
+  def setDocumentPublishDate(id:Long) = WithAuthAction.async(parse.json) { request => 
+    ((request.body \ "publishdate").asOpt[Long].map{ publishdate =>
+      documents.updatePublishDate(id, publishdate) map { x =>
+        Ok(Json.toJson(Map("success" -> JsNumber(x))))
+      }
+    }).getOrElse( Future(BadRequest("Error: missing parameter [publishdate]")) )
+  }
 
   implicit val EditableReads = Json.reads[Editable]
   def saveEditables(id:Long) = WithAuthAction(parse.json) { request => 
@@ -131,13 +137,5 @@ class MainController @Inject()(documents:Documents, editables:Editables, templat
     })
   }
 
-  def page_old(path:String):Action[AnyContent] = {
-    val result = Await.result(documents.getByPath("/" + path), Duration.Inf)
-    result match {
-      case Some(p) => templates.getAction(p)
-      case None => PageAction { implicit request =>
-        NotFound(views.html.notfound("The page you are looking for doesn't exist."))
-      }
-    }
-  }
+
 }

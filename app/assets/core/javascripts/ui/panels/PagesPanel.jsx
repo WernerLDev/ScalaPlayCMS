@@ -21,6 +21,10 @@ export default class PagesPanel extends React.Component {
         this.props.ee.on("pagedeleted", function(id){
             this.deleteItem(id);
         }.bind(this));
+
+        this.props.ee.on("pagePublishDateSet", function(id){
+            this.updateData();
+        }.bind(this));
     }
 
     updateData() {
@@ -125,6 +129,7 @@ export default class PagesPanel extends React.Component {
                     <TreeViewItem
                         drop="all"
                         id={x.id} type={x.doctype}
+                        published={x.published}
                         deleted={this.state.deleting == x.id}
                         renaming={this.state.renaming == x.id}
                         adding={this.state.adding == x.id}

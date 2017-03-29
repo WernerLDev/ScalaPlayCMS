@@ -2,7 +2,6 @@ package core.utils
 
 import scala.concurrent.Future
 import play.api.mvc._
-import models._
 import core.models._
 import javax.inject._
 import scala.concurrent.ExecutionContext.Implicits.global

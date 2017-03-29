@@ -78,6 +78,12 @@ export function updateParentDocument(id, parent_id) {
     return ApiCall("/documents/" + id + "/updateparent", "PUT", body);
 }
 
+export function updateDocumentPublishDate(id, publishdate) {
+    var body = JSON.stringify({
+        "publishdate" : publishdate
+    });
+    return ApiCall("/documents/"+id+"/publishdate", "PUT", body);
+}
 
 export function SaveEditables(id, editables) {
     var body = JSON.stringify({

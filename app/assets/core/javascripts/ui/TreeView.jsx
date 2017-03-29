@@ -73,6 +73,7 @@ class TreeViewItemLabel extends React.Component {
     }
 
     render() {
+        var publishedClass = this.props.published ? "published" : "unpublished";
         if(this.props.drop == "all" || this.props.type == this.props.drop) {
             return(
                 <div
@@ -83,7 +84,7 @@ class TreeViewItemLabel extends React.Component {
                     onDragLeave={this.onDragLeave.bind(this)}
                     onDropCapture={this.onDrop.bind(this)}
                     onContextMenu={this.props.onContextMenu}
-                    className={this.props.selected ? "selected treeitem" : "treeitem"}>
+                    className={this.props.selected ? "selected treeitem " + publishedClass : "treeitem " + publishedClass}>
                     {this.props.children}
                 </div>
             )
@@ -92,7 +93,7 @@ class TreeViewItemLabel extends React.Component {
                 <div 
                     draggable="true"
                     onContextMenu={this.props.onContextMenu}
-                    className={this.props.selected ? "selected nondraggable treeitem" : "nondraggable treeitem"}
+                    className={this.props.selected ? "selected nondraggable treeitem " + publishedClass : "nondraggable treeitem " + publishedClass}
                     onDragStart={this.onDragStart.bind(this)}
                     onDragEnd={this.onDragStop.bind(this)}
                     >
@@ -171,6 +172,7 @@ export class TreeViewItem extends React.Component {
                 <TreeViewItemLabel
                     drop={this.props.drop}
                     type={this.props.type}
+                    published={this.props.published}
                     id={this.props.id}
                     parentChanged={this.props.parentChanged}
                     onContextMenu={this.props.onClick}

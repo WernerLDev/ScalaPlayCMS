@@ -29,6 +29,18 @@ export default class TestEditor extends React.Component {
 
     publish() {
         console.log("publishing");
+        var newPublishDate = new Date();
+        if(this.state.document.published_at < newPublishDate.getTime()) {
+            newPublishDate = new Date(3000,1,1);
+        }
+        this.setState({iframeloaded: false});
+        Api.updateDocumentPublishDate(this.props.id, newPublishDate.getTime()).then(x => {
+            Api.getDocument(this.props.id).then(doc => {
+                this.setState({ document: doc, iframeloaded: true }, () => {
+                    this.props.ee.emitEvent("pagePublishDateSet", [this.props.id]);
+                });
+            })
+        });
     }
 
     saveItem() {
@@ -65,9 +77,13 @@ export default class TestEditor extends React.Component {
     
 
     renderToolbar() {
+        var publishlabel = "Publish";
+        if(this.state.document != null && this.state.document.published_at < (new Date()).getTime()) {
+            publishlabel = "Unpublish";
+        }
         return (
             <LargeToolBar>
-                <ToolbarItemLarge clicked={this.publish.bind(this)} icon="life-ring" label="Publish" />
+                <ToolbarItemLarge clicked={this.publish.bind(this)} icon="life-ring" label={publishlabel} />
                 <ToolbarItemLarge clicked={this.publish.bind(this)} icon="chevron-down" label="" />
                 <ToolbarItemLarge clicked={this.saveItem.bind(this)} icon="floppy-o" label="Save" />
                 <ToolbarItemLarge clicked={this.settings.bind(this)} icon="gears" label="Settings" />

@@ -140,6 +140,7 @@ export default class AssetsPanel extends React.Component {
                         drop="folder"
                         id={x.id}
                         type={x.mimetype}
+                        published={true}
                         deleted={this.state.deleting == x.id}
                         renaming={this.state.renaming == x.id}
                         adding={this.state.adding == x.id}

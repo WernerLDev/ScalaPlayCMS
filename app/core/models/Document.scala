@@ -1,4 +1,4 @@
-package models
+package core.models
 
 import play.api.Play
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
@@ -15,7 +15,7 @@ import scala.concurrent._
 import scala.concurrent.duration._
 
 case class Document(id : Long , parent_id : Long, name : String, doctype : String, collapsed : Boolean, view:Option[String], path:String, created_at:Timestamp, updated_at:Timestamp, published_at:Timestamp )
-case class DocumentJson(id : Long, key: String, path:String, label : String, doctype : String, collapsed : Boolean, children: List[DocumentJson])
+case class DocumentJson(id : Long, key: String, path:String, label : String, doctype : String, collapsed : Boolean, published: Boolean, children: List[DocumentJson])
 
 class DocumentTableDef(tag: Tag) extends Table[Document](tag, "document") {
 
@@ -46,7 +46,11 @@ class Documents @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
 
     def listJson():Future[List[DocumentJson]] = {
         def generateList(d:List[Document],parentid:Long):List[DocumentJson] = {
-            d.filter(x => x.parent_id == parentid).map(x => DocumentJson(x.id, x.name, x.path, x.name, x.doctype, x.collapsed, generateList(d ,x.id)))
+            
+            d.filter(x => x.parent_id == parentid).map(x => {
+                val isPublished = x.published_at.before(new Timestamp( (new java.util.Date).getTime()))
+                DocumentJson(x.id, x.name, x.path, x.name, x.doctype, x.collapsed, isPublished, generateList(d ,x.id))
+            })
         }
         listAll map (x => generateList(x.toList, 0))
     }
@@ -99,6 +103,13 @@ class Documents @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
         })
     }
 
+    def updatePublishDate(id:Long, publishdate:Long):Future[Int] = {
+        val published_at = new java.sql.Timestamp(publishdate);
+        dbConfig.db.run {
+            documents.filter(_.id === id).map(_.published_at).update(published_at)
+        }
+    }
+
     def getByName(name:String):Future[Option[Document]] = dbConfig.db.run {
         documents.filter(_.name === name).result.headOption
     }
@@ -112,7 +123,8 @@ class Documents @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     }
 
     def getByPath(path:String) = dbConfig.db.run {
-        documents.filter(_.path === path).result.headOption
+        val currDate = new Timestamp( (new java.util.Date).getTime() )
+        documents.filter(x => x.path === path && x.published_at < currDate ).result.headOption
     }
 
     def updatePath(parentdoc:Document):Future[Int] = {

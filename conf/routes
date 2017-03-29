@@ -26,6 +26,7 @@ PUT     /documents/:id/collapse     core.controllers.MainController.collapseDocu
 PUT     /documents/:id/rename       core.controllers.MainController.renameDocument(id:Long)
 PUT     /documents/:id/updateparent core.controllers.MainController.updateParentDocument(id:Long)
 PUT     /documents/:id/editables    core.controllers.MainController.saveEditables(id:Long)
+PUT     /documents/:id/publishdate  core.controllers.MainController.setDocumentPublishDate(id:Long)
 
 GET     /api/v1/assets              core.controllers.api.AssetsController.all
 GET     /api/v1/assets/:id          core.controllers.api.AssetsController.getById(id:Long)

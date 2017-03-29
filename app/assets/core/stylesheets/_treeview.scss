@@ -14,9 +14,9 @@ input.treeviewinput, input.treeviewinputEdit {
     min-width: 10px;
     font-size: 14px;
     margin-left: 0px;
-    flex: 1;
     font-family: 'Varela Round', sans-serif;
     font-size: 14px;
+    outline: none;
 }
 
 input.treeviewinput{
@@ -28,7 +28,7 @@ input.treeviewinput{
 }
 
 .renamewrapper {
-    position: absolute; top: 5px; left: 43px; right: 5px; bottom: 0;
+    position: absolute; top: 2px; left: 41px; right: 5px; bottom: 0;
 }
 .addformwrapper {
     position: absolute; top: 3px; left: 43px; right: 8px; bottom: 0;
@@ -41,8 +41,9 @@ input.treeviewinputEdit {
     border: 0;
     width: 100%;
     min-width: 10px;
-    padding-left: 0;
-    height: 15px;
+    padding-left: 2px;
+    height: 19px;
+    line-height: 23px;
     color: $color1;
 }
 
@@ -65,6 +66,7 @@ input.treeviewinputEdit {
                 -moz-user-select: none;
                 user-select: none;
                 height: 15px;
+                line-height: 15px;
                 padding: 5px;
                 font-size: 14px;
                 div.treeitemclickarea {
@@ -121,3 +123,8 @@ input.treeviewinputEdit {
     overflow: auto;
 }
 
+.unpublished {
+    text-decoration: line-through;
+
+    font-style: italic;
+}

@@ -10,7 +10,7 @@ import javax.inject.Singleton
 import javax.inject._
 import play.api.Play.current
 import slick.profile.SqlProfile.ColumnOption.SqlType
-import models.{Document, DocumentTableDef}
+import core.models.{Document, DocumentTableDef}
 import scala.concurrent._
 import scala.concurrent.duration._
 

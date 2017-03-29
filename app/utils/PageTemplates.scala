@@ -6,7 +6,7 @@ import javax.inject._
 import play.api._
 import play.api.mvc._
 import play.api.mvc.Results._
-import models.Document
+import core.models.Document
 import core.utils._
 
 case class PageType(name:String, action:(Document => Action[AnyContent]))
