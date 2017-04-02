@@ -1,9 +1,8 @@
-
 import React from 'react';
 import * as Api from '../../api/api.js';
 import {LargeToolBar, ToolbarItemLarge} from '../LargeToolBar.jsx';
 
-export default class ImageViewer extends React.Component {
+export default class FileViewer extends React.Component {
 
     constructor(props, context) {
         super(props, context);
@@ -27,7 +26,6 @@ export default class ImageViewer extends React.Component {
     renderToolbar() {
         return (
             <LargeToolBar>
-                <ToolbarItemLarge clicked={this.settings.bind(this)} icon="gears" label="Properties" />
                 <ToolbarItemLarge clicked={this.delete.bind(this)} icon="trash" label="" classes="button-right redbtn" />
             </LargeToolBar>
         );
@@ -41,10 +39,13 @@ export default class ImageViewer extends React.Component {
                 </div>)
         }
         return(
-            <div className="imageviewerback">
+            <div>
                 {this.renderToolbar()}
-                <div className="imageviewer">
-                  <img src={"/uploads" + this.state.asset.path} />
+                    <div className="fileviewer">
+                    <p>
+                        It's currently not possible to preview files with type {this.state.asset.mimetype}
+                    </p>
+                    <a className="downloadbtn" target="_blank" href={"/uploads" + this.state.asset.path}>Download file instead</a>
                 </div>
             </div>
         )

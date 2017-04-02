@@ -78,7 +78,7 @@ export default class AssetsTreePanel extends React.Component {
     uploaded(uploading) {
         this.setState({showUpload: false, working: true});
         uploading.then(x => {
-            Api.addAsset(this.state.selected, x.name, x.server_path, 'picture').then(x => {
+            Api.addAsset(this.state.selected, x.name, x.server_path, x.contenttype).then(x => {
                 this.updateData();
             })
         });
@@ -109,6 +109,12 @@ export default class AssetsTreePanel extends React.Component {
         }
     }
 
+    getContextMenuId(mimetype) {
+        if(mimetype == "home") return "assetshome";
+        else if(mimetype == "folder") return "assetsfolder";
+        else return "assetmenu";
+    }
+
     renderTreeView(items) {
         if(items.length <= 0) return null;
         return(
@@ -131,7 +137,7 @@ export default class AssetsTreePanel extends React.Component {
                         selected={this.state.selected == x.id}
                         key={x.id}
                         collapsed={x.collapsed}
-                        contextMenuId={"assets" + x.mimetype}
+                        contextMenuId={this.getContextMenuId(x.mimetype)}
                         onCollapse={(state) => Api.collapseAsset(x.id, state)}
                         label={x.label}>{this.renderTreeView(x.children)}</TreeViewItem> )}
             </TreeView>
@@ -177,7 +183,7 @@ export default class AssetsTreePanel extends React.Component {
                 </div>
                 <AssetsContextMenu menuid="assetshome" contextClickAction={this.contextClickAction.bind(this)} />
                 <AssetsContextMenu menuid="assetsfolder" contextClickAction={this.contextClickAction.bind(this)} />
-                <AssetsContextMenu menuid="assetspicture" contextClickAction={this.contextClickAction.bind(this)} />
+                <AssetsContextMenu menuid="assetmenu" contextClickAction={this.contextClickAction.bind(this)} />
 
                 {this.state.working ? this.renderLoading() : null}
                 {this.state.showUpload ? <UploadDialog onHide={() => this.setState({showUpload: false})} onUploaded={this.uploaded.bind(this)} /> : null}

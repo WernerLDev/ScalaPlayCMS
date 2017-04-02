@@ -4175,6 +4175,18 @@
 	
 	var _ImageViewer2 = _interopRequireDefault(_ImageViewer);
 	
+	var _FileViewer = __webpack_require__(257);
+	
+	var _FileViewer2 = _interopRequireDefault(_FileViewer);
+	
+	var _DocsViewer = __webpack_require__(258);
+	
+	var _DocsViewer2 = _interopRequireDefault(_DocsViewer);
+	
+	var _TextViewer = __webpack_require__(259);
+	
+	var _TextViewer2 = _interopRequireDefault(_TextViewer);
+	
 	var _wolfy87Eventemitter = __webpack_require__(255);
 	
 	var _wolfy87Eventemitter2 = _interopRequireDefault(_wolfy87Eventemitter);
@@ -4237,8 +4249,20 @@
 	            );
 	            if (type == "file") {
 	                content = _react2.default.createElement(_PageEditPanel2.default, { ee: this.state.ee, id: id });
-	            } else if (type == "picture") {
+	            } else if (type == "picture" || type.startsWith("image")) {
 	                content = _react2.default.createElement(_ImageViewer2.default, { ee: this.state.ee, id: id });
+	            } else if (type == "folder") {
+	                content = _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    label
+	                );
+	            } else if (type.match("officedocument") || type == "application/pdf") {
+	                content = _react2.default.createElement(_DocsViewer2.default, { ee: this.state.ee, id: id });
+	            } else if (type.startsWith("text")) {
+	                content = _react2.default.createElement(_TextViewer2.default, { ee: this.state.ee, id: id });
+	            } else {
+	                content = _react2.default.createElement(_FileViewer2.default, { ee: this.state.ee, id: id });
 	            }
 	            var newTab = {
 	                id: id + type,
@@ -26927,7 +26951,7 @@
 	        return _react2.default.createElement("i", { className: "fa fa-folder fileicon", "aria-hidden": "true" });
 	    } else if (props.type == "folder-open") {
 	        return _react2.default.createElement("i", { className: "fa fa-folder-open fileicon", "aria-hidden": "true" });
-	    } else if (props.type == "picture") {
+	    } else if (props.type == "picture" || props.type.startsWith("image")) {
 	        return _react2.default.createElement("i", { className: "fa fa-file-image-o fileicon", "aria-hidden": "true" });
 	    } else if (props.type == "home") {
 	        return _react2.default.createElement("i", { className: "fa fa-home fileicon", "aria-hidden": "true" });
@@ -26937,6 +26961,12 @@
 	        return _react2.default.createElement("i", { className: "fa fa-trash", "aria-hidden": "true" });
 	    } else if (props.type == "pencil") {
 	        return _react2.default.createElement("i", { className: "fa fa-pencil", "aria-hidden": "true" });
+	    } else if (props.type == "application/pdf") {
+	        return _react2.default.createElement("i", { className: "fa fa-file-pdf-o", "aria-hidden": "true" });
+	    } else if (props.type.startsWith("application") && (props.type.match("officedocument") != null || props.type.match("opendocument") != null)) {
+	        return _react2.default.createElement("i", { className: "fa fa-file-word-o", "aria-hidden": "true" });
+	    } else if (props.type.startsWith("text")) {
+	        return _react2.default.createElement("i", { className: "fa fa-file-text-o", "aria-hidden": "true" });
 	    } else {
 	        return _react2.default.createElement("i", { className: "fa emptyicon fileicon", "aria-hidden": "true" });
 	    }
@@ -29738,7 +29768,7 @@
 	                                null,
 	                                _react2.default.createElement('i', { className: 'fa fa-upload', 'aria-hidden': 'true' }),
 	                                _react2.default.createElement('br', null),
-	                                'Click or drop file(s) to upload'
+	                                'Select file(s) to upload'
 	                            )
 	                        )
 	                    )
@@ -29795,7 +29825,16 @@
 	    return _react2.default.createElement(
 	        _reactContextmenu.ContextMenu,
 	        { id: String(menuid) },
-	        canCreate(menuid) ? addsubmenu : null,
+	        canCreate(menuid) ? _react2.default.createElement(
+	            _reactContextmenu.MenuItem,
+	            { onClick: props.contextClickAction, data: { name: 'upload' } },
+	            "Upload file(s)"
+	        ) : null,
+	        canCreate(menuid) ? _react2.default.createElement(
+	            _reactContextmenu.MenuItem,
+	            { onClick: props.contextClickAction, data: { name: 'createfolder' } },
+	            "Create folder"
+	        ) : null,
 	        _react2.default.createElement(
 	            _reactContextmenu.MenuItem,
 	            { onClick: props.contextClickAction, data: { name: 'open' } },
@@ -29878,7 +29917,7 @@
 	    }, {
 	        key: 'delete',
 	        value: function _delete() {
-	            this.props.ee.emitEvent("assetdeleted", [this.props.id, "picture"]);
+	            this.props.ee.emitEvent("assetdeleted", [this.props.id, this.state.asset.mimetype]);
 	        }
 	    }, {
 	        key: 'renderToolbar',
@@ -30555,7 +30594,7 @@
 	
 	            this.setState({ showUpload: false, working: true });
 	            uploading.then(function (x) {
-	                Api.addAsset(_this7.state.selected, x.name, x.server_path, 'picture').then(function (x) {
+	                Api.addAsset(_this7.state.selected, x.name, x.server_path, x.contenttype).then(function (x) {
 	                    _this7.updateData();
 	                });
 	            });
@@ -30591,6 +30630,11 @@
 	            }
 	        }
 	    }, {
+	        key: 'getContextMenuId',
+	        value: function getContextMenuId(mimetype) {
+	            if (mimetype == "home") return "assetshome";else if (mimetype == "folder") return "assetsfolder";else return "assetmenu";
+	        }
+	    }, {
 	        key: 'renderTreeView',
 	        value: function renderTreeView(items) {
 	            var _this9 = this;
@@ -30621,7 +30665,7 @@
 	                            selected: _this9.state.selected == x.id,
 	                            key: x.id,
 	                            collapsed: x.collapsed,
-	                            contextMenuId: "assets" + x.mimetype,
+	                            contextMenuId: _this9.getContextMenuId(x.mimetype),
 	                            onCollapse: function onCollapse(state) {
 	                                return Api.collapseAsset(x.id, state);
 	                            },
@@ -30688,7 +30732,7 @@
 	                ),
 	                _react2.default.createElement(_AssetsContextMenu2.default, { menuid: 'assetshome', contextClickAction: this.contextClickAction.bind(this) }),
 	                _react2.default.createElement(_AssetsContextMenu2.default, { menuid: 'assetsfolder', contextClickAction: this.contextClickAction.bind(this) }),
-	                _react2.default.createElement(_AssetsContextMenu2.default, { menuid: 'assetspicture', contextClickAction: this.contextClickAction.bind(this) }),
+	                _react2.default.createElement(_AssetsContextMenu2.default, { menuid: 'assetmenu', contextClickAction: this.contextClickAction.bind(this) }),
 	                this.state.working ? this.renderLoading() : null,
 	                this.state.showUpload ? _react2.default.createElement(_UploadDialog2.default, { onHide: function onHide() {
 	                        return _this11.setState({ showUpload: false });
@@ -30701,6 +30745,343 @@
 	}(_react2.default.Component);
 	
 	exports.default = AssetsTreePanel;
+
+/***/ },
+/* 257 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _api = __webpack_require__(239);
+	
+	var Api = _interopRequireWildcard(_api);
+	
+	var _LargeToolBar = __webpack_require__(243);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var FileViewer = function (_React$Component) {
+	    _inherits(FileViewer, _React$Component);
+	
+	    function FileViewer(props, context) {
+	        _classCallCheck(this, FileViewer);
+	
+	        var _this = _possibleConstructorReturn(this, (FileViewer.__proto__ || Object.getPrototypeOf(FileViewer)).call(this, props, context));
+	
+	        _this.state = { asset: null };
+	        return _this;
+	    }
+	
+	    _createClass(FileViewer, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+	
+	            Api.getAsset(this.props.id).then(function (asset) {
+	                _this2.setState({ asset: asset });
+	            });
+	        }
+	    }, {
+	        key: 'settings',
+	        value: function settings() {}
+	    }, {
+	        key: 'delete',
+	        value: function _delete() {
+	            this.props.ee.emitEvent("assetdeleted", [this.props.id, this.state.asset.mimetype]);
+	        }
+	    }, {
+	        key: 'renderToolbar',
+	        value: function renderToolbar() {
+	            return _react2.default.createElement(
+	                _LargeToolBar.LargeToolBar,
+	                null,
+	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.delete.bind(this), icon: 'trash', label: '', classes: 'button-right redbtn' })
+	            );
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            if (this.state.asset == null) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    { id: 'wrapper' },
+	                    this.renderToolbar(),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'loading' },
+	                        _react2.default.createElement('img', { src: '/assets/images/rolling.svg' })
+	                    )
+	                );
+	            }
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                this.renderToolbar(),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'fileviewer' },
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        'It\'s currently not possible to preview files with type ',
+	                        this.state.asset.mimetype
+	                    ),
+	                    _react2.default.createElement(
+	                        'a',
+	                        { className: 'downloadbtn', target: '_blank', href: "/uploads" + this.state.asset.path },
+	                        'Download file instead'
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return FileViewer;
+	}(_react2.default.Component);
+	
+	exports.default = FileViewer;
+
+/***/ },
+/* 258 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _api = __webpack_require__(239);
+	
+	var Api = _interopRequireWildcard(_api);
+	
+	var _LargeToolBar = __webpack_require__(243);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var DocsViewer = function (_React$Component) {
+	    _inherits(DocsViewer, _React$Component);
+	
+	    function DocsViewer(props, context) {
+	        _classCallCheck(this, DocsViewer);
+	
+	        var _this = _possibleConstructorReturn(this, (DocsViewer.__proto__ || Object.getPrototypeOf(DocsViewer)).call(this, props, context));
+	
+	        _this.state = { asset: null };
+	        return _this;
+	    }
+	
+	    _createClass(DocsViewer, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+	
+	            Api.getAsset(this.props.id).then(function (asset) {
+	                _this2.setState({ asset: asset });
+	            });
+	        }
+	    }, {
+	        key: 'settings',
+	        value: function settings() {}
+	    }, {
+	        key: 'delete',
+	        value: function _delete() {
+	            this.props.ee.emitEvent("assetdeleted", [this.props.id, this.state.asset.mimetype]);
+	        }
+	    }, {
+	        key: 'renderToolbar',
+	        value: function renderToolbar() {
+	            return _react2.default.createElement(
+	                _LargeToolBar.LargeToolBar,
+	                null,
+	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.settings.bind(this), icon: 'gears', label: 'Properties' }),
+	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.delete.bind(this), icon: 'trash', label: '', classes: 'button-right redbtn' })
+	            );
+	        }
+	
+	        //this.state.asset.path
+	        //<iframe src="https://docs.google.com/viewer?url=http://infolab.stanford.edu/pub/papers/google.pdf&embedded=true" style="width:600px; height:500px;" frameborder="0"></iframe>
+	
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            if (this.state.asset == null) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    { id: 'wrapper' },
+	                    this.renderToolbar(),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'loading' },
+	                        _react2.default.createElement('img', { src: '/assets/images/rolling.svg' })
+	                    )
+	                );
+	            }
+	            var viewerurl = "http://view.officeapps.live.com/op/view.aspx?src=";
+	            var iframeurl = "/uploads" + this.state.asset.path;
+	            if (this.state.asset.mimetype.match("officedocument")) {
+	                iframeurl = viewerurl + "http://www.werlang.nl/rand/ontslagbrief.docx";
+	            }
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                this.renderToolbar(),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'iframe-wrapper' },
+	                    _react2.default.createElement('iframe', { src: iframeurl })
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return DocsViewer;
+	}(_react2.default.Component);
+	
+	exports.default = DocsViewer;
+
+/***/ },
+/* 259 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _api = __webpack_require__(239);
+	
+	var Api = _interopRequireWildcard(_api);
+	
+	var _LargeToolBar = __webpack_require__(243);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var TextViewer = function (_React$Component) {
+	    _inherits(TextViewer, _React$Component);
+	
+	    function TextViewer(props, context) {
+	        _classCallCheck(this, TextViewer);
+	
+	        var _this = _possibleConstructorReturn(this, (TextViewer.__proto__ || Object.getPrototypeOf(TextViewer)).call(this, props, context));
+	
+	        _this.state = { asset: null, textcontent: "" };
+	        return _this;
+	    }
+	
+	    _createClass(TextViewer, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+	
+	            Api.getAsset(this.props.id).then(function (asset) {
+	                fetch("/uploads" + asset.path).then(function (r) {
+	                    return r.text();
+	                }).then(function (r) {
+	                    _this2.setState({ asset: asset, textcontent: r });
+	                });
+	            });
+	        }
+	    }, {
+	        key: 'settings',
+	        value: function settings() {}
+	    }, {
+	        key: 'delete',
+	        value: function _delete() {
+	            this.props.ee.emitEvent("assetdeleted", [this.props.id, this.state.asset.mimetype]);
+	        }
+	    }, {
+	        key: 'renderToolbar',
+	        value: function renderToolbar() {
+	            return _react2.default.createElement(
+	                _LargeToolBar.LargeToolBar,
+	                null,
+	                _react2.default.createElement(_LargeToolBar.ToolbarItemLarge, { clicked: this.delete.bind(this), icon: 'trash', label: '', classes: 'button-right redbtn' })
+	            );
+	        }
+	
+	        //this.state.asset.path
+	
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var viewerurl = "http://view.officeapps.live.com/op/view.aspx?src=";
+	            if (this.state.asset == null) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    { id: 'wrapper' },
+	                    this.renderToolbar(),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'loading' },
+	                        _react2.default.createElement('img', { src: '/assets/images/rolling.svg' })
+	                    )
+	                );
+	            }
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                this.renderToolbar(),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'textcontent' },
+	                    this.state.textcontent
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return TextViewer;
+	}(_react2.default.Component);
+	
+	exports.default = TextViewer;
 
 /***/ }
 /******/ ]);

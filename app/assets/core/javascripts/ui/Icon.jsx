@@ -23,7 +23,7 @@ export default function Icon(props) {
             <i className="fa fa-folder-open fileicon" aria-hidden="true"></i>
        )
     } 
-    else if(props.type == "picture") {
+    else if(props.type == "picture" || props.type.startsWith("image")) {
        return (
             <i className="fa fa-file-image-o fileicon" aria-hidden="true"></i>
        )
@@ -43,6 +43,18 @@ export default function Icon(props) {
         return (
             <i className="fa fa-pencil" aria-hidden="true"></i>
         )
+    } else if(props.type == "application/pdf") {
+        return (
+            <i className="fa fa-file-pdf-o" aria-hidden="true"></i>
+        )
+    } else if(props.type.startsWith("application") && (props.type.match("officedocument") != null || props.type.match("opendocument") != null) ) {
+        return (
+            <i className="fa fa-file-word-o" aria-hidden="true"></i>
+        )
+    } else if(props.type.startsWith("text")) {
+       return (
+            <i className="fa fa-file-text-o" aria-hidden="true"></i>
+        ) 
     }
     else {
        return (

@@ -1,9 +1,8 @@
-
 import React from 'react';
 import * as Api from '../../api/api.js';
 import {LargeToolBar, ToolbarItemLarge} from '../LargeToolBar.jsx';
 
-export default class ImageViewer extends React.Component {
+export default class DocsViewer extends React.Component {
 
     constructor(props, context) {
         super(props, context);
@@ -33,6 +32,8 @@ export default class ImageViewer extends React.Component {
         );
     }
     
+    //this.state.asset.path
+//<iframe src="https://docs.google.com/viewer?url=http://infolab.stanford.edu/pub/papers/google.pdf&embedded=true" style="width:600px; height:500px;" frameborder="0"></iframe>
     render() {
         if(this.state.asset == null) {
             return(<div id="wrapper">
@@ -40,11 +41,16 @@ export default class ImageViewer extends React.Component {
                     <div className="loading"><img src="/assets/images/rolling.svg" /></div>
                 </div>)
         }
+        let viewerurl = "http://view.officeapps.live.com/op/view.aspx?src=";
+        var iframeurl = "/uploads" + this.state.asset.path;
+        if(this.state.asset.mimetype.match("officedocument")) {
+            iframeurl = viewerurl + "http://www.werlang.nl/rand/ontslagbrief.docx";
+        }
         return(
-            <div className="imageviewerback">
+            <div>
                 {this.renderToolbar()}
-                <div className="imageviewer">
-                  <img src={"/uploads" + this.state.asset.path} />
+                <div className="iframe-wrapper">
+                    <iframe src={iframeurl} />
                 </div>
             </div>
         )

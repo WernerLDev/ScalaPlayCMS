@@ -1,18 +1,19 @@
-
 import React from 'react';
 import * as Api from '../../api/api.js';
 import {LargeToolBar, ToolbarItemLarge} from '../LargeToolBar.jsx';
 
-export default class ImageViewer extends React.Component {
+export default class TextViewer extends React.Component {
 
     constructor(props, context) {
         super(props, context);
-        this.state = { asset: null };
+        this.state = { asset: null, textcontent: "" };
     }
 
     componentDidMount() {
         Api.getAsset(this.props.id).then(asset => {
-            this.setState({asset: asset})
+            fetch("/uploads" + asset.path).then(r => r.text()).then( r => {
+                this.setState({asset: asset, textcontent: r})
+            })
         })
     }
 
@@ -27,13 +28,14 @@ export default class ImageViewer extends React.Component {
     renderToolbar() {
         return (
             <LargeToolBar>
-                <ToolbarItemLarge clicked={this.settings.bind(this)} icon="gears" label="Properties" />
                 <ToolbarItemLarge clicked={this.delete.bind(this)} icon="trash" label="" classes="button-right redbtn" />
             </LargeToolBar>
         );
     }
     
+    //this.state.asset.path
     render() {
+        let viewerurl = "http://view.officeapps.live.com/op/view.aspx?src=";
         if(this.state.asset == null) {
             return(<div id="wrapper">
                     {this.renderToolbar()}
@@ -41,10 +43,10 @@ export default class ImageViewer extends React.Component {
                 </div>)
         }
         return(
-            <div className="imageviewerback">
+            <div>
                 {this.renderToolbar()}
-                <div className="imageviewer">
-                  <img src={"/uploads" + this.state.asset.path} />
+                <div className="textcontent">
+                    {this.state.textcontent}
                 </div>
             </div>
         )

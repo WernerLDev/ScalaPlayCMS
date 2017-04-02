@@ -13,8 +13,6 @@ import javax.inject._
 import play.api.Play.current
 import java.sql.Timestamp
 import slick.profile.SqlProfile.ColumnOption.SqlType
-import scala.concurrent._
-import scala.concurrent.duration._
 
 case class Asset(id : Long , parent_id : Long, name : String, mimetype : String, collapsed : Boolean, path:String, server_path:String, created_at:Timestamp )
 case class AssetTree(id : Long, key: String, path:String, server_path:String, label : String, mimetype : String, collapsed : Boolean, children: List[AssetTree])
@@ -46,7 +44,20 @@ class Assets @Inject()(protected val dbConfigProvider: DatabaseConfigProvider, c
 
     def listJson():Future[List[AssetTree]] = {
         def generateList(d:List[Asset],parentid:Long):List[AssetTree] = {
-            d.filter(x => x.parent_id == parentid).sortBy(a => a.mimetype).map(x => AssetTree(x.id, x.name, x.path, x.server_path, x.name, x.mimetype, x.collapsed, generateList(d ,x.id)))
+            d.filter(x => x.parent_id == parentid).sortBy(a => a.mimetype)
+            .map(x => {
+                val childItems = generateList(d, x.id)
+                AssetTree(
+                    id = x.id, 
+                    key = x.name,
+                    path = x.path,
+                    server_path = x.server_path,
+                    label = x.name,
+                    mimetype = x.mimetype, 
+                    collapsed = x.collapsed, 
+                    children = childItems.filter(_.mimetype == "folder") ++ childItems.filter(_.mimetype != "folder")
+                 )
+             })
         }
         listAll map (x => generateList(x.toList, 0))
     }

@@ -14,7 +14,8 @@ export default function AssetsContextMenu(props) {
     );
     return(
         <ContextMenu id={String(menuid)}>
-            {canCreate(menuid) ? addsubmenu : null }
+            {canCreate(menuid) ? <MenuItem onClick={props.contextClickAction} data={{name: 'upload'}}>Upload file(s)</MenuItem> : null }
+            {canCreate(menuid) ? <MenuItem onClick={props.contextClickAction} data={{name: 'createfolder'}}>Create folder</MenuItem> : null }
             <MenuItem onClick={props.contextClickAction} data={{name: 'open'}}>Open</MenuItem>
             {menuid != "assetshome" ? <MenuItem onClick={props.contextClickAction} data={{name: 'rename'}}>Rename</MenuItem> : null}
             {menuid != "assetshome" ? <MenuItem onClick={props.contextClickAction} data={{name: 'delete'}}>Delete</MenuItem> : null}

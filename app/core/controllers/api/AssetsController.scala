@@ -71,7 +71,7 @@ class AssetsController @Inject()(assets:Assets, WithAuthAction:AuthAction, PageA
             asset.ref.moveTo(outputfile)
             
             val filepath = uploaddir + filename
-            Ok(Json.obj("success" -> true, "name" -> asset.filename, "server_path" -> filepath))
+            Ok(Json.obj("success" -> true, "name" -> asset.filename, "contenttype" -> contentType, "server_path" -> filepath))
         }.getOrElse {
             Ok(Json.obj("success" -> false, "name" -> "", "path" -> ""))
         }
@@ -106,16 +106,24 @@ class AssetsController @Inject()(assets:Assets, WithAuthAction:AuthAction, PageA
             Ok(Json.toJson(Map("success" -> JsNumber(x))))
         }
         }).getOrElse( Future(BadRequest("Error: Missing parameter [collapsed]")) )
-    }
+    } 
 
     def getUpload(filename:String) = PageAction.async { implicit request =>
         val assetdir = conf.getString("elestic.uploadroot").getOrElse("")
         assets.getByPath("/" + filename).map(assetOpt => {
             assetOpt.map(asset => {
-                Ok.sendFile(
-                    content = new File(assetdir + asset.server_path),
-                    inline = true
-                )
+                val assetFile = new File(assetdir + asset.server_path)
+                if(assetFile.exists) {
+                    Ok.sendFile(
+                        content = assetFile,
+                        inline = true
+                    )
+                } else {
+                    NotFound.sendFile(
+                        content = new File(assetdir + "/public/images/imagenotfound.png"),
+                        inline = true
+                    )
+                }
             }).getOrElse(NotFound(views.html.notfound("The uploaded file you are looking for doesn't exist.")))
         })
    }

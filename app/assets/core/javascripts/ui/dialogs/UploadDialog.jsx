@@ -64,7 +64,7 @@ export default class UploadDialog extends React.Component {
                                 var files = e.currentTarget.files;
                                 this.doUpload(files);
                             }} />
-                            <span><i className="fa fa-upload" aria-hidden="true"></i><br />Click or drop file(s) to upload</span>
+                            <span><i className="fa fa-upload" aria-hidden="true"></i><br />Select file(s) to upload</span>
                         </label>
                         </form>
                 </div>

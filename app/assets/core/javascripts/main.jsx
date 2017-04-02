@@ -9,6 +9,9 @@ import * as TabsAction from './actions/TabViewActions.js';
 import _ from 'lodash/fp';
 import AssetsTreePanel from './ui/assets/AssetsTreePanel.jsx';
 import ImageViewer from './ui/panels/ImageViewer.jsx';
+import FileViewer from './ui/panels/FileViewer.jsx';
+import DocsViewer from './ui/panels/DocsViewer.jsx';
+import TextViewer from './ui/panels/TextViewer.jsx';
 import EventEmitter from 'wolfy87-eventemitter';
 
 export default class Main extends React.Component {
@@ -44,8 +47,16 @@ export default class Main extends React.Component {
         var content = (<div>{label}</div>);
         if(type == "file") {
             content = (<PageEditPanel ee={this.state.ee} id={id} />);
-        } else if(type == "picture") {
+        } else if(type == "picture" || type.startsWith("image")) {
             content = (<ImageViewer ee={this.state.ee} id={id} />)
+        } else if(type == "folder"){
+            content = (<div>{label}</div>)
+        } else if(type.match("officedocument") || type == "application/pdf") {
+            content = (<DocsViewer ee={this.state.ee} id={id} />)
+        } else if(type.startsWith("text")) {
+            content = (<TextViewer ee={this.state.ee} id={id} />)
+        } else {
+            content = (<FileViewer ee={this.state.ee} id={id} />)
         }
         var newTab = {
             id: id + type,

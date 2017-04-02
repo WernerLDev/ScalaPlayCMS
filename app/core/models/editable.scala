@@ -8,11 +8,8 @@ import slick.driver.MySQLDriver.api._
 import scala.concurrent.ExecutionContext.Implicits.global
 import javax.inject.Singleton
 import javax.inject._
-import play.api.Play.current
 import slick.profile.SqlProfile.ColumnOption.SqlType
 import core.models.{Document, DocumentTableDef}
-import scala.concurrent._
-import scala.concurrent.duration._
 
 
 case class Editable(id: Long, document_id:Long, name:String, value:String)
@@ -39,30 +36,20 @@ class Editables @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     val documents = TableQuery[DocumentTableDef]
     val insertQuery = editables returning editables.map(_.id) into ((editable, id) => editable.copy(id = id))
 
-    def getEditable(name:String, path:String) = {
-      Await.result(dbConfig.db.run {
-        val test = editables.join(documents).filter(x => x._1.name === name && x._2.path === path)
-        test.result.headOption
-      }, Duration.Inf)
-    }
-
     def getByPath(path:String) = dbConfig.db.run {
       editables.join(documents).on(_.document_id === _.id).filter(y => y._2.path === path).result
     }
 
     def insertOrUpdate(editable:Editable) = {
-
-      val eOpt = Await.result(dbConfig.db.run{
+      dbConfig.db.run(
         editables.filter(x => x.name === editable.name && x.document_id === editable.document_id).result.headOption
-      }, Duration.Inf)
-      eOpt match {
+      ) flatMap (eOpt => eOpt match {
         case Some(edit) => {
           val newEditable = editable.copy(id = edit.id)
           dbConfig.db.run(editables.filter(x => x.id === edit.id).update(newEditable))
         }
         case None => dbConfig.db.run(insertQuery += editable)
-      }
-
+      })
     }
 
     def deleteByDocId(id:Long) = dbConfig.db.run (
