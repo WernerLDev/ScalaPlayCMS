@@ -19,7 +19,7 @@ import core.models.{User, UserTableDef}
 
 case class ResetToken(id : Long , user_id : Long, resettoken : String, expires_at:Timestamp )
 
-class ResetTokenTableDef(tag: Tag) extends Table[ResetToken](tag, "resettoken") {
+class ResetTokenTableDef(tag: Tag) extends Table[ResetToken](tag, "resettokens") {
 
   def id = column[Long]("id", O.PrimaryKey,O.AutoInc)
   def user_id = column[Long]("user_id")

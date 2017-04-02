@@ -2,7 +2,7 @@
 
 # --- !Ups
 
-CREATE TABLE `session` (
+CREATE TABLE `sessions` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `session_key` VARCHAR(45) NULL,
   `user_id` INT NULL,
@@ -15,4 +15,4 @@ CREATE TABLE `session` (
 
 
 # --- !Downs
-drop table `session`;
+drop table `sessions`;

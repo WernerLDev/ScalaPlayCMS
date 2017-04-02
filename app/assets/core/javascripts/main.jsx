@@ -7,7 +7,7 @@ import {TabPanel, Tab, TabsList, TabContent} from './ui/panels/TabPanel.jsx';
 import PageEditPanel from './ui/panels/PageEditPanel.jsx';
 import * as TabsAction from './actions/TabViewActions.js';
 import _ from 'lodash/fp';
-import AssetsPanel from './ui/panels/AssetsPanel.jsx';
+import AssetsTreePanel from './ui/assets/AssetsTreePanel.jsx';
 import ImageViewer from './ui/panels/ImageViewer.jsx';
 import EventEmitter from 'wolfy87-eventemitter';
 
@@ -116,7 +116,7 @@ export default class Main extends React.Component {
                                 
                             </div>
                             <div className={this.state.section == "assets" ? "visible tree" : "hidden"}>
-                                <AssetsPanel 
+                                <AssetsTreePanel 
                                     ee={this.state.ee}
                                     onOpen={this.openTab.bind(this)}
                                     onRename={this.renameTab.bind(this)}

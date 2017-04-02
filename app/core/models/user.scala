@@ -18,7 +18,7 @@ import core.models._
 
 case class User(id: Long, username:String, passwordhash:String, email:String)
 
-class UserTableDef(tag: Tag) extends Table[User](tag, "User") {
+class UserTableDef(tag: Tag) extends Table[User](tag, "users") {
 
   def id = column[Long]("id", O.PrimaryKey,O.AutoInc)
   def username = column[String]("username")

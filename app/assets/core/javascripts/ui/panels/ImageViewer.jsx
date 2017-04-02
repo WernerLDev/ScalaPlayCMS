@@ -44,7 +44,7 @@ export default class ImageViewer extends React.Component {
             <div className="imageviewerback">
                 {this.renderToolbar()}
                 <div className="imageviewer">
-                  <img src={"/uploads/" + this.state.asset.name} />
+                  <img src={"/uploads" + this.state.asset.path} />
                 </div>
             </div>
         )

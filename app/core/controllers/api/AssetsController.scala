@@ -38,20 +38,23 @@ class AssetsController @Inject()(assets:Assets, WithAuthAction:AuthAction, PageA
     def create = WithAuthAction.async(parse.json) { request =>
       val parent_id = (request.body \ "parent_id").asOpt[Int].getOrElse(0)
       val name = (request.body \ "name").asOpt[String].getOrElse("")
-      val path = (request.body \ "path").asOpt[String].getOrElse("")
+      val server_path = (request.body \ "server_path").asOpt[String].getOrElse("")
       val mimetype = (request.body \ "mimetype").asOpt[String].getOrElse("")
       val currentTime:Timestamp = new Timestamp((new Date).getTime());
-      val asset = Asset(
-          id = 0,
-          parent_id = parent_id,
-          name = name,
-          path = path,
-          collapsed = true,
-          mimetype = mimetype,
-          created_at = currentTime 
-      )
-      assets.create(asset).map(x => {
-          Ok(Json.obj("success" -> true))
+      val parentAssetFuture = assets.getById(parent_id)
+      parentAssetFuture flatMap (parentOpt => parentOpt match {
+          case Some(parentAsset:Asset) => {
+              val newpath = if(parentAsset.mimetype == "home") "/" + name else parentAsset.path + "/" + name
+              val asset = Asset(
+                  id = 0, parent_id = parent_id, name = name, path = newpath,
+                  server_path = server_path, collapsed = true,
+                  mimetype = mimetype, created_at = currentTime
+              )
+              assets.create(asset) map ( x => {
+                  Ok(Json.obj("success" -> true))
+              })
+          }
+          case None => Future(BadRequest("Invalid parent id"))
       })
     }
 
@@ -60,13 +63,15 @@ class AssetsController @Inject()(assets:Assets, WithAuthAction:AuthAction, PageA
         val uploaddir = conf.getString("elestic.uploaddir").getOrElse("")
         val assetsdir = uploadroot + uploaddir;
         request.body.file("asset").map { asset =>
-            val filename = asset.filename 
+            //val filename = asset.filename 
+            val extension = asset.filename.split("\\.").toList.last
+            val filename = new java.util.Date().getTime() + "." + extension
             val contentType = asset.contentType
             val outputfile = new File(assetsdir + filename)
             asset.ref.moveTo(outputfile)
             
             val filepath = uploaddir + filename
-            Ok(Json.obj("success" -> true, "name" -> filename, "path" -> filepath))
+            Ok(Json.obj("success" -> true, "name" -> asset.filename, "server_path" -> filepath))
         }.getOrElse {
             Ok(Json.obj("success" -> false, "name" -> "", "path" -> ""))
         }
@@ -105,10 +110,10 @@ class AssetsController @Inject()(assets:Assets, WithAuthAction:AuthAction, PageA
 
     def getUpload(filename:String) = PageAction.async { implicit request =>
         val assetdir = conf.getString("elestic.uploadroot").getOrElse("")
-        assets.getByName(filename).map(assetOpt => {
+        assets.getByPath("/" + filename).map(assetOpt => {
             assetOpt.map(asset => {
                 Ok.sendFile(
-                    content = new File(assetdir + asset.path),
+                    content = new File(assetdir + asset.server_path),
                     inline = true
                 )
             }).getOrElse(NotFound(views.html.notfound("The uploaded file you are looking for doesn't exist.")))

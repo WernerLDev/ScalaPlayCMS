@@ -1,11 +1,11 @@
 import React from 'react';
 import {TreeView, TreeViewItem} from '../TreeView.jsx';
 import * as Api from '../../api/api.js';
-import { ContextMenu, MenuItem, SubMenu, ContextMenuTrigger } from "react-contextmenu";
 import {SmallToolBar, SmallToolBarItem} from '../SmallToolBar.jsx';
 import UploadDialog from '../dialogs/UploadDialog.jsx';
+import AssetsContextMenu from './AssetsContextMenu.jsx';
 
-export default class AssetsPanel extends React.Component {
+export default class AssetsTreePanel extends React.Component {
 
     constructor(props, context) {
         super(props, context);
@@ -78,7 +78,7 @@ export default class AssetsPanel extends React.Component {
     uploaded(uploading) {
         this.setState({showUpload: false, working: true});
         uploading.then(x => {
-            Api.addAsset(this.state.selected, x.name, x.path, 'picture').then(x => {
+            Api.addAsset(this.state.selected, x.name, x.server_path, 'picture').then(x => {
                 this.updateData();
             })
         });
@@ -95,10 +95,6 @@ export default class AssetsPanel extends React.Component {
         })
     }
 
-    canCreate(type) {
-        return type == "assetsfolder" || type == "assetshome";
-    }
-
     contextClickAction(e, data) {
         if(data.name == "open") {
             this.props.onOpen(this.state.selected, data.type, data.label);
@@ -111,24 +107,6 @@ export default class AssetsPanel extends React.Component {
         } else if(data.name == "upload") {
             this.setState({showUpload: true});
         }
-    }
-
-    renderContextMenu(menuid) {
-        var addsubmenu = (
-            <SubMenu hoverDelay={0} title="Add...">
-                 <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'upload'}}>Upload file(s)</MenuItem>
-                 <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'createfolder'}}>Folder</MenuItem>
-            </SubMenu>
-        );
-        return(
-            <ContextMenu id={String(menuid)}>
-                {this.canCreate(menuid) ? addsubmenu : null }
-                <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'open'}}>Open</MenuItem>
-                {menuid != "assetshome" ? <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'rename'}}>Rename</MenuItem> : null}
-                {menuid != "assetshome" ? <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'delete'}}>Delete</MenuItem> : null}
-                <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'rename'}}>Settings</MenuItem>
-            </ContextMenu>
-        )
     }
 
     renderTreeView(items) {
@@ -196,9 +174,9 @@ export default class AssetsPanel extends React.Component {
                 <div className={this.state.working ? "working treeviewcontainer" : "treeviewcontainer"}>
                     {this.renderTreeView(this.state.assets)}
                 </div>
-                {this.renderContextMenu("assetshome")}
-                {this.renderContextMenu("assetsfolder")}
-                {this.renderContextMenu("assetspicture")}
+                <AssetsContextMenu menuid="assetshome" contextClickAction={this.contextClickAction.bind(this)} />
+                <AssetsContextMenu menuid="assetsfolder" contextClickAction={this.contextClickAction.bind(this)} />
+                <AssetsContextMenu menuid="assetspicture" contextClickAction={this.contextClickAction.bind(this)} />
 
                 {this.state.working ? this.renderLoading() : null}
                 {this.state.showUpload ? <UploadDialog onHide={() => this.setState({showUpload: false})} onUploaded={this.uploaded.bind(this)} /> : null}

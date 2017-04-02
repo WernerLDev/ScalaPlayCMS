@@ -17,7 +17,7 @@ import scala.concurrent.duration._
 case class Document(id : Long , parent_id : Long, name : String, doctype : String, collapsed : Boolean, view:Option[String], path:String, created_at:Timestamp, updated_at:Timestamp, published_at:Timestamp )
 case class DocumentJson(id : Long, key: String, path:String, label : String, doctype : String, collapsed : Boolean, published: Boolean, children: List[DocumentJson])
 
-class DocumentTableDef(tag: Tag) extends Table[Document](tag, "document") {
+class DocumentTableDef(tag: Tag) extends Table[Document](tag, "documents") {
 
   def id = column[Long]("id", O.PrimaryKey,O.AutoInc)
   def parent_id = column[Long]("parent_id")
@@ -128,12 +128,18 @@ class Documents @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     }
 
     def updatePath(parentdoc:Document):Future[Int] = {
-        val childs = Await.result(getByParentId(parentdoc.id), Duration.Inf)
-        val updatedChilds = childs map (x => update(x.copy(path = parentdoc.path + "/" + x.name)))
-        
-        updatedChilds foreach (x => x map (doc => {
-            updatePath(doc)
-        }))
-        Future(updatedChilds.length)
+        getByParentId(parentdoc.id) map (childs => {
+            val updatedChilds = {
+                if(parentdoc.doctype == "home") {
+                    childs map (x => update(x.copy(path = "/" + x.name)))
+                } else {
+                    childs map (x => update(x.copy(path = parentdoc.path + "/" + x.name)))
+                }
+            }
+            updatedChilds foreach (x => x map (doc => {
+                updatePath(doc)
+            }))
+            updatedChilds.length
+        })
     }
 }

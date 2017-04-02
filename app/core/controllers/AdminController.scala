@@ -36,8 +36,8 @@ class AdminController @Inject()(
     )
 
     def login = Action { implicit request =>
-        //users.insert( User(0, "werner", "test123", "blaat@bla.nl") )
-        //users.insert( User(0, "nogiemand", "test123", "nogiemand@bla.nl") )
+        //users.insert( User(0, "werner", "testing123", "blaat@bla.nl") )
+        //users.insert( User(0, "admin", "test1234", "nogiemand@bla.nl") )
         //val test = PasswordHasher.hashPassword("testing123")
         Ok(core.views.html.login(loginForm))
     }

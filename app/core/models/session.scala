@@ -19,7 +19,7 @@ import core.models.{User, UserTableDef}
 
 case class UserSession(id: Long, session_key:String, user_id:Long, passwordhash:String, ipaddress:String, useragent:String, expiration_date:Timestamp)
 
-class SessionTableDef(tag: Tag) extends Table[UserSession](tag, "session") {
+class SessionTableDef(tag: Tag) extends Table[UserSession](tag, "sessions") {
 
   def id = column[Long]("id", O.PrimaryKey,O.AutoInc)
   def session_key = column[String]("session_key")

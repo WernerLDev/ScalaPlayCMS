@@ -2,7 +2,7 @@
 
 # --- !Ups
 
-CREATE TABLE `resettoken` (
+CREATE TABLE `resettokens` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NULL,
   `resettoken` VARCHAR(255) NULL,
@@ -12,4 +12,4 @@ CREATE TABLE `resettoken` (
 
 
 # --- !Downs
-drop table `resettoken`;
+drop table `resettokens`;

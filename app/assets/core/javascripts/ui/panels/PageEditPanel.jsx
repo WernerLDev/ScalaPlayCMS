@@ -28,7 +28,6 @@ export default class TestEditor extends React.Component {
     }
 
     publish() {
-        console.log("publishing");
         var newPublishDate = new Date();
         if(this.state.document.published_at < newPublishDate.getTime()) {
             newPublishDate = new Date(3000,1,1);
@@ -84,7 +83,7 @@ export default class TestEditor extends React.Component {
         return (
             <LargeToolBar>
                 <ToolbarItemLarge clicked={this.publish.bind(this)} icon="life-ring" label={publishlabel} />
-                <ToolbarItemLarge clicked={this.publish.bind(this)} icon="chevron-down" label="" />
+                {false ? <ToolbarItemLarge clicked={this.publish.bind(this)} icon="chevron-down" label="" /> : null }
                 <ToolbarItemLarge clicked={this.saveItem.bind(this)} icon="floppy-o" label="Save" />
                 <ToolbarItemLarge clicked={this.settings.bind(this)} icon="gears" label="Settings" />
                 <ToolbarItemLarge clicked={this.refreshPage.bind(this)} icon="refresh" label="Refresh" />

@@ -100,7 +100,7 @@ export function addAsset(parent_id, name, path, mimetype) {
     var body = JSON.stringify({
         'parent_id': parent_id,
         'name': name,
-        'path': path,
+        'server_path': path,
         'mimetype': mimetype
     });
     return ApiCall("/api/v1/assets", "POST", body);

@@ -17,7 +17,7 @@ import scala.concurrent.duration._
 
 case class Editable(id: Long, document_id:Long, name:String, value:String)
 
-class EditableTableDef(tag: Tag) extends Table[Editable](tag, "editable") {
+class EditableTableDef(tag: Tag) extends Table[Editable](tag, "editables") {
 
   def id = column[Long]("id", O.PrimaryKey,O.AutoInc)
   def document_id = column[Long]("document_id")

@@ -8,21 +8,6 @@ module.exports = {
       filename: 'bundle.js',
       sourceMapFilename: 'bundle.js.map'
     },
-    plugins: [
-        new webpack.DefinePlugin({
-        'process.env': {
-            NODE_ENV: JSON.stringify('production')
-        }
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-    compress: {
-        warnings: false,
-        screw_ie8: true
-    },
-    comments: false,
-    sourceMap: false
-    })
-    ],
     devtool: 'cheap-module-source-map',
     module: {
         loaders: [
@@ -42,16 +27,18 @@ module.exports = {
 
 /*
     plugins: [
-        new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.DefinePlugin({
         'process.env': {
-            'NODE_ENV': JSON.stringify('production')
+            NODE_ENV: JSON.stringify('production')
         }
-        }),
-        new webpack.optimize.UglifyJsPlugin({
-        compressor: {
-            warnings: false
-        }
-        })
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+    compress: {
+        warnings: false,
+        screw_ie8: true
+    },
+    comments: false,
+    sourceMap: false
+    })
     ],
     */

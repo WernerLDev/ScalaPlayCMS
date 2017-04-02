@@ -2,7 +2,7 @@
 
 # --- !Ups
 
-CREATE TABLE `editable` (
+CREATE TABLE `editables` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `document_id` INT NOT NULL,
   `name` VARCHAR(45) NOT NULL,
@@ -10,4 +10,4 @@ CREATE TABLE `editable` (
   PRIMARY KEY (`id`));
 
 # --- !Downs
-drop table `editable`;
+drop table `editables`;

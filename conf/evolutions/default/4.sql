@@ -2,7 +2,7 @@
 
 # --- !Ups
 
-CREATE TABLE `User` (
+CREATE TABLE `users` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(45) NULL,
   `password` VARCHAR(255) NULL,
@@ -10,4 +10,4 @@ CREATE TABLE `User` (
   PRIMARY KEY (`id`));
 
 # --- !Downs
-drop table `User`;
+drop table `users`;

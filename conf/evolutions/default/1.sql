@@ -2,7 +2,7 @@
 
 # --- !Ups
 
-CREATE TABLE `document` (
+CREATE TABLE `documents` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NULL,
   `parent_id` INT NULL,
@@ -13,4 +13,4 @@ CREATE TABLE `document` (
 
 # --- !Downs
 
-drop table `document`
+drop table `documents`
