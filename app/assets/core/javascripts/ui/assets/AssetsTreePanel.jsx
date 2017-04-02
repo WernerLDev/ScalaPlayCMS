@@ -146,8 +146,9 @@ export default class AssetsTreePanel extends React.Component {
                     <SmallToolBarItem icon="plus" onClick={() => console.log("not implemented yet")} />
                     <SmallToolBarItem icon="trash" onClick={this.deleteItem.bind(this)} />
                     <SmallToolBarItem alignright={true} icon="refresh" onClick={() => {
-                        this.setState({working: true});
-                        this.updateData();
+                        this.setState({working: true}, () => {
+                            this.updateData();
+                        });
                         }} />
                 </SmallToolBar>
             </div>);

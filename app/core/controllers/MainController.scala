@@ -69,7 +69,8 @@ class MainController @Inject()(documents:Documents, editables:Editables, templat
 
   def addDocument() = WithAuthAction.async(parse.json) { request =>
       val parent_id = (request.body \ "parent_id").asOpt[Int].getOrElse(0)
-      val name = (request.body \ "name").asOpt[String].getOrElse("")
+      val inputname = (request.body \ "name").asOpt[String].getOrElse("")
+      val name = inputname.toLowerCase.replace(" ", "-")
       val pagetype = (request.body \ "pagetype").asOpt[String].getOrElse("default")
       val currentTime:Timestamp = new Timestamp((new Date).getTime());
       val parent = documents.getById(parent_id)

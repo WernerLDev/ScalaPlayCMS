@@ -77,8 +77,9 @@ class Documents @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     }
 
     def setName(id:Long, name:String):Future[Int] = {
+        val newname = name.toLowerCase.replace(" ", "-")
         (dbConfig.db.run {
-            documents.filter(_.id === id).map(_.name).update(name)
+            documents.filter(_.id === id).map(_.name).update(newname)
         }) flatMap (x => {
             getById(id) flatMap (docOpt => docOpt match {
                 case Some(doc) => {

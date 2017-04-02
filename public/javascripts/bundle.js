@@ -30647,8 +30647,9 @@
 	                        } }),
 	                    _react2.default.createElement(_SmallToolBar.SmallToolBarItem, { icon: 'trash', onClick: this.deleteItem.bind(this) }),
 	                    _react2.default.createElement(_SmallToolBar.SmallToolBarItem, { alignright: true, icon: 'refresh', onClick: function onClick() {
-	                            _this10.setState({ working: true });
-	                            _this10.updateData();
+	                            _this10.setState({ working: true }, function () {
+	                                _this10.updateData();
+	                            });
 	                        } })
 	                )
 	            );
