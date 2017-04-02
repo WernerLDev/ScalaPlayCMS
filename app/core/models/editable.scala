@@ -65,5 +65,9 @@ class Editables @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
 
     }
 
+    def deleteByDocId(id:Long) = dbConfig.db.run (
+      editables.filter(_.document_id === id).delete
+    )
+
 }
 

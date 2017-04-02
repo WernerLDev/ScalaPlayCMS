@@ -11,8 +11,9 @@ import javax.inject._
 import play.api.Play.current
 import java.sql.Timestamp
 import slick.profile.SqlProfile.ColumnOption.SqlType
-import scala.concurrent._
-import scala.concurrent.duration._
+//import scala.concurrent._
+//import scala.concurrent.duration._
+import core.models.Editables
 
 case class Document(id : Long , parent_id : Long, name : String, doctype : String, collapsed : Boolean, view:Option[String], path:String, created_at:Timestamp, updated_at:Timestamp, published_at:Timestamp )
 case class DocumentJson(id : Long, key: String, path:String, label : String, doctype : String, collapsed : Boolean, published: Boolean, children: List[DocumentJson])
@@ -35,9 +36,10 @@ class DocumentTableDef(tag: Tag) extends Table[Document](tag, "documents") {
 }
 
 @Singleton
-class Documents @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends HasDatabaseConfigProvider[JdbcProfile] {
+class Documents @Inject()(protected val dbConfigProvider: DatabaseConfigProvider, editables:Editables) extends HasDatabaseConfigProvider[JdbcProfile] {
 
     val documents = TableQuery[DocumentTableDef]
+
     val insertQuery = documents returning documents.map(_.id) into ((doc, id) => doc.copy(id = id))
 
     def listAll():Future[Seq[Document]] = {
@@ -65,7 +67,9 @@ class Documents @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
             items.map(x => delete(x.id))
         })
         val action = documents.filter(_.id === id).delete
-        dbConfig.db.run(action)
+        editables.deleteByDocId(id) flatMap (x => {
+            dbConfig.db.run(action)
+        })
     }
 
     def update(doc:Document):Future[Document] = dbConfig.db.run {
