@@ -39,6 +39,7 @@ class AdminController @Inject()(
         //users.insert( User(0, "werner", "testing123", "blaat@bla.nl") )
         //users.insert( User(0, "admin", "test1234", "nogiemand@bla.nl") )
         //val test = PasswordHasher.hashPassword("testing123")
+        //println(test)
         Ok(core.views.html.login(loginForm))
     }
 

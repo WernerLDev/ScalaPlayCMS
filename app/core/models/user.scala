@@ -42,7 +42,10 @@ class Users @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) ex
                     Some(user)
                 } else None
             }
-            case None => None
+            case None => {
+                //PasswordHasher.checkPassword("bla", "$2a$14$VVsr/CDT9Bnlmbc4S/npJuoYXF/jgviR32Cg36DtHy6pNQpb/kRfu")
+                None
+            }
         })
     }
 

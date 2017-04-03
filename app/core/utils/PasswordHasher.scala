@@ -5,7 +5,7 @@ import org.mindrot.jbcrypt.BCrypt
 object PasswordHasher {
 
     def hashPassword(password:String) = {
-        BCrypt.hashpw(password, BCrypt.gensalt(10))
+        BCrypt.hashpw(password, BCrypt.gensalt(14))
     }
 
     def checkPassword(password:String, hash:String) = {

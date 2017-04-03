@@ -9,7 +9,7 @@ export default class AssetsTreePanel extends React.Component {
 
     constructor(props, context) {
         super(props, context);
-        this.state = { showUpload: false, lastClick: 0, working: false, deleting: -1, adding: -1, newtype: "", renaming: -1, assets: [], selected: -1 };
+        this.state = { showUpload: false, lastClick: 0, working: false, deleting: -1, adding: -1, newtype: "", renaming: -1, assets: [], selected: -1, selectedType: "" };
     }
 
     componentDidMount() {
@@ -35,7 +35,7 @@ export default class AssetsTreePanel extends React.Component {
         if(currTime - this.state.lastClick < 500 && this.state.selected == id) {
             this.props.onOpen(id, type, label);
         }
-        this.setState({ lastClick: currTime, selected: id })
+        this.setState({ lastClick: currTime, selected: id, selectedType: type })
     }
 
     deleteItem(type, id) {
@@ -145,11 +145,29 @@ export default class AssetsTreePanel extends React.Component {
     }
 
 
+    canUpload() {
+        console.log(this.state.selected + " - " + this.state.selectedType);
+        var bla =  ["home", "folder"].indexOf(this.state.selectedType) > -1;
+        console.log(bla);
+        return bla;
+    }
+
     renderToolbar() {
         return(
             <div className="toolbar">
                 <SmallToolBar>
-                    <SmallToolBarItem icon="plus" onClick={() => console.log("not implemented yet")} />
+                    <SmallToolBarItem icon="plus" toggleChildren={true}>
+                        <div className="submenu">
+                            <nav className="react-contextmenu">
+                                {this.canUpload() ? <div className="react-contextmenu-item" onClick={() => {
+                                    if(this.canUpload()) {
+                                        this.setState({showUpload: true});
+                                    }
+                                    }}>Upload file(s)</div> : null }
+                                <div onClick={() => console.log("asdfasfasdf")} className="react-contextmenu-item">Create folder</div>
+                            </nav>
+                        </div>
+                    </SmallToolBarItem>
                     <SmallToolBarItem icon="trash" onClick={this.deleteItem.bind(this)} />
                     <SmallToolBarItem alignright={true} icon="refresh" onClick={() => {
                         this.setState({working: true}, () => {

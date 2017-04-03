@@ -49,7 +49,6 @@ export default class UploadDialog extends React.Component {
             <div>
                 <div onClick={this.props.onHide} className="overlay"></div>
                 <div className="uploadDialog">
-                    <h3>Upload file</h3>
                     <form
                         onDragOver={this.onDragOver.bind(this)}
                         onDragLeave={this.onDragLeave.bind(this)}
