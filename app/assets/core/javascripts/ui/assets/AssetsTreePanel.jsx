@@ -145,30 +145,33 @@ export default class AssetsTreePanel extends React.Component {
     }
 
 
-    canUpload() {
-        console.log(this.state.selected + " - " + this.state.selectedType);
-        var bla =  ["home", "folder"].indexOf(this.state.selectedType) > -1;
-        console.log(bla);
-        return bla;
+    canCreate() {
+        return  ["home", "folder"].indexOf(this.state.selectedType) > -1;
+    }
+
+    canDelete() {
+        return this.state.selectedType.length > 0 && this.state.selectedType != "home";
     }
 
     renderToolbar() {
+        let uploadAction = () => {
+            this.setState({showUpload: true})
+        };
+        let createFolderAction = () => {
+            this.setState({adding: this.state.selected, newtype: "folder"});
+        };
         return(
             <div className="toolbar">
                 <SmallToolBar>
-                    <SmallToolBarItem icon="plus" toggleChildren={true}>
+                    <SmallToolBarItem disabled={this.canCreate() == false} icon="plus" toggleChildren={true}>
                         <div className="submenu">
                             <nav className="react-contextmenu">
-                                {this.canUpload() ? <div className="react-contextmenu-item" onClick={() => {
-                                    if(this.canUpload()) {
-                                        this.setState({showUpload: true});
-                                    }
-                                    }}>Upload file(s)</div> : null }
-                                <div onClick={() => console.log("asdfasfasdf")} className="react-contextmenu-item">Create folder</div>
+                                {this.canCreate() ? <div onClick={uploadAction.bind(this)} className="react-contextmenu-item">Upload file(s)</div> : null }
+                                {this.canCreate() ? <div onClick={createFolderAction.bind(this)} className="react-contextmenu-item">Create folder</div> : null}
                             </nav>
                         </div>
                     </SmallToolBarItem>
-                    <SmallToolBarItem icon="trash" onClick={this.deleteItem.bind(this)} />
+                    <SmallToolBarItem disabled={this.canDelete() == false} icon="trash" onClick={this.deleteItem.bind(this)} />
                     <SmallToolBarItem alignright={true} icon="refresh" onClick={() => {
                         this.setState({working: true}, () => {
                             this.updateData();

@@ -10,7 +10,7 @@ export default function Icon(props) {
        return (
             <i onClick={props.onClick} className="fa fa-plus-square-o arrow" aria-hidden="true"></i>
        )
-    } else if(props.type == "file") {
+    } else if(props.type == "page") {
        return (
             <i className="fa fa-file-code-o fileicon" aria-hidden="true"></i>
        )

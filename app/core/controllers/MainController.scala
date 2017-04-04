@@ -78,7 +78,7 @@ class MainController @Inject()(documents:Documents, editables:Editables, templat
         case Some(parentDoc) => {
           //val newpath = if(parentDoc.parent_id > 0) parentDoc.path + "/" + name else "/" + name
           val newpath = if(parentDoc.doctype == "home") "/" + name else parentDoc.path + "/" + name
-          documents.create( Document(0, parent_id, name, "file", true, Some(pagetype), newpath, currentTime, currentTime, currentTime) ) map { x =>
+          documents.create( Document(0, parent_id, name, "page", true, Some(pagetype), newpath, currentTime, currentTime, currentTime) ) map { x =>
             Ok(Json.toJson( Map("id" -> JsNumber(x.id),  "parent_id" -> JsNumber(parent_id), "name" -> JsString(name)) ))
           }
         }

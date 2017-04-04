@@ -4247,7 +4247,7 @@
 	                null,
 	                label
 	            );
-	            if (type == "file") {
+	            if (type == "page") {
 	                content = _react2.default.createElement(_PageEditPanel2.default, { ee: this.state.ee, id: id });
 	            } else if (type == "picture" || type.startsWith("image")) {
 	                content = _react2.default.createElement(_ImageViewer2.default, { ee: this.state.ee, id: id });
@@ -26299,7 +26299,7 @@
 	
 	        var _this = _possibleConstructorReturn(this, (PagesPanel.__proto__ || Object.getPrototypeOf(PagesPanel)).call(this, props, context));
 	
-	        _this.state = { lastClick: 0, working: false, deleting: -1, adding: -1, newtype: "", renaming: -1, pages: [], pagetypes: [], selected: -1 };
+	        _this.state = { lastClick: 0, working: false, deleting: -1, adding: -1, newtype: "", renaming: -1, pages: [], pagetypes: [], selected: -1, selectedType: "" };
 	        return _this;
 	    }
 	
@@ -26335,12 +26335,12 @@
 	        }
 	    }, {
 	        key: 'clickItem',
-	        value: function clickItem(id, label) {
+	        value: function clickItem(id, label, type) {
 	            var currTime = new Date().getTime();
 	            if (currTime - this.state.lastClick < 500 && this.state.selected == id) {
-	                this.props.onOpen(id, "file", label);
+	                this.props.onOpen(id, "page", label);
 	            }
-	            this.setState({ lastClick: currTime, selected: id });
+	            this.setState({ lastClick: currTime, selected: id, selectedType: type });
 	        }
 	    }, {
 	        key: 'deleteItem',
@@ -26360,7 +26360,7 @@
 	                this.setState({ working: true, deleting: docid });
 	                Api.deleteDocument(docid).then(function (x) {
 	                    _this4.updateData().then(function (y) {
-	                        _this4.props.onDelete(docid, "file");
+	                        _this4.props.onDelete(docid, "page");
 	                    });
 	                });
 	            }
@@ -26374,7 +26374,7 @@
 	            this.setState({ working: true });
 	            Api.renameDocument(docid, name).then(function (x) {
 	                _this5.updateData().then(function (x) {
-	                    return _this5.props.onRename(docid, "file", name);
+	                    return _this5.props.onRename(docid, "page", name);
 	                });
 	            });
 	        }
@@ -26417,7 +26417,7 @@
 	        key: 'contextClickAction',
 	        value: function contextClickAction(e, data) {
 	            if (data.name == "open") {
-	                this.props.onOpen(this.state.selected, "file", data.label);
+	                this.props.onOpen(this.state.selected, "page", data.label);
 	            } else if (data.name == "rename") {
 	                this.setState({ renaming: this.state.selected });
 	            } else if (data.name == "delete") {
@@ -26494,7 +26494,7 @@
 	                            addicon: 'file',
 	                            onBlur: _this9.onBlur.bind(_this9),
 	                            onClick: function onClick() {
-	                                return _this9.clickItem(x.id, x.label);
+	                                return _this9.clickItem(x.id, x.label, x.doctype);
 	                            },
 	                            onRename: _this9.renameItem.bind(_this9),
 	                            onAdd: _this9.addItem.bind(_this9),
@@ -26516,16 +26516,40 @@
 	        value: function renderToolbar() {
 	            var _this10 = this;
 	
+	            var pageAdd = function pageAdd(type) {
+	                _this10.setState({ adding: _this10.state.selected, newtype: type });
+	            };
+	            var canDelete = function canDelete() {
+	                return _this10.state.selectedType != "" && _this10.state.selectedType != "home";
+	            };
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'toolbar' },
 	                _react2.default.createElement(
 	                    _SmallToolBar.SmallToolBar,
 	                    null,
-	                    _react2.default.createElement(_SmallToolBar.SmallToolBarItem, { icon: 'plus', onClick: function onClick() {
-	                            return console.log("not implemented yet");
-	                        } }),
-	                    _react2.default.createElement(_SmallToolBar.SmallToolBarItem, { icon: 'trash', onClick: this.deleteItem.bind(this) }),
+	                    _react2.default.createElement(
+	                        _SmallToolBar.SmallToolBarItem,
+	                        { disabled: this.state.selected == -1, icon: 'plus', toggleChildren: true },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'submenu' },
+	                            _react2.default.createElement(
+	                                'nav',
+	                                { className: 'react-contextmenu' },
+	                                this.state.pagetypes.map(function (x) {
+	                                    return _react2.default.createElement(
+	                                        'div',
+	                                        { className: 'react-contextmenu-item', key: x.typekey, onClick: function onClick() {
+	                                                return pageAdd(x.typekey);
+	                                            } },
+	                                        x.typename
+	                                    );
+	                                })
+	                            )
+	                        )
+	                    ),
+	                    _react2.default.createElement(_SmallToolBar.SmallToolBarItem, { disabled: canDelete() == false, icon: 'trash', onClick: this.deleteItem.bind(this) }),
 	                    _react2.default.createElement(_SmallToolBar.SmallToolBarItem, { alignright: true, icon: 'refresh', onClick: function onClick() {
 	                            _this10.setState({ working: true }, function () {
 	                                _this10.updateData();
@@ -26945,7 +26969,7 @@
 	        return _react2.default.createElement("i", { onClick: props.onClick, className: "fa fa-minus-square-o arrow", "aria-hidden": "true" });
 	    } else if (props.type == "arrow-right") {
 	        return _react2.default.createElement("i", { onClick: props.onClick, className: "fa fa-plus-square-o arrow", "aria-hidden": "true" });
-	    } else if (props.type == "file") {
+	    } else if (props.type == "page") {
 	        return _react2.default.createElement("i", { className: "fa fa-file-code-o fileicon", "aria-hidden": "true" });
 	    } else if (props.type == "folder") {
 	        return _react2.default.createElement("i", { className: "fa fa-folder fileicon", "aria-hidden": "true" });
@@ -28158,6 +28182,9 @@
 	    }, {
 	        key: "render",
 	        value: function render() {
+	            var classes = [];
+	            if (this.props.alignright) classes.push("tool-right");
+	            if (this.props.disabled) classes.push("disabled");
 	
 	            if (this.props.toggleChildren) {
 	                return _react2.default.createElement(
@@ -28165,14 +28192,14 @@
 	                    {
 	                        onMouseLeave: this.hideChildren.bind(this),
 	                        onClick: this.toggle.bind(this),
-	                        className: this.props.alignright ? "tool-right" : "" },
+	                        className: classes.join(" ") },
 	                    _react2.default.createElement("i", { className: "fa fa-" + this.props.icon, "aria-hidden": "true" }),
 	                    this.state.childrenVisible ? this.props.children : null
 	                );
 	            } else {
 	                return _react2.default.createElement(
 	                    "li",
-	                    { onClick: this.props.onClick, className: this.props.alignright ? "tool-right" : "" },
+	                    { onClick: this.props.onClick, className: classes },
 	                    _react2.default.createElement("i", { className: "fa fa-" + this.props.icon, "aria-hidden": "true" })
 	                );
 	            }
@@ -29908,18 +29935,26 @@
 	            );
 	        }
 	    }, {
-	        key: 'canUpload',
-	        value: function canUpload() {
-	            console.log(this.state.selected + " - " + this.state.selectedType);
-	            var bla = ["home", "folder"].indexOf(this.state.selectedType) > -1;
-	            console.log(bla);
-	            return bla;
+	        key: 'canCreate',
+	        value: function canCreate() {
+	            return ["home", "folder"].indexOf(this.state.selectedType) > -1;
+	        }
+	    }, {
+	        key: 'canDelete',
+	        value: function canDelete() {
+	            return this.state.selectedType.length > 0 && this.state.selectedType != "home";
 	        }
 	    }, {
 	        key: 'renderToolbar',
 	        value: function renderToolbar() {
 	            var _this10 = this;
 	
+	            var uploadAction = function uploadAction() {
+	                _this10.setState({ showUpload: true });
+	            };
+	            var createFolderAction = function createFolderAction() {
+	                _this10.setState({ adding: _this10.state.selected, newtype: "folder" });
+	            };
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'toolbar' },
@@ -29928,33 +29963,27 @@
 	                    null,
 	                    _react2.default.createElement(
 	                        _SmallToolBar.SmallToolBarItem,
-	                        { icon: 'plus', toggleChildren: true },
+	                        { disabled: this.canCreate() == false, icon: 'plus', toggleChildren: true },
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'submenu' },
 	                            _react2.default.createElement(
 	                                'nav',
 	                                { className: 'react-contextmenu' },
-	                                this.canUpload() ? _react2.default.createElement(
+	                                this.canCreate() ? _react2.default.createElement(
 	                                    'div',
-	                                    { className: 'react-contextmenu-item', onClick: function onClick() {
-	                                            if (_this10.canUpload()) {
-	                                                _this10.setState({ showUpload: true });
-	                                            }
-	                                        } },
+	                                    { onClick: uploadAction.bind(this), className: 'react-contextmenu-item' },
 	                                    'Upload file(s)'
 	                                ) : null,
-	                                _react2.default.createElement(
+	                                this.canCreate() ? _react2.default.createElement(
 	                                    'div',
-	                                    { onClick: function onClick() {
-	                                            return console.log("asdfasfasdf");
-	                                        }, className: 'react-contextmenu-item' },
+	                                    { onClick: createFolderAction.bind(this), className: 'react-contextmenu-item' },
 	                                    'Create folder'
-	                                )
+	                                ) : null
 	                            )
 	                        )
 	                    ),
-	                    _react2.default.createElement(_SmallToolBar.SmallToolBarItem, { icon: 'trash', onClick: this.deleteItem.bind(this) }),
+	                    _react2.default.createElement(_SmallToolBar.SmallToolBarItem, { disabled: this.canDelete() == false, icon: 'trash', onClick: this.deleteItem.bind(this) }),
 	                    _react2.default.createElement(_SmallToolBar.SmallToolBarItem, { alignright: true, icon: 'refresh', onClick: function onClick() {
 	                            _this10.setState({ working: true }, function () {
 	                                _this10.updateData();

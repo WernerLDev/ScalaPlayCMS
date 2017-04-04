@@ -16,20 +16,23 @@ export class SmallToolBarItem extends React.Component {
     }
 
     render() {
+        var classes = [];
+        if(this.props.alignright) classes.push("tool-right");
+        if(this.props.disabled) classes.push("disabled");
 
         if(this.props.toggleChildren) {
             return (
                 <li 
                     onMouseLeave={this.hideChildren.bind(this)} 
                     onClick={this.toggle.bind(this)}
-                    className={this.props.alignright ? "tool-right" : ""}>
+                    className={classes.join(" ")}>
                         <i className={"fa fa-" + this.props.icon} aria-hidden="true"></i>
                         {this.state.childrenVisible ? this.props.children : null }
                 </li>
             );
         } else {
             return (
-                <li onClick={this.props.onClick} className={this.props.alignright ? "tool-right" : ""}>
+                <li onClick={this.props.onClick} className={classes}>
                     <i className={"fa fa-" + this.props.icon} aria-hidden="true"></i>
                 </li>
             );

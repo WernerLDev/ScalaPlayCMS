@@ -45,7 +45,7 @@ export default class Main extends React.Component {
 
     openTab(id, type, label) {
         var content = (<div>{label}</div>);
-        if(type == "file") {
+        if(type == "page") {
             content = (<PageEditPanel ee={this.state.ee} id={id} />);
         } else if(type == "picture" || type.startsWith("image")) {
             content = (<ImageViewer ee={this.state.ee} id={id} />)

@@ -8,7 +8,7 @@ export default class PagesPanel extends React.Component {
 
     constructor(props, context) {
         super(props, context);
-        this.state = { lastClick: 0, working: false, deleting: -1, adding: -1, newtype: "", renaming: -1, pages: [], pagetypes: [], selected: -1 };
+        this.state = { lastClick: 0, working: false, deleting: -1, adding: -1, newtype: "", renaming: -1, pages: [], pagetypes: [], selected: -1, selectedType: "" };
     }
 
     componentDidMount() {
@@ -35,12 +35,12 @@ export default class PagesPanel extends React.Component {
         });
     }
 
-    clickItem(id, label) {
+    clickItem(id, label, type) {
         var currTime = (new Date()).getTime();
         if(currTime - this.state.lastClick < 500 && this.state.selected == id) {
-            this.props.onOpen(id, "file", label);
+            this.props.onOpen(id, "page", label);
         }
-        this.setState({ lastClick: currTime, selected: id })
+        this.setState({ lastClick: currTime, selected: id, selectedType: type })
     }
 
     deleteItem(id) {
@@ -57,7 +57,7 @@ export default class PagesPanel extends React.Component {
             this.setState({ working: true, deleting: docid});
             Api.deleteDocument(docid).then(x => {
                 this.updateData().then(y => {
-                    this.props.onDelete(docid, "file");
+                    this.props.onDelete(docid, "page");
                 })
             });
         }
@@ -67,7 +67,7 @@ export default class PagesPanel extends React.Component {
         var docid = this.state.selected;
         this.setState({working: true});
         Api.renameDocument(docid, name).then(x => {
-            this.updateData().then(x => this.props.onRename(docid, "file", name) );
+            this.updateData().then(x => this.props.onRename(docid, "page", name) );
         })
     }
 
@@ -96,7 +96,7 @@ export default class PagesPanel extends React.Component {
 
     contextClickAction(e, data) {
         if(data.name == "open") {
-            this.props.onOpen(this.state.selected, "file", data.label);
+            this.props.onOpen(this.state.selected, "page", data.label);
         } else if(data.name == "rename") {
             this.setState({renaming: this.state.selected});
         } else if(data.name == "delete") {
@@ -135,7 +135,7 @@ export default class PagesPanel extends React.Component {
                         adding={this.state.adding == x.id}
                         addicon="file"
                         onBlur={this.onBlur.bind(this)}
-                        onClick={() => this.clickItem(x.id, x.label)}
+                        onClick={() => this.clickItem(x.id, x.label, x.doctype)}
                         onRename={this.renameItem.bind(this)}
                         onAdd={this.addItem.bind(this)}
                         parentChanged={this.onParentChanged.bind(this)}
@@ -149,11 +149,21 @@ export default class PagesPanel extends React.Component {
     }
 
     renderToolbar() {
+        let pageAdd = (type) => {
+            this.setState({adding: this.state.selected, newtype: type});
+        };
+        let canDelete = () => this.state.selectedType != "" && this.state.selectedType != "home";
         return(
             <div className="toolbar">
                 <SmallToolBar>
-                    <SmallToolBarItem icon="plus" onClick={() => console.log("not implemented yet")} />
-                    <SmallToolBarItem icon="trash" onClick={this.deleteItem.bind(this)} />
+                    <SmallToolBarItem disabled={this.state.selected == -1} icon="plus" toggleChildren={true}>
+                        <div className="submenu">
+                            <nav className="react-contextmenu">
+                                {this.state.pagetypes.map(x => <div className="react-contextmenu-item" key={x.typekey} onClick={() => pageAdd(x.typekey)}>{x.typename}</div> )}
+                            </nav>
+                        </div>
+                    </SmallToolBarItem>
+                    <SmallToolBarItem disabled={canDelete() == false} icon="trash" onClick={this.deleteItem.bind(this)} />
                     <SmallToolBarItem alignright={true} icon="refresh" onClick={() => {
                         this.setState({working: true}, () => {
                             this.updateData();

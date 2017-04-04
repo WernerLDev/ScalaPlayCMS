@@ -62,7 +62,10 @@ iframe {
     opacity: 0.6;
 }
 
-
+.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
 
 .overlay {
     position: absolute; top: 40px; left: 0; right: 0; bottom: 0;

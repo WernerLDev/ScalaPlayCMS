@@ -24,7 +24,7 @@ class HomeController @Inject()(PageAction:PageAction, editables:Editables) exten
    * a path of `/`.
    */
   def index = PageAction { implicit request =>
-    Ok(views.html.index("Your new application is ready !1sdf"))
+    Ok(views.html.index("Your new application is ready!"))
   }
 
   def test(p:Document) = PageAction { implicit request =>
@@ -32,7 +32,7 @@ class HomeController @Inject()(PageAction:PageAction, editables:Editables) exten
   }
 
   def default(p:Document) = PageAction { implicit request =>
-    //println(request.user)
+    println(request.user)
     Ok(views.html.default(p))
   }
 
