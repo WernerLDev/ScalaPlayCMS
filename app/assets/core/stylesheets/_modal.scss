@@ -1,0 +1,34 @@
+.modal-back {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: #000; opacity: 0.4;
+    z-index: 100;
+}
+
+.modal {
+    display: block;
+    z-index: 101;
+    width: 500px; height: 400px;
+    position: absolute; top: 50%; left: 50%;
+    margin-left: -250px; margin-top: -200px;
+    background: #FFF;
+    border: 1px solid $menuback;
+
+    .modal-head {
+        height: 40px; line-height: 40px;
+        background: $menuback; color: #fff;
+        padding-left: 15px;
+        .closebtn {
+            width: 40px; height: 40px;
+            position: absolute; top: 0; right: 0;
+            color: #FFF; font-size: 20px; text-align: center;
+            cursor: pointer;
+        }
+        .closebtn:hover {
+            background: $color1;
+        }
+    }
+
+    .modal-content {
+        padding: 15px;
+    }
+}

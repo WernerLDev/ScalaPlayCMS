@@ -14,6 +14,8 @@ import DocsViewer from './ui/panels/DocsViewer.jsx';
 import TextViewer from './ui/panels/TextViewer.jsx';
 import EventEmitter from 'wolfy87-eventemitter';
 
+import Modal from './ui/dialogs/Modal.jsx';
+
 export default class Main extends React.Component {
 
     constructor(props, context) {
@@ -147,6 +149,7 @@ export default class Main extends React.Component {
                     </SplitPane>
      
                 </div>
+
             </div>
         )
     }

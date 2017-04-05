@@ -3,12 +3,13 @@ import {TreeView, TreeViewItem} from '../TreeView.jsx';
 import * as Api from '../../api/api.js';
 import { ContextMenu, MenuItem, SubMenu, ContextMenuTrigger } from "react-contextmenu";
 import {SmallToolBar, SmallToolBarItem} from '../SmallToolBar.jsx';
+import PageSettingsModal from '../dialogs/PageSettingsModal.jsx';
 
 export default class PagesPanel extends React.Component {
 
     constructor(props, context) {
         super(props, context);
-        this.state = { lastClick: 0, working: false, deleting: -1, adding: -1, newtype: "", renaming: -1, pages: [], pagetypes: [], selected: -1, selectedType: "" };
+        this.state = { lastClick: 0, working: false, showSettings: false, deleting: -1, adding: -1, newtype: "", renaming: -1, pages: [], pagetypes: [], selected: -1, selectedType: "" };
     }
 
     componentDidMount() {
@@ -103,6 +104,8 @@ export default class PagesPanel extends React.Component {
             this.deleteItem(this.state.selected);
         } else if(data.name == "add") {
             this.setState({adding: this.state.selected, newtype: data.newtype});
+        } else if(data.name == "settings") {
+            this.setState({showSettings: true});
         }
     }
 
@@ -116,7 +119,7 @@ export default class PagesPanel extends React.Component {
                 {menuid != "home" ? <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'rename'}}>Rename</MenuItem> : null}
                 {menuid != "home" ? <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'delete'}}>Delete</MenuItem> : null}
                 <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'rename'}}>Dublicate</MenuItem>
-                <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'rename'}}>Settings</MenuItem>
+                <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'settings'}}>Settings</MenuItem>
             </ContextMenu>
         )
     }
@@ -196,6 +199,7 @@ export default class PagesPanel extends React.Component {
                     {this.renderTreeView(this.state.pages)}
                     {this.renderContextMenu("page")}
                     {this.renderContextMenu("home")}
+                    <PageSettingsModal visible={this.state.showSettings} onClose={() => this.setState({showSettings: false})} />
                 </div>
             </div>
         )

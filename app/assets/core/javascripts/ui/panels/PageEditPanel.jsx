@@ -1,12 +1,13 @@
 import React from 'react';
 import {LargeToolBar, ToolbarItemLarge} from '../LargeToolBar.jsx';
 import * as Api from '../../api/api.js';
+import PageSettingsModal from '../dialogs/PageSettingsModal.jsx';
 
 export default class TestEditor extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { document: null, iframeloaded: false };
+        this.state = { document: null, iframeloaded: false, showSettings: false };
     }
 
     componentDidMount() {
@@ -63,6 +64,7 @@ export default class TestEditor extends React.Component {
 
     settings() {
         console.log("Open settings");
+        this.setState({ showSettings: true });
     }
 
     preview() {
@@ -106,7 +108,10 @@ export default class TestEditor extends React.Component {
                     <iframe onLoad={() => this.setState({iframeloaded: true})} ref="docpage" src={this.state.document.path + "?editmode=editing"} />
                 </div>
                  {this.state.iframeloaded ? null : <div className="loadingiframe"> <img src="/assets/images/rolling.svg" /> </div>}
+                 <PageSettingsModal visible={this.state.showSettings} onClose={() => this.setState({showSettings: false})} />
             </div>
         )
     }
 }
+
+                 //{this.state.showSettings ? <PageSettingsModal visible  : null }
