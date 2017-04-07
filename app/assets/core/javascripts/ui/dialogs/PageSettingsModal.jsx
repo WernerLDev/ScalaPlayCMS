@@ -13,7 +13,7 @@ export default class PageSettingsModal extends React.Component {
         if(this.props.visible == false) return null;
         return (
             <Modal title="Settings" onClose={this.props.onClose}>
-                Settings thing
+                Settings thing {this.props.item.id}
             </Modal>
         )
     }

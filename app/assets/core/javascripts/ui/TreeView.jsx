@@ -44,7 +44,6 @@ class TreeViewItemLabel extends React.Component {
          });
          [].forEach.call(document.getElementsByClassName("treeitemclickarea"), function(elem){
             elem.style.display = "block";
-            console.log("adding back thing")
          });
     }
 
@@ -121,9 +120,9 @@ export class TreeViewItem extends React.Component {
     keypress(e) {
         if(e.keyCode == 13) {
             if(this.props.renaming) {
-                this.props.onRename(this.state.inputvalue)
+                this.props.onRename(this.state.inputvalue, this.props.item)
             } else if(this.props.adding) {
-                this.props.onAdd(this.state.inputvalue, this.props.id);
+                this.props.onAdd(this.state.inputvalue, this.props.item);
             }
         }
     }

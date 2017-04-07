@@ -13,6 +13,7 @@ import FileViewer from './ui/panels/FileViewer.jsx';
 import DocsViewer from './ui/panels/DocsViewer.jsx';
 import TextViewer from './ui/panels/TextViewer.jsx';
 import EventEmitter from 'wolfy87-eventemitter';
+import PageSettingsModal from './ui/dialogs/PageSettingsModal.jsx';
 
 import Modal from './ui/dialogs/Modal.jsx';
 
@@ -21,12 +22,17 @@ export default class Main extends React.Component {
     constructor(props, context) {
         super(props, context);
         var initialTabs = TabsAction.getInitialTabs();
-        this.state = { section: "pages", activetab: 0, tabs: initialTabs, ee: new EventEmitter() }
+        this.state = { section: "pages", activetab: 0, tabs: initialTabs, modal: "", modalitem: null, ee: new EventEmitter() }
+    }
+
+    componentDidMount() {
+        this.state.ee.on("pagesettings", function(item){
+            console.log(item);
+            this.setState({modal: "pagesettings", modalitem: item});
+        }.bind(this));
     }
 
     switchSection(section) {
-        
-        
         if(this.state.section == section) SplitPaneActions.hideLeftPanel(this.refs.leftpane);
         if(this.state.section == "") SplitPaneActions.showLeftPanel(this.refs.leftpane); 
         this.setState({section: section == this.state.section ? "" : section});
@@ -150,6 +156,7 @@ export default class Main extends React.Component {
      
                 </div>
 
+               <PageSettingsModal visible={this.state.modal == "pagesettings"} item={this.state.modalitem} onClose={() => this.setState({modal: ""})} />
             </div>
         )
     }

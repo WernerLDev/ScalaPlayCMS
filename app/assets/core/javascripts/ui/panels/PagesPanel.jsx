@@ -3,13 +3,12 @@ import {TreeView, TreeViewItem} from '../TreeView.jsx';
 import * as Api from '../../api/api.js';
 import { ContextMenu, MenuItem, SubMenu, ContextMenuTrigger } from "react-contextmenu";
 import {SmallToolBar, SmallToolBarItem} from '../SmallToolBar.jsx';
-import PageSettingsModal from '../dialogs/PageSettingsModal.jsx';
 
 export default class PagesPanel extends React.Component {
 
     constructor(props, context) {
         super(props, context);
-        this.state = { lastClick: 0, working: false, showSettings: false, deleting: -1, adding: -1, newtype: "", renaming: -1, pages: [], pagetypes: [], selected: -1, selectedType: "" };
+        this.state = { lastClick: 0, working: false, deleting: -1, adding: -1, newtype: "", renaming: -1, pages: [], pagetypes: [], selected: -1, selectedType: "" };
     }
 
     componentDidMount() {
@@ -36,18 +35,21 @@ export default class PagesPanel extends React.Component {
         });
     }
 
-    clickItem(id, label, type) {
+    clickItem(x) {
         var currTime = (new Date()).getTime();
-        if(currTime - this.state.lastClick < 500 && this.state.selected == id) {
-            this.props.onOpen(id, "page", label);
+        if(currTime - this.state.lastClick < 500 && this.state.selected.id == x.id) {
+            this.props.onOpen(x.id, "page", x.label);
         }
-        this.setState({ lastClick: currTime, selected: id, selectedType: type })
+        this.setState({ lastClick: currTime, selected: x, selectedType: x.doctype })
     }
 
-    deleteItem(id) {
-        var docid = id;
-        if(isNaN(docid)) {
-            docid = this.state.selected;
+    deleteItem(item) {
+        var docid = 0;
+        if(item == -1) {
+        //if(isNaN(docid)) {
+            docid = this.state.selected.id;
+        } else {
+            docid = item.id;
         }
 
         if(docid == -1) {
@@ -64,19 +66,19 @@ export default class PagesPanel extends React.Component {
         }
     }
 
-    renameItem(name) {
-        var docid = this.state.selected;
+    renameItem(name, item) {
+        var docid = item.id;
         this.setState({working: true});
         Api.renameDocument(docid, name).then(x => {
             this.updateData().then(x => this.props.onRename(docid, "page", name) );
         })
     }
 
-    addItem(name, parent_id) {
+    addItem(name, item) {
         this.setState({working: true});
-        Api.addDocument(parent_id, name, this.state.newtype).then(x => {
+        Api.addDocument(item.id, name, this.state.newtype).then(x => {
             this.updateData().then(y => {
-                this.setState({selected: x.id});
+                this.setState({selected: x});
             });
         })
     }
@@ -97,15 +99,16 @@ export default class PagesPanel extends React.Component {
 
     contextClickAction(e, data) {
         if(data.name == "open") {
-            this.props.onOpen(this.state.selected, "page", data.label);
+            this.props.onOpen(this.state.selected.id, "page", data.label);
         } else if(data.name == "rename") {
-            this.setState({renaming: this.state.selected});
+            this.setState({renaming: this.state.selected.id});
         } else if(data.name == "delete") {
             this.deleteItem(this.state.selected);
         } else if(data.name == "add") {
-            this.setState({adding: this.state.selected, newtype: data.newtype});
+            this.setState({adding: this.state.selected.id, newtype: data.newtype});
         } else if(data.name == "settings") {
-            this.setState({showSettings: true});
+            
+            this.props.ee.emitEvent("pagesettings", [this.state.selected]);
         }
     }
 
@@ -131,18 +134,19 @@ export default class PagesPanel extends React.Component {
                 {items.map(x =>
                     <TreeViewItem
                         drop="all"
+                        item={x}
                         id={x.id} type={x.doctype}
                         published={x.published}
                         deleted={this.state.deleting == x.id}
                         renaming={this.state.renaming == x.id}
                         adding={this.state.adding == x.id}
-                        addicon="file"
+                        addicon="page"
                         onBlur={this.onBlur.bind(this)}
-                        onClick={() => this.clickItem(x.id, x.label, x.doctype)}
+                        onClick={() => this.clickItem(x)}
                         onRename={this.renameItem.bind(this)}
                         onAdd={this.addItem.bind(this)}
                         parentChanged={this.onParentChanged.bind(this)}
-                        selected={this.state.selected == x.id}
+                        selected={this.state.selected.id == x.id}
                         key={x.id} collapsed={x.collapsed}
                         contextMenuId={x.doctype == "home" ? "home" : "page"}
                         onCollapse={(state) => Api.collapseDocument(x.id, state)}
@@ -153,7 +157,7 @@ export default class PagesPanel extends React.Component {
 
     renderToolbar() {
         let pageAdd = (type) => {
-            this.setState({adding: this.state.selected, newtype: type});
+            this.setState({adding: this.state.selected.id, newtype: type});
         };
         let canDelete = () => this.state.selectedType != "" && this.state.selectedType != "home";
         return(
@@ -199,7 +203,6 @@ export default class PagesPanel extends React.Component {
                     {this.renderTreeView(this.state.pages)}
                     {this.renderContextMenu("page")}
                     {this.renderContextMenu("home")}
-                    <PageSettingsModal visible={this.state.showSettings} onClose={() => this.setState({showSettings: false})} />
                 </div>
             </div>
         )

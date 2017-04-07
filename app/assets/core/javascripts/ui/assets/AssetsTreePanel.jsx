@@ -30,18 +30,18 @@ export default class AssetsTreePanel extends React.Component {
         });
     }
 
-    clickItem(id, label, type) {
+    clickItem(item) {
         var currTime = (new Date()).getTime();
-        if(currTime - this.state.lastClick < 500 && this.state.selected == id) {
-            this.props.onOpen(id, type, label);
+        if(currTime - this.state.lastClick < 500 && this.state.selected.id == item.id) {
+            this.props.onOpen(item.id, item.mimetype, item.label);
         }
-        this.setState({ lastClick: currTime, selected: id, selectedType: type })
+        this.setState({ lastClick: currTime, selected: item, selectedType: item.mimetype })
     }
 
     deleteItem(type, id) {
         var assetid = id;
         if(isNaN(assetid)) {
-            assetid = this.state.selected;
+            assetid = this.state.selected.id;
         }
         if(assetid == -1) {
             alert("No item selected");
@@ -57,8 +57,8 @@ export default class AssetsTreePanel extends React.Component {
         }
     }
 
-    renameItem(name) {
-        var assetid = this.state.selected;
+    renameItem(name, item) {
+        var assetid = item.id;
         var type = this.state.newtype;
         this.setState({working: true});
         Api.renameAsset(assetid, name).then(x => {
@@ -68,9 +68,9 @@ export default class AssetsTreePanel extends React.Component {
         })        
     }
 
-    addItem(name, parent_id) {
+    addItem(name, parent) {
         this.setState({working: true});
-        Api.addAsset(parent_id, name, "",this.state.newtype).then(x => {
+        Api.addAsset(parent.id, name, "",this.state.newtype).then(x => {
             this.updateData();
         })
     }
@@ -78,7 +78,7 @@ export default class AssetsTreePanel extends React.Component {
     uploaded(uploading) {
         this.setState({showUpload: false, working: true});
         uploading.then(x => {
-            Api.addAsset(this.state.selected, x.name, x.server_path, x.contenttype).then(x => {
+            Api.addAsset(this.state.selected.id, x.name, x.server_path, x.contenttype).then(x => {
                 this.updateData();
             })
         });
@@ -97,13 +97,13 @@ export default class AssetsTreePanel extends React.Component {
 
     contextClickAction(e, data) {
         if(data.name == "open") {
-            this.props.onOpen(this.state.selected, data.type, data.label);
+            this.props.onOpen(this.state.selected.id, data.type, data.label);
         } else if(data.name == "rename") {
-            this.setState({renaming: this.state.selected, newtype: data.type});
+            this.setState({renaming: this.state.selected.id, newtype: data.type});
         } else if(data.name == "delete") {
-            this.deleteItem(data.type, this.state.selected);
+            this.deleteItem(data.type, this.state.selected.id);
         } else if(data.name == "createfolder") {
-            this.setState({adding: this.state.selected, newtype: "folder"});
+            this.setState({adding: this.state.selected.id, newtype: "folder"});
         } else if(data.name == "upload") {
             this.setState({showUpload: true});
         }
@@ -122,6 +122,7 @@ export default class AssetsTreePanel extends React.Component {
                 {items.map(x => 
                     <TreeViewItem
                         drop="folder"
+                        item={x}
                         id={x.id}
                         type={x.mimetype}
                         published={true}
@@ -130,11 +131,11 @@ export default class AssetsTreePanel extends React.Component {
                         adding={this.state.adding == x.id}
                         addicon="folder"
                         onBlur={this.onBlur.bind(this)}
-                        onClick={() => this.clickItem(x.id, x.label, x.mimetype)}
+                        onClick={() => this.clickItem(x)}
                         onRename={this.renameItem.bind(this)}
                         onAdd={this.addItem.bind(this)}
                         parentChanged={this.parentChanged.bind(this)}
-                        selected={this.state.selected == x.id}
+                        selected={this.state.selected.id == x.id}
                         key={x.id}
                         collapsed={x.collapsed}
                         contextMenuId={this.getContextMenuId(x.mimetype)}
@@ -158,7 +159,7 @@ export default class AssetsTreePanel extends React.Component {
             this.setState({showUpload: true})
         };
         let createFolderAction = () => {
-            this.setState({adding: this.state.selected, newtype: "folder"});
+            this.setState({adding: this.state.selected.id, newtype: "folder"});
         };
         return(
             <div className="toolbar">
