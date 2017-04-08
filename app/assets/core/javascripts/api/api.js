@@ -11,7 +11,6 @@ function handleErrors(response) {
 }
 
 function ApiCall(call, method, body, contenttype) {
-    var type = contenttype == null ? 'application/json' : contenttype;
     var headers = {
             "Csrf-Token": csrf
     }

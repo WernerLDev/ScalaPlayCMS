@@ -1,6 +1,7 @@
 body {
     font-family: Lato, sans-serif;
 	line-height: 1.8;
+    background: url(../images/bgpattern.png);
 }
 
 .bg-grey {
@@ -128,6 +129,7 @@ body > .container {
     /*padding: 60px 50px;*/
     margin-top: 80px; margin-bottom: 80px;
     padding: 25px;
+    background: #FFF; border: 0px solid #d5d5d5;
    -webkit-box-shadow: 0px -22px 72px -42px rgba(0,0,0,0.5);
 -moz-box-shadow: 0px -22px 72px -42px rgba(0,0,0,0.5);
 box-shadow: 0px -22px 72px -42px rgba(0,0,0,0.5);
@@ -203,7 +205,7 @@ body > .container-fluid {
     height: 70px;
     /*background-color: #f4511e;
     background: #f4511e;*/
-    background: none;
+    background: #FFF;
     z-index: 9999;
     border: 0;
     font-size: 12px !important;
