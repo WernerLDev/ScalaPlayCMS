@@ -45,8 +45,8 @@ export default class PagesPanel extends React.Component {
 
     deleteItem(item) {
         var docid = 0;
-        if(item == -1) {
-        //if(isNaN(docid)) {
+        //if(item == -1) {
+        if(isNaN(docid)) {
             docid = this.state.selected.id;
         } else {
             docid = item.id;
@@ -57,11 +57,12 @@ export default class PagesPanel extends React.Component {
             return;
         }
         if(confirm("Do you really want to delete this page? (This cannot be undone).")) {
-            this.setState({ working: true, deleting: docid});
-            Api.deleteDocument(docid).then(x => {
-                this.updateData().then(y => {
-                    this.props.onDelete(docid, "page");
-                })
+            this.setState({ working: true, deleting: docid}, () => {
+                Api.deleteDocument(docid).then(x => {
+                    this.updateData().then(y => {
+                        this.props.onDelete(docid, "page");
+                    })
+                });
             });
         }
     }
@@ -106,9 +107,9 @@ export default class PagesPanel extends React.Component {
             this.deleteItem(this.state.selected);
         } else if(data.name == "add") {
             this.setState({adding: this.state.selected.id, newtype: data.newtype});
-        } else if(data.name == "settings") {
+        } else if(data.name == "properties") {
             
-            this.props.ee.emitEvent("pagesettings", [this.state.selected]);
+            this.props.ee.emitEvent("pagesettings", [this.state.selected.id]);
         }
     }
 
@@ -122,7 +123,7 @@ export default class PagesPanel extends React.Component {
                 {menuid != "home" ? <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'rename'}}>Rename</MenuItem> : null}
                 {menuid != "home" ? <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'delete'}}>Delete</MenuItem> : null}
                 <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'rename'}}>Dublicate</MenuItem>
-                <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'settings'}}>Settings</MenuItem>
+                <MenuItem onClick={this.contextClickAction.bind(this)} data={{name: 'properties'}}>Properties</MenuItem>
             </ContextMenu>
         )
     }

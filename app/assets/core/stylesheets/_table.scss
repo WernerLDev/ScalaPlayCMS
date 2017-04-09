@@ -1,0 +1,66 @@
+
+.table {
+    width: 100%; height: auto;
+
+    .tablerow {
+        display: flex;
+        width: 100%; height: 40px; 
+
+        .tablecol {
+            flex: 1;
+            height: 40px; line-height: 40px;
+            padding: 0 5px;
+            .fa {
+                cursor: pointer;
+                float: right;
+                line-height: 40px;
+            }
+
+            .fa-floppy-o {
+                margin: 0 10px;
+            }
+        }
+
+        .col-6 {
+            width: 50%;
+        }
+
+        .col-4 {
+            flex-basis: 130px;
+        }
+
+        .col-8 { 
+            flex-grow: 10;
+            width: 100%;
+            input {
+                height: 30px;
+                border: 0;
+                
+                padding-left: 0;
+                outline: 0;  background: #fff2f2;
+                width: 100%; box-sizing: border-box;
+                font-size: 14px;
+                font-family: 'Varela Round', sans-serif;
+             }
+             select {
+                 width: 100%;
+                 border: 0; outline: 0; background: none; padding-left: 0; text-indent: 0;
+                 font-size: 14px;
+                 font-family: 'Varela Round', sans-serif;
+                 margin-left: -4px;
+                     appearance:none;
+                -moz-appearance:none; /* Firefox */
+                -webkit-appearance:none; /* Safari and Chrome */
+             }
+             .selecticon {
+                 position: absolute; right: 21px;
+                 line-height: 40px;
+             }
+        }
+    }
+
+    .tablerow:nth-child(odd) {
+        background: #eaeaea;
+    }
+
+}

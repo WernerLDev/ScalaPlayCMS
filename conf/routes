@@ -22,6 +22,7 @@ GET     /documents                  core.controllers.MainController.listDocument
 GET     /documents/:id              core.controllers.MainController.getDocument(id:Long)
 DELETE  /documents/:id              core.controllers.MainController.deleteDocument(id:Long)
 POST    /documents                  core.controllers.MainController.addDocument
+PUT     /documents                  core.controllers.MainController.updateDocument
 PUT     /documents/:id/collapse     core.controllers.MainController.collapseDocument(id:Long)
 PUT     /documents/:id/rename       core.controllers.MainController.renameDocument(id:Long)
 PUT     /documents/:id/updateparent core.controllers.MainController.updateParentDocument(id:Long)

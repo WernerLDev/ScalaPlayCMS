@@ -52,6 +52,7 @@ iframe {
 }
 
 .loading {
+    position: absolute; top: 0; left: 0;
     width: 100%;
     img {
         display: block; margin: 90px auto 0 auto;

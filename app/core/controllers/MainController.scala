@@ -21,6 +21,8 @@ import play.filters.csrf._
 @Singleton
 class MainController @Inject()(documents:Documents, editables:Editables, templates:PageTemplates, WithAuthAction:AuthAction, PageAction:PageAction) extends Controller {
 
+  implicit val tsreads: Reads[Timestamp] = Reads.of[Long] map (new Timestamp(_))
+
   /**
    * Create an Action to render an HTML page with a welcome message.
    * The configuration in the `routes` file means that this method
@@ -84,6 +86,15 @@ class MainController @Inject()(documents:Documents, editables:Editables, templat
         }
         case None => Future(BadRequest("Invalid parent_id"))
       })
+  }
+  
+  implicit val DocumentReads = Json.reads[Document]
+  def updateDocument = WithAuthAction.async(parse.json) { request => 
+    {request.body \ "document"}.asOpt[Document].map( document => {
+      documents.update(document) map (x => {
+        Ok( Json.toJson(Map("success" -> JsBoolean(true))) )
+      })
+    }).getOrElse(Future(BadRequest("Parameter missing")))
   }
 
   def collapseDocument(id:Long) = WithAuthAction.async(parse.json) { request =>

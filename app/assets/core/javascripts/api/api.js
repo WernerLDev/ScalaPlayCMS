@@ -56,6 +56,13 @@ export function addDocument(parent_id, name, pagetype) {
     return ApiCall("/documents", "POST", body);
 }
 
+export function updateDocument(document) {
+    var body = JSON.stringify({
+        "document" : document
+    });
+    return ApiCall("/documents", "PUT", body);
+}
+
 export function collapseDocument(id, collapsed) {
     var body = JSON.stringify({
         "collapsed": collapsed

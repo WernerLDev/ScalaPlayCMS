@@ -7,7 +7,7 @@
 .modal {
     display: block;
     z-index: 101;
-    width: 500px; height: 400px;
+    width: 600px; height: auto;
     position: absolute; top: 50%; left: 50%;
     margin-left: -250px; margin-top: -200px;
     background: #FFF;
@@ -30,5 +30,14 @@
 
     .modal-content {
         padding: 15px;
+        height: 360px;
+        font-size: 14px;
+    }
+
+    .modal-footer {
+        background: $color1;
+        height: 40px;
+        line-height: 40px;
+        padding-left: 15px;
     }
 }

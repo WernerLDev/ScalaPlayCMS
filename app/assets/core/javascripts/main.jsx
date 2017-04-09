@@ -22,14 +22,7 @@ export default class Main extends React.Component {
     constructor(props, context) {
         super(props, context);
         var initialTabs = TabsAction.getInitialTabs();
-        this.state = { section: "pages", activetab: 0, tabs: initialTabs, modal: "", modalitem: null, ee: new EventEmitter() }
-    }
-
-    componentDidMount() {
-        this.state.ee.on("pagesettings", function(item){
-            console.log(item);
-            this.setState({modal: "pagesettings", modalitem: item});
-        }.bind(this));
+        this.state = { section: "pages", activetab: 0, tabs: initialTabs, ee: new EventEmitter() }
     }
 
     switchSection(section) {
@@ -146,7 +139,7 @@ export default class Main extends React.Component {
                             </div>
                         </div>
                         <div key="tabar">
-                            <TabsList active={this.state.activetab} onClose={this.closeTab.bind(this)} onClick={this.switchTab.bind(this)}>
+                            <TabsList closable={true} active={this.state.activetab} onClose={this.closeTab.bind(this)} onClick={this.switchTab.bind(this)}>
                                 {this.state.tabs.map(t => <Tab key={t.id} id={t.id} label={t.label} type={t.type} />)}
                             </TabsList>
 
@@ -156,7 +149,7 @@ export default class Main extends React.Component {
      
                 </div>
 
-               <PageSettingsModal visible={this.state.modal == "pagesettings"} item={this.state.modalitem} onClose={() => this.setState({modal: ""})} />
+               <PageSettingsModal ee={this.state.ee} />
             </div>
         )
     }
