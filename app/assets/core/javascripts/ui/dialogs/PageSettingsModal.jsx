@@ -14,7 +14,7 @@ export default class PageSettingsModal extends React.Component {
     }
 
     componentDidMount() {
-        this.props.ee.on("pagesettings", function(item){
+        this.props.ee.on("pageproperties", function(item){
             this.setState({ working: true, visible: true }, () => {
                 Api.getPageTypes().then(result => {
                     this.receivePage(item, result.pagetypes);
@@ -91,13 +91,21 @@ export default class PageSettingsModal extends React.Component {
                     <div className="tablerow">
                         <div className="tablecol col-4">Title</div>
                         <div className="tablecol col-8">
-                            <TextInput value="the title" />
+                            <TextInput value={this.state.page.title} onChange={(v) => {
+                                    var newpage = this.state.page;
+                                    newpage.title = v;
+                                    this.updatePage(newpage);
+                                }} />
                         </div>
                     </div>
                     <div className="tablerow">
                         <div className="tablecol col-4">Language</div>
                         <div className="tablecol col-8">
-                            <select>
+                            <select defaultValue={this.state.page.locale} onChange={(e) => {
+                                    var newpage = this.state.page;
+                                    newpage.locale = e.currentTarget.value;
+                                    this.updatePage(newpage);
+                                }}>
                                 <option value="en">English</option>
                                 <option value="nl">Dutch</option>
                             </select>

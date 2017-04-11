@@ -108,8 +108,7 @@ export default class PagesPanel extends React.Component {
         } else if(data.name == "add") {
             this.setState({adding: this.state.selected.id, newtype: data.newtype});
         } else if(data.name == "properties") {
-            
-            this.props.ee.emitEvent("pagesettings", [this.state.selected.id]);
+            this.props.ee.emitEvent("pageproperties", [this.state.selected.id]);
         }
     }
 

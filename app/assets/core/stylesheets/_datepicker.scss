@@ -16,6 +16,10 @@
   box-shadow: 0 1px 3px rgba(0,0,0,.1);
   border: 1px solid #f9f9f9;
 }
+.rdtPicker thead, .rdtPicker tfoot {
+    background: $color1;
+    color: #FFF;
+}
 .rdtOpen .rdtPicker {
   display: block;
 }
