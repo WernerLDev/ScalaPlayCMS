@@ -99,6 +99,16 @@ export default class PageSettingsModal extends React.Component {
                         </div>
                     </div>
                     <div className="tablerow">
+                        <div className="tablecol col-4">Description</div>
+                        <div className="tablecol col-8">
+                            <TextInput value={this.state.page.description} onChange={(v) => {
+                                    var newpage = this.state.page;
+                                    newpage.description = v;
+                                    this.updatePage(newpage);
+                                }} />
+                        </div>
+                    </div>
+                    <div className="tablerow">
                         <div className="tablecol col-4">Language</div>
                         <div className="tablecol col-8">
                             <select defaultValue={this.state.page.locale} onChange={(e) => {

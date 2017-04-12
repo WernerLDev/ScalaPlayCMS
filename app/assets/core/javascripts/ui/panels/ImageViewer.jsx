@@ -16,8 +16,8 @@ export default class ImageViewer extends React.Component {
         })
     }
 
-    settings() {
-
+    properties() {
+        this.props.ee.emitEvent("assetproperties", [this.state.asset]);
     }
 
     delete() {
@@ -27,7 +27,7 @@ export default class ImageViewer extends React.Component {
     renderToolbar() {
         return (
             <LargeToolBar>
-                <ToolbarItemLarge clicked={this.settings.bind(this)} icon="gears" label="Properties" />
+                <ToolbarItemLarge clicked={this.properties.bind(this)} icon="gears" label="Properties" />
                 <ToolbarItemLarge clicked={this.delete.bind(this)} icon="trash" label="" classes="button-right redbtn" />
             </LargeToolBar>
         );

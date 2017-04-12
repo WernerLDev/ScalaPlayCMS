@@ -15,7 +15,7 @@ import slick.profile.SqlProfile.ColumnOption.SqlType
 //import scala.concurrent.duration._
 import core.models.Editables
 
-case class Document(id : Long , parent_id : Long, name : String, doctype : String, collapsed : Boolean, view:Option[String], path:String, title:String, locale:String, created_at:Timestamp, updated_at:Timestamp, published_at:Timestamp )
+case class Document(id : Long , parent_id : Long, name : String, doctype : String, collapsed : Boolean, view:Option[String], path:String, title:String, locale:String, description:String, created_at:Timestamp, updated_at:Timestamp, published_at:Timestamp )
 case class DocumentJson(id : Long, key: String, path:String, label : String, doctype : String, collapsed : Boolean, published: Boolean, children: List[DocumentJson])
 
 class DocumentTableDef(tag: Tag) extends Table[Document](tag, "documents") {
@@ -29,12 +29,13 @@ class DocumentTableDef(tag: Tag) extends Table[Document](tag, "documents") {
   def view = column[Option[String]]("view")
   def title = column[String]("title")
   def locale = column[String]("locale")
+  def description = column[String]("description")
 
   def created_at = column[Timestamp]("created_at", SqlType("timestamp not null default CURRENT_TIMESTAMP"))
   def updated_at = column[Timestamp]("updated_at", SqlType("timestamp not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP"))
   def published_at = column[Timestamp]("published_at", SqlType("timestamp not null default CURRENT_TIMESTAMP"))
   override def * =
-    (id, parent_id, name, doctype, collapsed, view, path, title, locale, created_at, updated_at, published_at) <>(Document.tupled, Document.unapply)
+    (id, parent_id, name, doctype, collapsed, view, path, title, locale, description, created_at, updated_at, published_at) <>(Document.tupled, Document.unapply)
 }
 
 @Singleton

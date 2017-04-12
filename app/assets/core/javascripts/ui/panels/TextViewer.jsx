@@ -17,8 +17,8 @@ export default class TextViewer extends React.Component {
         })
     }
 
-    settings() {
-
+    properties() {
+        this.props.ee.emitEvent("assetproperties", [this.state.asset]);
     }
 
     delete() {
@@ -28,14 +28,13 @@ export default class TextViewer extends React.Component {
     renderToolbar() {
         return (
             <LargeToolBar>
+                <ToolbarItemLarge clicked={this.properties.bind(this)} icon="gears" label="Properties" />
                 <ToolbarItemLarge clicked={this.delete.bind(this)} icon="trash" label="" classes="button-right redbtn" />
             </LargeToolBar>
         );
     }
     
-    //this.state.asset.path
     render() {
-        let viewerurl = "http://view.officeapps.live.com/op/view.aspx?src=";
         if(this.state.asset == null) {
             return(<div id="wrapper">
                     {this.renderToolbar()}

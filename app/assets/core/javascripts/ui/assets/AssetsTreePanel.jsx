@@ -106,6 +106,8 @@ export default class AssetsTreePanel extends React.Component {
             this.setState({adding: this.state.selected.id, newtype: "folder"});
         } else if(data.name == "upload") {
             this.setState({showUpload: true});
+        } else if(data.name == "properties") {
+            this.props.ee.emitEvent("assetproperties", [this.state.selected.id]);
         }
     }
 

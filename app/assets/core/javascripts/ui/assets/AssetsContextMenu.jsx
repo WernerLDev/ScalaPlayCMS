@@ -19,7 +19,7 @@ export default function AssetsContextMenu(props) {
             <MenuItem onClick={props.contextClickAction} data={{name: 'open'}}>Open</MenuItem>
             {menuid != "assetshome" ? <MenuItem onClick={props.contextClickAction} data={{name: 'rename'}}>Rename</MenuItem> : null}
             {menuid != "assetshome" ? <MenuItem onClick={props.contextClickAction} data={{name: 'delete'}}>Delete</MenuItem> : null}
-            <MenuItem onClick={props.contextClickAction} data={{name: 'rename'}}>Settings</MenuItem>
+            <MenuItem onClick={props.contextClickAction} data={{name: 'properties'}}>Properties</MenuItem>
         </ContextMenu>
     )
 }

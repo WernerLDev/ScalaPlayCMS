@@ -83,7 +83,7 @@ class MainController @Inject()(documents:Documents, editables:Editables, templat
           val newDocument = Document(
             id = 0, parent_id = 0,  name = name,
             doctype = "page", path = newpath, collapsed = true,
-            view = Some(pagetype), title = "", locale = "en",
+            view = Some(pagetype), title = "", locale = "en", description = "",
             created_at = currentTime, updated_at = currentTime, published_at = currentTime
           )
           documents.create( newDocument ) map { x =>

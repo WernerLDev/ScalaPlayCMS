@@ -14,6 +14,7 @@ import DocsViewer from './ui/panels/DocsViewer.jsx';
 import TextViewer from './ui/panels/TextViewer.jsx';
 import EventEmitter from 'wolfy87-eventemitter';
 import PageSettingsModal from './ui/dialogs/PageSettingsModal.jsx';
+import AssetPropertiesModal from './ui/dialogs/AssetPropertiesModal.jsx';
 
 import Modal from './ui/dialogs/Modal.jsx';
 
@@ -150,6 +151,7 @@ export default class Main extends React.Component {
                 </div>
 
                <PageSettingsModal ee={this.state.ee} />
+               <AssetPropertiesModal ee={this.state.ee} />
             </div>
         )
     }
