@@ -36,6 +36,7 @@ class AssetsController @Inject()(assets:Assets, WithAuthAction:AuthAction, PageA
     }
 
     def create = WithAuthAction.async(parse.json) { request =>
+      val uploadroot = conf.getString("elestic.uploadroot").getOrElse("")
       val parent_id = (request.body \ "parent_id").asOpt[Int].getOrElse(0)
       val name = (request.body \ "name").asOpt[String].getOrElse("")
       val server_path = (request.body \ "server_path").asOpt[String].getOrElse("")
@@ -45,10 +46,11 @@ class AssetsController @Inject()(assets:Assets, WithAuthAction:AuthAction, PageA
       parentAssetFuture flatMap (parentOpt => parentOpt match {
           case Some(parentAsset:Asset) => {
               val newpath = if(parentAsset.mimetype == "home") "/" + name else parentAsset.path + "/" + name
+              val assetfile = new File(uploadroot + server_path)
               val asset = Asset(
                   id = 0, parent_id = parent_id, name = name, path = newpath,
                   server_path = server_path, collapsed = true,
-                  mimetype = mimetype, created_at = currentTime
+                  mimetype = mimetype, filesize = assetfile.length(), created_at = currentTime
               )
               assets.create(asset) map ( x => {
                   Ok(Json.obj("success" -> true))

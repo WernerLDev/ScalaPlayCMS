@@ -14,7 +14,7 @@ import play.api.Play.current
 import java.sql.Timestamp
 import slick.profile.SqlProfile.ColumnOption.SqlType
 
-case class Asset(id : Long , parent_id : Long, name : String, mimetype : String, collapsed : Boolean, path:String, server_path:String, created_at:Timestamp )
+case class Asset(id : Long , parent_id : Long, name : String, mimetype : String, collapsed : Boolean, path:String, server_path:String, filesize:Long, created_at:Timestamp )
 case class AssetTree(id : Long, key: String, path:String, server_path:String, label : String, mimetype : String, collapsed : Boolean, children: List[AssetTree])
 
 class AssetTableDef(tag: Tag) extends Table[Asset](tag, "assets") {
@@ -26,10 +26,11 @@ class AssetTableDef(tag: Tag) extends Table[Asset](tag, "assets") {
   def path = column[String]("path")
   def server_path = column[String]("server_path")
   def collapsed = column[Boolean]("collapsed")
+  def filesize = column[Long]("filesize")
   def created_at = column[Timestamp]("created_at", SqlType("timestamp not null default CURRENT_TIMESTAMP"))
 
   override def * =
-    (id, parent_id, name, mimetype, collapsed, path, server_path, created_at) <>(Asset.tupled, Asset.unapply)
+    (id, parent_id, name, mimetype, collapsed, path, server_path, filesize, created_at) <>(Asset.tupled, Asset.unapply)
 }
 
 @Singleton

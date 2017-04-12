@@ -80,6 +80,10 @@ export default class PageSettingsModal extends React.Component {
                         <div className="tablecol col-8"> {this.state.asset.mimetype}</div>
                     </div>
                     <div className="tablerow">
+                        <div className="tablecol col-4">Filesize</div>
+                        <div className="tablecol col-8"> {(this.state.asset.filesize / 1000).toFixed(2) + " kB"}</div>
+                    </div>
+                    <div className="tablerow">
                         <div className="tablecol col-4">Created at</div>
                         <div className="tablecol col-8"> {create_date.toLocaleFormat()}</div>
                     </div>
