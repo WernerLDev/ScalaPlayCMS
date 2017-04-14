@@ -17,17 +17,17 @@ GET     /admin/login/retrievePassword       core.controllers.AdminController.ret
 POST    /admin/login/retrievePassword     core.controllers.AdminController.retrievePassword
 GET     /admin/login/resetpassword/:token  core.controllers.AdminController.resetPassword(token:String)
 
-GET     /api/v1/pagetypes           core.controllers.MainController.getPageTypes
-GET     /documents                  core.controllers.MainController.listDocuments
-GET     /documents/:id              core.controllers.MainController.getDocument(id:Long)
-DELETE  /documents/:id              core.controllers.MainController.deleteDocument(id:Long)
-POST    /documents                  core.controllers.MainController.addDocument
-PUT     /documents                  core.controllers.MainController.updateDocument
-PUT     /documents/:id/collapse     core.controllers.MainController.collapseDocument(id:Long)
-PUT     /documents/:id/rename       core.controllers.MainController.renameDocument(id:Long)
-PUT     /documents/:id/updateparent core.controllers.MainController.updateParentDocument(id:Long)
-PUT     /documents/:id/editables    core.controllers.MainController.saveEditables(id:Long)
-PUT     /documents/:id/publishdate  core.controllers.MainController.setDocumentPublishDate(id:Long)
+GET     /api/v1/pagetypes           core.controllers.api.DocumentsController.getPageTypes
+GET     /api/v1/documents                  core.controllers.api.DocumentsController.listDocuments
+GET     /api/v1/documents/:id              core.controllers.api.DocumentsController.getDocument(id:Long)
+DELETE  /api/v1/documents/:id              core.controllers.api.DocumentsController.deleteDocument(id:Long)
+POST    /api/v1/documents                  core.controllers.api.DocumentsController.addDocument
+PUT     /api/v1/documents                  core.controllers.api.DocumentsController.updateDocument
+PUT     /api/v1/documents/:id/collapse     core.controllers.api.DocumentsController.collapseDocument(id:Long)
+PUT     /api/v1/documents/:id/rename       core.controllers.api.DocumentsController.renameDocument(id:Long)
+PUT     /api/v1/documents/:id/updateparent core.controllers.api.DocumentsController.updateParentDocument(id:Long)
+PUT     /api/v1/documents/:id/editables    core.controllers.api.DocumentsController.saveEditables(id:Long)
+PUT     /api/v1/documents/:id/publishdate  core.controllers.api.DocumentsController.setDocumentPublishDate(id:Long)
 
 GET     /api/v1/assets              core.controllers.api.AssetsController.all
 GET     /api/v1/assets/:id          core.controllers.api.AssetsController.getById(id:Long)

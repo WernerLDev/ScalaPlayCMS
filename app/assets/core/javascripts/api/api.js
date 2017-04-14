@@ -36,15 +36,15 @@ export function getPageTypes() {
 }
 
 export function getDocuments() {
-    return ApiCall("/documents", "GET");
+    return ApiCall("/api/v1/documents", "GET");
 }
 
 export function getDocument(id) {
-    return ApiCall("/documents/" + id, "GET");
+    return ApiCall("/api/v1/documents/" + id, "GET");
 }
 
 export function deleteDocument(id) {
-    return ApiCall("/documents/" + id, "DELETE");
+    return ApiCall("/api/v1/documents/" + id, "DELETE");
 }
 
 export function addDocument(parent_id, name, pagetype) {
@@ -53,49 +53,49 @@ export function addDocument(parent_id, name, pagetype) {
         "name" : name,
         "pagetype": pagetype
     })
-    return ApiCall("/documents", "POST", body);
+    return ApiCall("/api/V1/documents", "POST", body);
 }
 
 export function updateDocument(document) {
     var body = JSON.stringify({
         "document" : document
     });
-    return ApiCall("/documents", "PUT", body);
+    return ApiCall("/api/v1/documents", "PUT", body);
 }
 
 export function collapseDocument(id, collapsed) {
     var body = JSON.stringify({
         "collapsed": collapsed
     });
-    return ApiCall("/documents/" + id + "/collapse", "PUT", body);
+    return ApiCall("/api/v1/documents/" + id + "/collapse", "PUT", body);
 }
 
 export function renameDocument(id, name) {
     var body = JSON.stringify({
         "name": name
     });
-    return ApiCall("/documents/" + id + "/rename", "PUT", body);
+    return ApiCall("/api/v1/documents/" + id + "/rename", "PUT", body);
 }
 
 export function updateParentDocument(id, parent_id) {
     var body = JSON.stringify({
         "parent_id": parent_id
     });
-    return ApiCall("/documents/" + id + "/updateparent", "PUT", body);
+    return ApiCall("/api/v1/documents/" + id + "/updateparent", "PUT", body);
 }
 
 export function updateDocumentPublishDate(id, publishdate) {
     var body = JSON.stringify({
         "publishdate" : publishdate
     });
-    return ApiCall("/documents/"+id+"/publishdate", "PUT", body);
+    return ApiCall("/api/v1/documents/"+id+"/publishdate", "PUT", body);
 }
 
 export function SaveEditables(id, editables) {
     var body = JSON.stringify({
         "editables": editables
     });
-    return ApiCall("/documents/" + id + "/editables", "PUT", body);
+    return ApiCall("/api/v1/documents/" + id + "/editables", "PUT", body);
 }
 
 export function getAssets() {
