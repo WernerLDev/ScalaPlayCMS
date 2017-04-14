@@ -1,8 +1,8 @@
 import React from 'react';
-import {TreeView, TreeViewItem} from '../TreeView.jsx';
+import {TreeView, TreeViewItem} from '../uielements/TreeView.jsx';
 import * as Api from '../../api/api.js';
 import { ContextMenu, MenuItem, SubMenu, ContextMenuTrigger } from "react-contextmenu";
-import {SmallToolBar, SmallToolBarItem} from '../SmallToolBar.jsx';
+import {SmallToolBar, SmallToolBarItem} from '../toolbars/SmallToolBar.jsx';
 
 export default class PagesPanel extends React.Component {
 

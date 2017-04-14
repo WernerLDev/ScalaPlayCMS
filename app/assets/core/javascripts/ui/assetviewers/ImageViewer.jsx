@@ -1,7 +1,7 @@
 
 import React from 'react';
 import * as Api from '../../api/api.js';
-import {LargeToolBar, ToolbarItemLarge} from '../LargeToolBar.jsx';
+import {LargeToolBar, ToolbarItemLarge} from '../toolbars/LargeToolBar.jsx';
 
 export default class ImageViewer extends React.Component {
 

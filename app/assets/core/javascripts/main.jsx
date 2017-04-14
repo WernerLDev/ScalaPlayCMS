@@ -1,20 +1,20 @@
 import React from 'react';
-import {SideMenu, SideMenuItem} from './ui/sidemenu.jsx';
+import {SideMenu, SideMenuItem} from './ui/toolbars/sidemenu.jsx';
 import SplitPane from 'react-split-pane';
 import * as SplitPaneActions from './actions/SplitPaneActions.js';
-import PagesPanel from './ui/panels/PagesPanel.jsx';
-import {TabPanel, Tab, TabsList, TabContent} from './ui/panels/TabPanel.jsx';
-import PageEditPanel from './ui/panels/PageEditPanel.jsx';
+import PagesPanel from './ui/pages/PagesPanel.jsx';
+import {TabPanel, Tab, TabsList, TabContent} from './ui/uielements/TabPanel.jsx';
+import PageEditPanel from './ui/pages/PageEditPanel.jsx';
 import * as TabsAction from './actions/TabViewActions.js';
 import _ from 'lodash/fp';
 import AssetsTreePanel from './ui/assets/AssetsTreePanel.jsx';
-import ImageViewer from './ui/panels/ImageViewer.jsx';
-import FileViewer from './ui/panels/FileViewer.jsx';
-import DocsViewer from './ui/panels/DocsViewer.jsx';
-import TextViewer from './ui/panels/TextViewer.jsx';
+import ImageViewer from './ui/assetviewers/ImageViewer.jsx';
+import FileViewer from './ui/assetviewers/FileViewer.jsx';
+import DocsViewer from './ui/assetviewers/DocsViewer.jsx';
+import TextViewer from './ui/assetviewers/TextViewer.jsx';
 import EventEmitter from 'wolfy87-eventemitter';
-import PageSettingsModal from './ui/dialogs/PageSettingsModal.jsx';
-import AssetPropertiesModal from './ui/dialogs/AssetPropertiesModal.jsx';
+import PageSettingsModal from './ui/pages/PageSettingsModal.jsx';
+import AssetPropertiesModal from './ui/assets/AssetPropertiesModal.jsx';
 
 import Modal from './ui/dialogs/Modal.jsx';
 

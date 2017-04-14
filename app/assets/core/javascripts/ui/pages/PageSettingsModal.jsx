@@ -1,10 +1,10 @@
 
 import React from 'react';
 import * as Api from '../../api/api.js';
-import Modal from './Modal.jsx';
-import {TabPanel, Tab, TabsList, TabContent} from '../panels/TabPanel.jsx';
-import TextInput from '../global/TextInput.jsx';
-import DateInput from '../global/DateInput.jsx';
+import Modal from '../dialogs/Modal.jsx';
+import {TabPanel, Tab, TabsList, TabContent} from '../uielements/TabPanel.jsx';
+import TextInput from '../uielements/inputs/TextInput.jsx';
+import DateInput from '../uielements/inputs/DateInput.jsx';
 
 export default class PageSettingsModal extends React.Component {
 

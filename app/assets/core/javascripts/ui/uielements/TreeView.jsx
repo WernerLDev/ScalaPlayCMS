@@ -1,7 +1,7 @@
 import React from 'react';
 import Icon from './Icon.jsx';
 import { ContextMenu, MenuItem, SubMenu, ContextMenuTrigger } from "react-contextmenu";
-import * as Api from '../api/api.js';
+import * as Api from '../../api/api.js';
 
 class TreeViewListItem extends React.Component {
 

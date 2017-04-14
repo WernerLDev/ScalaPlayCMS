@@ -1,5 +1,5 @@
 import React from 'react';
-import {LargeToolBar, ToolbarItemLarge} from '../LargeToolBar.jsx';
+import {LargeToolBar, ToolbarItemLarge} from '../toolbars/LargeToolBar.jsx';
 import * as Api from '../../api/api.js';
 
 export default class TestEditor extends React.Component {

@@ -1,7 +1,7 @@
 import React from 'react';
-import {TreeView, TreeViewItem} from '../TreeView.jsx';
+import {TreeView, TreeViewItem} from '../uielements/TreeView.jsx';
 import * as Api from '../../api/api.js';
-import {SmallToolBar, SmallToolBarItem} from '../SmallToolBar.jsx';
+import {SmallToolBar, SmallToolBarItem} from '../toolbars/SmallToolBar.jsx';
 import UploadDialog from '../dialogs/UploadDialog.jsx';
 import AssetsContextMenu from './AssetsContextMenu.jsx';
 

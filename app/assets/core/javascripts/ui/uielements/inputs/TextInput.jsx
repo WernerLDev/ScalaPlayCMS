@@ -1,5 +1,5 @@
 import React from 'react';
-import * as Api from '../../api/api.js';
+import * as Api from '../../../api/api.js';
 import Draggable from 'react-draggable';
 
 export default class TextInput extends React.Component {

@@ -1,9 +1,9 @@
 import React from 'react';
 import * as Api from '../../api/api.js';
-import Modal from './Modal.jsx';
-import {TabPanel, Tab, TabsList, TabContent} from '../panels/TabPanel.jsx';
-import TextInput from '../global/TextInput.jsx';
-import DateInput from '../global/DateInput.jsx';
+import Modal from '../dialogs/Modal.jsx';
+import {TabPanel, Tab, TabsList, TabContent} from '../uielements/TabPanel.jsx';
+import TextInput from '../uielements/inputs/TextInput.jsx';
+import DateInput from '../uielements/inputs/DateInput.jsx';
 
 export default class PageSettingsModal extends React.Component {
 
@@ -76,12 +76,16 @@ export default class PageSettingsModal extends React.Component {
                         <div className="tablecol col-8"> {this.state.asset.path}</div>
                     </div>
                     <div className="tablerow">
+                        <div className="tablecol col-4">Server path</div>
+                        <div className="tablecol col-8"> {this.state.asset.server_path}</div>
+                    </div>
+                    <div className="tablerow">
                         <div className="tablecol col-4">Mimetype</div>
                         <div className="tablecol col-8"> {this.state.asset.mimetype}</div>
                     </div>
                     <div className="tablerow">
                         <div className="tablecol col-4">Filesize</div>
-                        <div className="tablecol col-8"> {(this.state.asset.filesize / 1000).toFixed(2) + " kB"}</div>
+                        <div className="tablecol col-8"> {(this.state.asset.filesize / 1000).toFixed(1) + " kB"}</div>
                     </div>
                     <div className="tablerow">
                         <div className="tablecol col-4">Created at</div>
