@@ -18,7 +18,6 @@ import utils.PageTemplates
 class DocumentsController @Inject()(
     documents:Documents, 
     templates:PageTemplates, 
-    editables:Editables,
     WithAuthAction:AuthAction
 ) extends Controller {
   
@@ -124,12 +123,5 @@ class DocumentsController @Inject()(
     }).getOrElse( Future(BadRequest("Error: missing parameter [publishdate]")) )
   }
   
-  implicit val EditableReads = Json.reads[Editable]
-  def saveEditables(id:Long) = WithAuthAction(parse.json) { request => 
-    {request.body \ "editables"}.asOpt[List[Editable]].map( elist => {
-        elist foreach (e => editables.insertOrUpdate(e))
-        Ok( Json.toJson(Map("success" -> JsBoolean(true))) )
-    }).getOrElse(BadRequest("Parameter missing"))
-  }
 
 }
