@@ -3,6 +3,7 @@ import React from 'react';
 import * as Api from '../../../api/api.js';
 import Draggable from 'react-draggable';
 import Datetime from 'react-datetime';
+import moment from 'moment';
 
 export default class TextInput extends React.Component {
 
@@ -38,7 +39,7 @@ export default class TextInput extends React.Component {
         }
         return(
             <div>
-            {this.props.value.toLocaleFormat()} <i onClick={() => this.setState({editing: !this.state.editing, savedDate: this.props.value})} className="fa fa-pencil" aria-hidden="true"></i>
+            {moment(this.props.value).format("MMMM Do YYYY, HH:MM")} <i onClick={() => this.setState({editing: !this.state.editing, savedDate: this.props.value})} className="fa fa-pencil" aria-hidden="true"></i>
             </div>
         );
     }

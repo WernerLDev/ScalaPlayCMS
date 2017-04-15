@@ -27,7 +27,7 @@ class EditablesController @Inject()(
     {request.body \ "editables"}.asOpt[List[Editable]].map( elist => {
         documents.getById(id) flatMap (docOpt => docOpt match {
           case Some(document) => {
-            val currentTime:Timestamp = new Timestamp((new Date).getTime());
+            val currentTime:Timestamp = new Timestamp((new Date).getTime())
             elist foreach (e => editables.insertOrUpdate(e))
             val newDoc:Document = document.copy(updated_at = currentTime)
             documents.update(newDoc) map (x => {

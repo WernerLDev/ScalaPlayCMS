@@ -4,6 +4,7 @@ import Modal from '../dialogs/Modal.jsx';
 import {TabPanel, Tab, TabsList, TabContent} from '../uielements/TabPanel.jsx';
 import TextInput from '../uielements/inputs/TextInput.jsx';
 import DateInput from '../uielements/inputs/DateInput.jsx';
+import moment from 'moment';
 
 export default class PageSettingsModal extends React.Component {
 
@@ -52,7 +53,8 @@ export default class PageSettingsModal extends React.Component {
                 <div className="loading"><img src="/assets/images/rolling.svg" alt="" /> </div>
             </Modal>
         );
-        let create_date = new Date(this.state.asset.created_at);
+        let create_date = moment(new Date(this.state.asset.created_at)).format("MMMM Do YYYY, HH:MM");
+        
         return(
             <Modal title="Properties" onClose={this.onClose.bind(this)}>
                 {this.state.working ? <div className="loading"><img src="/assets/images/rolling.svg" alt="" /> </div> : null }
@@ -89,7 +91,7 @@ export default class PageSettingsModal extends React.Component {
                     </div>
                     <div className="tablerow">
                         <div className="tablecol col-4">Created at</div>
-                        <div className="tablecol col-8"> {create_date.toLocaleFormat()}</div>
+                        <div className="tablecol col-8"> {create_date}</div>
                     </div>
                 </div>
 
