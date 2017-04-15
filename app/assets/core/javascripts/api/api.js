@@ -49,11 +49,13 @@ export function deleteDocument(id) {
 
 export function addDocument(parent_id, name, pagetype) {
     var body = JSON.stringify({
-        "parent_id" : parent_id,
-        "name" : name,
-        "pagetype": pagetype
+        "document" : {
+            "parent_id" : parent_id,
+            "name" : name,
+            "pagetype": pagetype
+        }
     })
-    return ApiCall("/api/V1/documents", "POST", body);
+    return ApiCall("/api/v1/documents", "POST", body);
 }
 
 export function updateDocument(document) {

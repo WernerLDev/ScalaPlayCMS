@@ -14,6 +14,8 @@ import java.util.Date
 import core.utils._
 import utils.PageTemplates
 
+case class NewDocument(name:String, pagetype:String, parent_id:Long)
+
 @Singleton
 class DocumentsController @Inject()(
     documents:Documents, 
@@ -25,6 +27,7 @@ class DocumentsController @Inject()(
   implicit val DocTreeWrites = Json.writes[DocumentJson]
   implicit val DocWrites = Json.writes[Document]
   implicit val DocumentReads = Json.reads[Document]
+  implicit val NewDocReads = Json.reads[NewDocument]
   
   def getPageTypes = WithAuthAction {
     val pagetypes = templates.templates.map { case (k,v) => {
@@ -59,27 +62,31 @@ class DocumentsController @Inject()(
   }
 
   def addDocument() = WithAuthAction.async(parse.json) { request =>
-      val parent_id = (request.body \ "parent_id").asOpt[Int].getOrElse(0)
-      val inputname = (request.body \ "name").asOpt[String].getOrElse("")
-      val name = inputname.toLowerCase.replace(" ", "-")
-      val pagetype = (request.body \ "pagetype").asOpt[String].getOrElse("default")
-      val currentTime:Timestamp = new Timestamp((new Date).getTime());
-      val parent = documents.getById(parent_id)
-      parent flatMap (docOp => docOp match {
-        case Some(parentDoc) => {
-          val newpath = if(parentDoc.doctype == "home") "/" + name else parentDoc.path + "/" + name
-          val newDocument = Document(
-            id = 0, parent_id = 0,  name = name,
-            doctype = "page", path = newpath, collapsed = true,
-            view = Some(pagetype), title = "", locale = "en", description = "",
-            created_at = currentTime, updated_at = currentTime, published_at = currentTime
-          )
-          documents.create( newDocument ) map { x =>
-            Ok(Json.toJson( Map("id" -> JsNumber(x.id),  "parent_id" -> JsNumber(parent_id), "name" -> JsString(name)) ))
+      {request.body \ "document"}.asOpt[NewDocument].map( document => {
+        val currentTime:Timestamp = new Timestamp((new Date).getTime());
+        val name = document.name.toLowerCase.replace(" ", "-")
+        val parent = documents.getById(document.parent_id)
+        parent flatMap (docOpt => docOpt match {
+          case Some(parentDoc) => {
+            val newpath = if(parentDoc.doctype == "home") "/" + name else parentDoc.path + "/" + name
+            val newDocument = Document(
+              id = 0,
+              parent_id = document.parent_id,
+              name = name,
+              doctype = "page",
+              path = newpath,
+              collapsed = true,
+              view = Some(document.pagetype),
+              title = "", description = "", locale = "en",
+              created_at = currentTime, updated_at = currentTime, published_at = currentTime
+            )
+            documents.create(newDocument) map (x => {
+              Ok(Json.toJson( Map("id" -> JsNumber(x.id),  "parent_id" -> JsNumber(document.parent_id), "name" -> JsString(name)) ))
+            })
           }
-        }
-        case None => Future(BadRequest("Invalid parent_id"))
-      })
+          case None => Future(BadRequest("Error: Invalid parent id"))
+        })
+      }).getOrElse(Future(BadRequest("Error: No document found")))
   }
   
   def updateDocument = WithAuthAction.async(parse.json) { request => 
