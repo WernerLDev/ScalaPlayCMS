@@ -7,7 +7,7 @@
             "name" : "entity",
             "plural" : "entities",
             "attributes" : [
-                { "name" : "name", "atype" : "String"}
+                { "name" : "entityName", "atype" : "String"}
             ],
             "relations" : []
         }

@@ -1,3 +1,5 @@
+import SlickGenerator._
+
 name := """ElesticSpider"""
 
 version := "1.0-SNAPSHOT"
@@ -8,6 +10,10 @@ lazy val root = (project in file("."))
     .dependsOn(SlickScaffolder)
 
 lazy val SlickScaffolder = project
+
+lazy val genModels = inputKey[Unit]("Generate models and table defenitions")
+
+fullRunInputTask(genModels, Test, "werlang.Main")
 
 scalaVersion := "2.11.7"
 
