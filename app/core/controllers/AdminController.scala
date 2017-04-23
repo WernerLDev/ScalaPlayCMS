@@ -85,7 +85,6 @@ class AdminController @Inject()(
         )
     }
 
-
     val lostpassForm = Form(
         mapping(
             "email" -> email

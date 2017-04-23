@@ -15,7 +15,6 @@ import java.sql.Timestamp
 import slick.profile.SqlProfile.ColumnOption.SqlType
 import scala.concurrent._
 import java.util.Date;
-import core.models.{User, UserTableDef}
 
 case class ResetToken(id : Long , user_id : Long, resettoken : String, expires_at:Timestamp )
 

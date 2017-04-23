@@ -9,7 +9,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import javax.inject.Singleton
 import javax.inject._
 import slick.profile.SqlProfile.ColumnOption.SqlType
-import core.models.{Document, DocumentTableDef}
 
 
 case class Editable(id: Long, document_id:Long, name:String, value:String)

@@ -15,7 +15,6 @@ import scala.concurrent.duration._
 import core.utils.PasswordHasher
 import java.sql.Timestamp
 import java.util.Date;
-import core.models.{User, UserTableDef}
 
 case class UserSession(id: Long, session_key:String, user_id:Long, passwordhash:String, ipaddress:String, useragent:String, expiration_date:Timestamp)
 

@@ -2,7 +2,12 @@ name := """ElesticSpider"""
 
 version := "1.0-SNAPSHOT"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala, SbtWeb)
+lazy val root = (project in file("."))
+    .enablePlugins(PlayScala, SbtWeb)
+    .aggregate(SlickScaffolder)
+    .dependsOn(SlickScaffolder)
+
+lazy val SlickScaffolder = project
 
 scalaVersion := "2.11.7"
 

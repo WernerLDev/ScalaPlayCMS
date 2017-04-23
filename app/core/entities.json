@@ -1,0 +1,15 @@
+{
+    "packageName" : "core.models",
+    "modelFolder" : "app/core/models",
+    "migrationFile" : "conf/evolutions/default/12.sql",
+    "entities" : [
+        {
+            "name" : "entity",
+            "plural" : "entities",
+            "attributes" : [
+                { "name" : "name", "atype" : "String"}
+            ],
+            "relations" : []
+        }
+    ]
+}

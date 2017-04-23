@@ -1,0 +1,26 @@
+{
+    "packageName" : "models",
+    "modelFolder" : "app/models",
+    "migrationFile" : "conf/evolutions/default/12.sql",
+    "entities" : [
+        {
+            "name" : "post",
+            "plural" : "posts",
+            "attributes" : [
+                { "name" : "title", "atype" : "String"},
+                { "name" : "content", "atype" : "text" },
+                { "name" : "posted_at", "atype" : "timestamp" }
+            ],
+            "relations" : [
+                { "has" : "one", "of" : "category" }
+            ]
+        }, {
+            "name" : "Category",
+            "plural" : "Categories",
+            "attributes" : [
+                { "name" : "name", "atype" : "string"}
+            ],
+            "relations" : []
+        }
+    ]
+}
