@@ -1,12 +1,9 @@
-import SlickGenerator._
-
 name := """ElesticSpider"""
 
 version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
     .enablePlugins(PlayScala, SbtWeb)
-    .aggregate(SlickScaffolder)
     .dependsOn(SlickScaffolder)
 
 lazy val SlickScaffolder = project

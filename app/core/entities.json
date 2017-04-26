@@ -6,8 +6,16 @@
         {
             "name" : "entity",
             "plural" : "entities",
+            "attributes" : [],
+            "relations" : []
+        },
+        {
+            "name" : "blog",
+            "plural": "blogs",
             "attributes" : [
-                { "name" : "entityName", "atype" : "String"}
+                { "name" : "title", "atype" : "string" },
+                { "name" : "content", "atype" : "text" },
+                { "name" : "created_at", "atype" : "timestamp" }
             ],
             "relations" : []
         }

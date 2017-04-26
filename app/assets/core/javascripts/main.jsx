@@ -15,6 +15,7 @@ import TextViewer from './ui/assetviewers/TextViewer.jsx';
 import EventEmitter from 'wolfy87-eventemitter';
 import PageSettingsModal from './ui/pages/PageSettingsModal.jsx';
 import AssetPropertiesModal from './ui/assets/AssetPropertiesModal.jsx';
+import EntitiesPanel from './ui/entities/EntitiesPanel.jsx';
 
 import Modal from './ui/dialogs/Modal.jsx';
 
@@ -124,8 +125,11 @@ export default class Main extends React.Component {
                                 onDelete={(id, type) => this.closeTab(id + type)} />
                             </div>
                             <div className={this.state.section == "entities" ? "visible" : "hidden"}>
-                                Entities
-
+                                <EntitiesPanel
+                                ee={this.state.ee}
+                                onOpen={this.openTab.bind(this)}
+                                onRename={this.renameTab.bind(this)}
+                                onDelete={(id, type) => this.closeTab(id + type)} />
                                 
                             </div>
                             <div className={this.state.section == "assets" ? "visible tree" : "hidden"}>
