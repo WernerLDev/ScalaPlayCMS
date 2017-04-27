@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import {TreeView, TreeViewItem} from '../uielements/TreeView.jsx';
 import * as Api from '../../api/api.js';
 import {SmallToolBar, SmallToolBarItem} from '../toolbars/SmallToolBar.jsx';
@@ -19,6 +20,17 @@ export default class AssetsTreePanel extends React.Component {
 
         this.props.ee.on("assetdeleted", function(id, type){
             this.deleteItem(type, id);
+        }.bind(this));
+        
+        document.addEventListener('mousedown', function(e){
+            var contextMenus = document.getElementsByClassName("react-contextmenu");
+            var menuOpened = false;
+            [].forEach.call(contextMenus, function(menu){
+                menuOpened = menu.style.opacity == 1;
+            }.bind(this));
+            if(!ReactDOM.findDOMNode(this.refs.tree).contains(e.target) && menuOpened == false) {
+                this.setState({selected: -1});
+            }
         }.bind(this));
     }
 
@@ -120,7 +132,7 @@ export default class AssetsTreePanel extends React.Component {
     renderTreeView(items) {
         if(items.length <= 0) return null;
         return(
-            <TreeView>
+            <TreeView ref="tree">
                 {items.map(x => 
                     <TreeViewItem
                         drop="folder"

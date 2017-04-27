@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import {TreeView, TreeViewItem} from '../uielements/TreeView.jsx';
 import * as Api from '../../api/api.js';
 import { ContextMenu, MenuItem, SubMenu, ContextMenuTrigger } from "react-contextmenu";
@@ -24,6 +25,19 @@ export default class PagesPanel extends React.Component {
 
         this.props.ee.on("pagePublishDateSet", function(id){
             this.updateData();
+        }.bind(this));
+
+        document.addEventListener('mousedown', function(e){
+            var contextMenus = document.getElementsByClassName("react-contextmenu");
+            var menuOpened = false;
+            [].forEach.call(contextMenus, function(menu){
+                if(menu.style.opacity == 1) {
+                    menuOpened = true;
+                }
+            }.bind(this));
+            if(!ReactDOM.findDOMNode(this.refs.tree).contains(e.target) && menuOpened == false) {
+                this.setState({selected: -1, selectedType: ""});
+            }
         }.bind(this));
     }
 
@@ -130,7 +144,7 @@ export default class PagesPanel extends React.Component {
     renderTreeView(items) {
         if(items.length <= 0) return null;
         return(
-            <TreeView>
+            <TreeView ref="tree">
                 {items.map(x =>
                     <TreeViewItem
                         drop="all"

@@ -33,9 +33,10 @@ class GeneratedBlogsController @Inject() (
     implicit val tsreads: Reads[Timestamp] = Reads.of[Long] map (new Timestamp(_))
     implicit val BlogWrites = Json.writes[Blog]
     implicit val BlogReads = Json.reads[Blog]
+    implicit val categoryWrites = Json.writes[Category]
 
     def getAll(request:AuthRequest[AnyContent]) = {
-        blogs.getAll.map(x => Ok(Json.toJson(x.map(_._1))))
+        blogs.getAll.map(entities => Ok(Json.toJson(entities.map(x => Map( "id" -> JsNumber(x._1.id), "name" -> JsString(x._1.name), "title" -> JsString(x._1.title), "content" -> JsString(x._1.content), "created_at" -> JsNumber(x._1.created_at.getTime()), "category_id" -> JsNumber(x._1.category_id), "category" -> Json.toJson(x._2)) ))))
     }
 
     def insert(request:AuthRequest[JsValue]) = {
@@ -57,6 +58,7 @@ class GeneratedCategoriesController @Inject() (
     implicit val tsreads: Reads[Timestamp] = Reads.of[Long] map (new Timestamp(_))
     implicit val CategoryWrites = Json.writes[Category]
     implicit val CategoryReads = Json.reads[Category]
+
 
     def getAll(request:AuthRequest[AnyContent]) = {
         categories.getAll.map(x => Ok(Json.toJson(x)))

@@ -13,7 +13,7 @@ import java.sql.Timestamp
 import slick.profile.SqlProfile.ColumnOption.SqlType
 import core.models._
 
-case class Blog (id:Long, name:String, title:String, content:String, created_at:Timestamp, category_id:Long)
+case class Blog (id:Long, name:String, title:String, content:String, created_at:Timestamp, category_id:Long) 
 
 class BlogTableDef(tag:Tag) extends Table[Blog](tag, "blogs") {
   
@@ -53,7 +53,7 @@ trait TBlogs extends HasDatabaseConfigProvider[JdbcProfile] {
   }
 
 }
-case class Category (id:Long, name:String)
+case class Category (id:Long, name:String) 
 
 class CategoryTableDef(tag:Tag) extends Table[Category](tag, "categories") {
   
