@@ -124,7 +124,7 @@ export default class Main extends React.Component {
                                 onRename={this.renameTab.bind(this)}
                                 onDelete={(id, type) => this.closeTab(id + type)} />
                             </div>
-                            <div className={this.state.section == "entities" ? "visible" : "hidden"}>
+                            <div className={this.state.section == "entities" ? "visible tree" : "hidden"}>
                                 <EntitiesPanel
                                 ee={this.state.ee}
                                 onOpen={this.openTab.bind(this)}

@@ -56,6 +56,16 @@ export default function Icon(props) {
             <i className="fa fa-file-text-o" aria-hidden="true"></i>
         ) 
     }
+    else if(props.type == "cubes") {
+        return (
+            <i className="fa fa-cubes" aria-hidden="true"></i>
+        )
+    }
+    else if(props.type == "cube") {
+        return (
+            <i className="fa fa-cube" aria-hidden="true"></i>
+        )
+    }
     else {
        return (
             <i className="fa emptyicon fileicon" aria-hidden="true"></i>

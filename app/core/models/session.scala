@@ -42,6 +42,8 @@ class UserSessions @Inject()(protected val dbConfigProvider: DatabaseConfigProvi
     val users = TableQuery[UserTableDef]
     val insertQuery = sessions returning sessions.map(_.id) into ((session, id) => session.copy(id = id))
 
+    def getAll = dbConfig.db.run(sessions.result)
+
     def getSession(user:User, key:String) = dbConfig.db.run {
       sessions.filter(x => x.user_id === user.id && x.session_key === key).result.headOption
     }

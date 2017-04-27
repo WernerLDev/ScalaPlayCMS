@@ -2,13 +2,9 @@
     "packageName" : "core.models",
     "modelFolder" : "app/core/models",
     "migrationFile" : "conf/evolutions/default/12.sql",
+    "controllerPackage" : "core.controllers.api",
+    "controllerFile" : "app/core/controllers/api/GeneratedControllers.scala",
     "entities" : [
-        {
-            "name" : "entity",
-            "plural" : "entities",
-            "attributes" : [],
-            "relations" : []
-        },
         {
             "name" : "blog",
             "plural": "blogs",
@@ -17,6 +13,14 @@
                 { "name" : "content", "atype" : "text" },
                 { "name" : "created_at", "atype" : "timestamp" }
             ],
+            "relations" : [
+                { "has" : "one", "of" : "category" }
+            ]
+        },
+        {
+            "name" : "category",
+            "plural" : "categories",
+            "attributes" : [],
             "relations" : []
         }
     ]

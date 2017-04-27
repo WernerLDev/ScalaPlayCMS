@@ -39,7 +39,9 @@ PUT     /api/v1/assets/:id/updateparent     core.controllers.api.AssetsControlle
 PUT     /api/v1/assets/:id/collapse core.controllers.api.AssetsController.collapse(id:Long)
 GET     /uploads/*name              core.controllers.api.AssetsController.getUpload(name:String)
 
-GET     /api/v1/entities            core.controllers.api.EntitiesController.getAll
+GET     /api/v1/entities            core.controllers.api.GeneratedController.getEntities
+GET     /api/v1/:name               core.controllers.api.GeneratedController.getAll(name:String)
+
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

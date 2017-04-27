@@ -1,0 +1,109 @@
+package core.controllers.api
+
+import javax.inject._
+import play.api._
+import play.api.mvc._
+import core.models._
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+import play.api.libs.json._
+import play.api.libs.json.Reads._
+import play.api.libs.functional.syntax._
+import java.sql.Timestamp
+import java.util.Date
+import core.utils._
+import scala.util.{Success, Failure}
+import java.io.File
+import core.models._
+
+@Singleton
+class GeneratedBlogsController @Inject() (
+    WithAuthAction:AuthAction,
+    blogs:Blogs
+    ) extends Controller {
+
+    implicit val tsreads: Reads[Timestamp] = Reads.of[Long] map (new Timestamp(_))
+    implicit val BlogWrites = Json.writes[Blog]
+    implicit val BlogReads = Json.reads[Blog]
+
+    def getAll = WithAuthAction.async { request =>
+        blogs.getAll.map(x => Ok(Json.toJson(x)))
+    }
+
+    def insert = WithAuthAction.async(parse.json) { request =>
+        {request.body \ "entity"}.asOpt[Blog].map( entity => {
+            blogs.insert(entity).map(x => {
+                Ok(Json.toJson( Map("id" -> JsNumber(x.id)) ))
+            })
+        }).getOrElse(Future(BadRequest("Parameter missing")))
+    }
+}
+
+
+@Singleton
+class GeneratedController @Inject()(
+    WithAuthAction:AuthAction, 
+    blogs:Blogs,
+    sessions:UserSessions,
+    conf:Configuration) extends Controller {
+
+
+    implicit val tsreads: Reads[Timestamp] = Reads.of[Long] map (new Timestamp(_))
+    implicit val BlogWrites = Json.writes[Blog]
+    implicit val BlogReads = Json.reads[Blog]
+    def getAllBlogs = {
+        blogs.getAll.map(x => {
+            Json.toJson(x)
+        })
+    }
+
+    def createBlog = WithAuthAction.async(parse.json) { request =>
+        {request.body \ "entity"}.asOpt[Blog].map( entity => {
+            blogs.insert(entity).map(x => {
+                Ok("created")
+            })
+        }).getOrElse(Future(BadRequest("Parameter missing")))
+    }
+
+    implicit val UserSessionWrites = Json.writes[UserSession]
+    implicit val UserSessionReads = Json.reads[UserSession]
+    def getAllSessions = {
+        sessions.getAll.map(x => {
+            Json.toJson(x)
+        })
+    }
+
+    def createSession = WithAuthAction.async(parse.json) { request =>
+        {request.body \ "entity"}.asOpt[UserSession].map( entity => {
+            sessions.create(entity).map(x => {
+                Ok("created")
+            })
+        }).getOrElse(Future(BadRequest("Parameter missing")))
+    }
+    
+    val entityMap = Map(
+        "blogs" -> {() => getAllBlogs},
+        "sessions" -> {() => getAllSessions}
+    )
+    
+    val entityMapCreate = Map(
+        "blogs" -> {createBlog},
+        "sessions" -> {createSession}
+    )
+
+    def getAll(name:String) = WithAuthAction.async { request =>
+        entityMap.get(name) match {
+            case Some(f) => f() map (x => Ok(x))
+            case None => Future(Ok("Not found"))
+        }
+    }
+
+    def create(name:String) = WithAuthAction.async(parse.json) { request =>
+        entityMapCreate.get(name) match {
+            case Some(f) => f(request)
+            case None => Future(Ok("Not found"))
+        }
+        
+    }
+
+}
