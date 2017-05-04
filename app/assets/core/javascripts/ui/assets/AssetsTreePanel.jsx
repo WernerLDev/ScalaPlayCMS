@@ -26,7 +26,9 @@ export default class AssetsTreePanel extends React.Component {
             var contextMenus = document.getElementsByClassName("react-contextmenu");
             var menuOpened = false;
             [].forEach.call(contextMenus, function(menu){
-                menuOpened = menu.style.opacity == 1;
+                if(menu.style.opacity == 1) {
+                    menuOpened = true;
+                }
             }.bind(this));
             if(!ReactDOM.findDOMNode(this.refs.tree).contains(e.target) && menuOpened == false) {
                 this.setState({selected: -1});
@@ -36,9 +38,7 @@ export default class AssetsTreePanel extends React.Component {
 
     updateData() {
         return Api.getAssets().then(assets => {
-            setTimeout(() =>{
-                this.setState( {assets: assets, deleting: -1, adding: -1, renaming: -1, working: false} );
-            },200);
+            this.setState( {assets: assets, deleting: -1, adding: -1, renaming: -1, working: false} );
         });
     }
 

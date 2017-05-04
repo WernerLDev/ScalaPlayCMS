@@ -1,11 +1,16 @@
+import ApiError from './ApiErrorView.jsx';
+
 var csrf = document.getElementById("csrftoken").innerText;
 
 function handleErrors(response) {
     if(!response.ok) {
-        alert(response.status + " - " + response.statusText);
-        throw Error(response.statusText);
+        response.text().then(r => {
+            ApiError(response.status, response.statusText, r);
+            //alert(response.status + " - " + response.statusText + "\n" + r);
+        });
+        //throw Error(response.statusText);
     } else {
-        return response;
+        return response
     }
 }
 
@@ -29,3 +34,6 @@ export default function ApiCall(call, method, body, contenttype) {
 
     return fetch(call, params).then(handleErrors).then(r => r.json());
 }
+
+
+

@@ -12,17 +12,15 @@ lazy val genModels = inputKey[Unit]("Generate models and table defenitions")
 
 fullRunInputTask(genModels, Test, "werlang.Main")
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.8"
 
 libraryDependencies ++= Seq(
   cache,
   ws,
   "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test,
-  "org.webjars" % "react" % "15.3.2",
   "com.typesafe.play" %% "play-slick" % "2.0.0",
   "com.typesafe.play" %% "play-slick-evolutions" % "2.0.0",
   "mysql" % "mysql-connector-java" % "5.1.34",
-  "jp.t2v" %% "play2-auth"        % "0.14.2",
   play.sbt.Play.autoImport.cache,
   filters,
   "org.mindrot" % "jbcrypt" % "0.3m",

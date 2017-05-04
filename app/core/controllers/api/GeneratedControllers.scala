@@ -36,7 +36,7 @@ class GeneratedBlogsController @Inject() (
     implicit val categoryWrites = Json.writes[Category]
 
     def getAll(request:AuthRequest[AnyContent]) = {
-        blogs.getAll.map(entities => Ok(Json.toJson(entities.map(x => Map( "id" -> JsNumber(x._1.id), "name" -> JsString(x._1.name), "title" -> JsString(x._1.title), "content" -> JsString(x._1.content), "created_at" -> JsNumber(x._1.created_at.getTime()), "category_id" -> JsNumber(x._1.category_id), "category" -> Json.toJson(x._2)) ))))
+        blogs.getAll.map(entities => Ok(Json.toJson(entities.map(x => Map( "id" -> JsNumber(x._1.id), "name"-> JsString(x._1.name), "title"-> JsString(x._1.title), "content"-> JsString(x._1.content), "created_at" -> JsNumber(x._1.created_at.getTime()), "category_id" -> JsNumber(x._1.category_id), "category" -> Json.toJson(x._2)) ))))
     }
 
     def insert(request:AuthRequest[JsValue]) = {

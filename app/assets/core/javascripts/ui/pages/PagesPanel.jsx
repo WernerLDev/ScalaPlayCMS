@@ -35,7 +35,7 @@ export default class PagesPanel extends React.Component {
                     menuOpened = true;
                 }
             }.bind(this));
-            if(!ReactDOM.findDOMNode(this.refs.tree).contains(e.target) && menuOpened == false) {
+            if(!ReactDOM.findDOMNode(this.refs.pagetree).contains(e.target) && menuOpened == false) {
                 this.setState({selected: -1, selectedType: ""});
             }
         }.bind(this));
@@ -43,9 +43,7 @@ export default class PagesPanel extends React.Component {
 
     updateData() {
         return Api.getDocuments().then(docs => {
-            setTimeout(() => {
-                this.setState( {pages: docs, deleting: -1, adding: -1, renaming: -1, working: false} );
-            },200);
+           this.setState( {pages: docs, deleting: -1, adding: -1, renaming: -1, working: false} );
         });
     }
 
@@ -144,7 +142,7 @@ export default class PagesPanel extends React.Component {
     renderTreeView(items) {
         if(items.length <= 0) return null;
         return(
-            <TreeView ref="tree">
+            <TreeView>
                 {items.map(x =>
                     <TreeViewItem
                         drop="all"
@@ -213,7 +211,7 @@ export default class PagesPanel extends React.Component {
             <div>
                 {this.state.working ? this.renderLoading() : null}
                 {this.renderToolbar()}
-                <div className={this.state.working ? "working treeviewcontainer" : "treeviewcontainer"}>
+                <div ref="pagetree" className={this.state.working ? "working treeviewcontainer" : "treeviewcontainer"}>
                     {this.renderTreeView(this.state.pages)}
                     {this.renderContextMenu("page")}
                     {this.renderContextMenu("home")}

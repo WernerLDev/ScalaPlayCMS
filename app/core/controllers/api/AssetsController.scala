@@ -56,7 +56,7 @@ class AssetsController @Inject()(assets:Assets, WithAuthAction:AuthAction, PageA
                   Ok(Json.obj("success" -> true))
               })
           }
-          case None => Future(BadRequest("Invalid parent id"))
+          case None => Future(BadRequest("Error: Missing (or invalid) parameter. [parent_id]"))
       })
     }
 
